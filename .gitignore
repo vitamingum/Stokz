@@ -1,0 +1,33 @@
+# Build folder
+build/
+DerivedData/
+
+# Xcode
+*.xcuserstate
+*.xcuserdatad
+xcuserdata/
+
+# Archives
+*.xcarchive
+
+# Build artifacts
+*.ipa
+*.dSYM.zip
+*.app.dSYM.zip
+
+# CocoaPods
+Pods/
+
+# Fastlane
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots/**/*.png
+fastlane/test_output
+
+# OS
+.DS_Store
+
+# Secrets
+*.p8
+*.p12
+*.pem

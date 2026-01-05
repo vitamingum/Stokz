@@ -1,0 +1,5 @@
+app_identifier("com.stokz.app")
+apple_id("cburns@astoundstudios.com")
+team_id("MSW9JQ3H2Q")
+
+# For more info see: https://docs.fastlane.tools/advanced/#appfile

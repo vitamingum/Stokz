@@ -1,0 +1,39 @@
+default_platform(:ios)
+
+platform :ios do
+  desc "Build and upload to TestFlight"
+  lane :beta do
+    # Increment build number automatically
+    increment_build_number(
+      xcodeproj: "Stokz.xcodeproj"
+    )
+    
+    # Build the app
+    build_app(
+      scheme: "Stokz",
+      export_method: "app-store",
+      xcargs: "-allowProvisioningUpdates"
+    )
+    
+    # Upload to TestFlight
+    upload_to_testflight(
+      skip_waiting_for_build_processing: true
+    )
+  end
+  
+  desc "Just build for App Store"
+  lane :build do
+    build_app(
+      scheme: "Stokz",
+      export_method: "app-store",
+      xcargs: "-allowProvisioningUpdates"
+    )
+  end
+  
+  desc "Upload existing build to TestFlight"
+  lane :upload do
+    upload_to_testflight(
+      skip_waiting_for_build_processing: true
+    )
+  end
+end

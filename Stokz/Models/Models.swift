@@ -1,0 +1,266 @@
+import Foundation
+
+// MARK: - User Model
+struct User: Identifiable, Codable, Equatable {
+    let id: String
+    let email: String
+    let displayName: String
+    let photoURL: String?
+    let createdAt: Date
+    
+    static func == (lhs: User, rhs: User) -> Bool {
+        lhs.id == rhs.id
+    }
+}
+
+// MARK: - Stock Model
+struct Stock: Identifiable, Codable, Hashable {
+    let symbol: String
+    var currentPrice: Double
+    var previousClose: Double
+    var lastUpdated: Date
+    
+    var id: String { symbol }
+    
+    var priceChange: Double {
+        currentPrice - previousClose
+    }
+    
+    var priceChangePercent: Double {
+        guard previousClose > 0 else { return 0 }
+        return (priceChange / previousClose) * 100
+    }
+    
+    var isPositive: Bool {
+        priceChange >= 0
+    }
+}
+
+// MARK: - Portfolio Holding
+struct PortfolioHolding: Identifiable, Codable {
+    let id: String
+    let symbol: String
+    var shares: Double // Implied shares based on entry
+    var entryPrice: Double // Price at which shares were calculated
+    var entryDate: Date
+    
+    // Calculated properties using current prices
+    func currentValue(at price: Double) -> Double {
+        shares * price
+    }
+    
+    func allocationPercent(totalValue: Double, currentPrice: Double) -> Double {
+        guard totalValue > 0 else { return 0 }
+        return (currentValue(at: currentPrice) / totalValue) * 100
+    }
+    
+    func profitLoss(at currentPrice: Double) -> Double {
+        (currentPrice - entryPrice) * shares
+    }
+    
+    func profitLossPercent(at currentPrice: Double) -> Double {
+        guard entryPrice > 0 else { return 0 }
+        return ((currentPrice - entryPrice) / entryPrice) * 100
+    }
+}
+
+// MARK: - Portfolio
+struct Portfolio: Identifiable, Codable {
+    let id: String
+    let userId: String
+    var holdings: [PortfolioHolding]
+    var cashBalance: Double // Cash available for new investments
+    let initialValue: Double // Starting amount ($100,000)
+    var lastUpdated: Date
+    
+    init(id: String = UUID().uuidString, userId: String, holdings: [PortfolioHolding] = [], cashBalance: Double? = nil, initialValue: Double = 100_000) {
+        self.id = id
+        self.userId = userId
+        self.holdings = holdings
+        // Default cash: if no holdings, start with full initial value as cash
+        self.cashBalance = cashBalance ?? (holdings.isEmpty ? initialValue : 0)
+        self.initialValue = initialValue
+        self.lastUpdated = Date()
+    }
+    
+    // Calculate total portfolio value at current prices
+    func totalValue(prices: [String: Double]) -> Double {
+        let holdingsValue = holdings.reduce(0.0) { total, holding in
+            let price = prices[holding.symbol] ?? holding.entryPrice
+            return total + holding.currentValue(at: price)
+        }
+        let total = holdingsValue + cashBalance
+        
+        // If completely empty (no holdings, no cash), return initial value
+        if holdings.isEmpty && cashBalance == 0 {
+            return initialValue
+        }
+        return total
+    }
+    
+    // Calculate allocation percentages for all holdings
+    func allocations(prices: [String: Double]) -> [String: Double] {
+        let total = totalValue(prices: prices)
+        guard total > 0 else { return [:] }
+        
+        var result: [String: Double] = [:]
+        for holding in holdings {
+            let price = prices[holding.symbol] ?? holding.entryPrice
+            result[holding.symbol] = holding.allocationPercent(totalValue: total, currentPrice: price)
+        }
+        return result
+    }
+    
+    // Calculate total profit/loss
+    func totalProfitLoss(prices: [String: Double]) -> Double {
+        return totalValue(prices: prices) - initialValue
+    }
+    
+    func totalProfitLossPercent(prices: [String: Double]) -> Double {
+        guard initialValue > 0 else { return 0 }
+        return (totalProfitLoss(prices: prices) / initialValue) * 100
+    }
+}
+
+// MARK: - Net Worth Snapshot (for historical tracking)
+struct NetWorthSnapshot: Identifiable, Codable {
+    let id: String
+    let userId: String
+    let netWorth: Double
+    let timestamp: Date
+    
+    init(id: String = UUID().uuidString, userId: String, netWorth: Double, timestamp: Date = Date()) {
+        self.id = id
+        self.userId = userId
+        self.netWorth = netWorth
+        self.timestamp = timestamp
+    }
+}
+
+// MARK: - Transaction (for audit trail)
+struct Transaction: Identifiable, Codable {
+    let id: String
+    let userId: String
+    let type: TransactionType
+    let symbol: String?
+    let shares: Double?
+    let price: Double?
+    let timestamp: Date
+    let description: String
+    
+    enum TransactionType: String, Codable {
+        case addStock
+        case removeStock
+        case rebalance
+        case adjustAllocation
+    }
+    
+    init(id: String = UUID().uuidString, userId: String, type: TransactionType, symbol: String? = nil, shares: Double? = nil, price: Double? = nil, description: String) {
+        self.id = id
+        self.userId = userId
+        self.type = type
+        self.symbol = symbol
+        self.shares = shares
+        self.price = price
+        self.timestamp = Date()
+        self.description = description
+    }
+}
+
+// MARK: - Leaderboard Entry
+struct LeaderboardEntry: Identifiable {
+    let id: String
+    let user: User
+    let netWorth: Double
+    let rank: Int
+    let profitLossPercent: Double
+    
+    var isPositive: Bool {
+        profitLossPercent >= 0
+    }
+}
+
+// MARK: - Stock with Owners (for Stocks View)
+struct StockWithOwners: Identifiable {
+    let stock: Stock
+    let owners: [User]
+    
+    var id: String { stock.symbol }
+}
+
+// MARK: - Time Range for Charts
+enum TimeRange: String, CaseIterable {
+    case oneDay = "1D"
+    case oneWeek = "1W"
+    case oneMonth = "1M"
+    case all = "All"
+    
+    var displayName: String { rawValue }
+    
+    var startDate: Date {
+        let calendar = Calendar.current
+        let now = Date()
+        
+        switch self {
+        case .oneDay:
+            return calendar.date(byAdding: .day, value: -1, to: now) ?? now
+        case .oneWeek:
+            return calendar.date(byAdding: .weekOfYear, value: -1, to: now) ?? now
+        case .oneMonth:
+            return calendar.date(byAdding: .month, value: -1, to: now) ?? now
+        case .all:
+            return calendar.date(byAdding: .year, value: -10, to: now) ?? now
+        }
+    }
+}
+
+// MARK: - Chart Data Point
+struct ChartDataPoint: Identifiable {
+    let id = UUID()
+    let date: Date
+    let value: Double
+}
+
+// MARK: - API Response Models
+struct FinnhubQuoteResponse: Codable {
+    let c: Double  // Current price
+    let d: Double? // Change
+    let dp: Double? // Percent change
+    let h: Double  // High price of the day
+    let l: Double  // Low price of the day
+    let o: Double  // Open price of the day
+    let pc: Double // Previous close price
+    let t: Int     // Timestamp
+}
+
+struct StockSearchResult: Identifiable, Codable {
+    let symbol: String
+    let description: String
+    let type: String
+    
+    var id: String { symbol }
+}
+
+struct FinnhubSearchResponse: Codable {
+    let count: Int
+    let result: [FinnhubSearchResult]
+}
+
+struct FinnhubSearchResult: Codable {
+    let description: String
+    let displaySymbol: String
+    let symbol: String
+    let type: String
+}
+
+// MARK: - Price Cache Entry
+struct PriceCacheEntry: Codable {
+    let symbol: String
+    let price: Double
+    let previousClose: Double
+    let timestamp: Date
+    
+    var isStale: Bool {
+        Date().timeIntervalSince(timestamp) > 60 // 1 minute cache
+    }
+}

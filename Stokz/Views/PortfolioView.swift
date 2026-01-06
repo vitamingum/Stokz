@@ -4,6 +4,7 @@ import SwiftUI
 /// LIQUID DEATH STYLE - Bold Black & White
 struct PortfolioView: View {
     @EnvironmentObject var appState: AppState
+    @StateObject private var llmService = LocalLLMService.shared
     @State private var showAddStock = false
     @State private var selectedStock: String?
     @State private var showAdjustAllocation = false
@@ -83,9 +84,24 @@ struct PortfolioView: View {
                 .tracking(3)
                 .foregroundColor(Color(white: 0.5))
             
-            Text(appState.getNetWorth().asCurrency)
-                .font(.system(size: 48, weight: .black))
-                .foregroundColor(.white)
+            // Net Worth with movement emoji
+            if let portfolio = appState.currentUserPortfolio {
+                let profitLossPercent = portfolio.totalProfitLossPercent(prices: appState.priceService.prices)
+                let nwEmoji = llmService.getNetWorthEmoji(profitLossPercent: profitLossPercent)
+                
+                HStack(spacing: 8) {
+                    Text(appState.getNetWorth().asCurrency)
+                        .font(.system(size: 48, weight: .black))
+                        .foregroundColor(.white)
+                    
+                    Text(nwEmoji)
+                        .font(.system(size: 32))
+                }
+            } else {
+                Text(appState.getNetWorth().asCurrency)
+                    .font(.system(size: 48, weight: .black))
+                    .foregroundColor(.white)
+            }
             
             // Profit/Loss
             if let portfolio = appState.currentUserPortfolio {
@@ -117,7 +133,8 @@ struct PortfolioView: View {
     
     // MARK: - Holdings List (Liquid Death Style)
     private var holdingsList: some View {
-        LazyVStack(spacing: 0) {
+        let _ = llmService.resetPortfolioEmojis() // Reset deduplication for this render
+        return LazyVStack(spacing: 0) {
             // Cash row (always first)
             if let portfolio = appState.currentUserPortfolio {
                 cashRow(cashBalance: portfolio.cashBalance, totalValue: appState.getNetWorth())
@@ -126,18 +143,20 @@ struct PortfolioView: View {
             ForEach(appState.getAllocations(), id: \.symbol) { allocation in
                 let stock = appState.priceService.stocks[allocation.symbol]
                 let holding = appState.currentUserPortfolio?.holdings.first(where: { $0.symbol == allocation.symbol })
+                let dayChangePercent = stock?.priceChangePercent ?? 0
+                let emoji = llmService.getPortfolioEmoji(
+                    symbol: allocation.symbol,
+                    dayChangePercent: dayChangePercent
+                )
                 
                 VStack(spacing: 0) {
                     HStack(spacing: 8) {
-                        // Remove button (LEFT)
-                        Button(action: {
-                            Task { await appState.removeStock(symbol: allocation.symbol) }
-                        }) {
-                            Image(systemName: "xmark.circle.fill")
-                                .font(.system(size: 22, weight: .bold))
-                                .foregroundColor(Color(white: 0.3))
+                        // Emoji (LEFT) - only shows for big moves
+                        if !emoji.isEmpty {
+                            Text(emoji)
+                                .font(.system(size: 22))
+                                .frame(width: 32)
                         }
-                        .buttonStyle(PlainButtonStyle())
                         
                         // Stock info (CENTER)
                         VStack(alignment: .leading, spacing: 2) {
@@ -209,6 +228,13 @@ struct PortfolioView: View {
                         .padding(.leading)
                 }
                 .background(Color.black)
+                .swipeActions(edge: .leading, allowsFullSwipe: true) {
+                    Button(role: .destructive) {
+                        Task { await appState.removeStock(symbol: allocation.symbol) }
+                    } label: {
+                        Label("Remove", systemImage: "trash")
+                    }
+                }
             }
         }
         .padding(.vertical)
@@ -217,12 +243,14 @@ struct PortfolioView: View {
     // MARK: - Cash Row (No X or +/- buttons)
     private func cashRow(cashBalance: Double, totalValue: Double) -> some View {
         let percent = totalValue > 0 ? (cashBalance / totalValue) * 100 : 0
+        let cashEmoji = llmService.getCashEmoji(cashBalance: cashBalance, totalValue: totalValue)
         
         return VStack(spacing: 0) {
             HStack(spacing: 8) {
-                // Spacer to align with stock rows (where X button would be)
-                Color.clear
-                    .frame(width: 22, height: 22)
+                // Cash Emoji (LEFT)
+                Text(cashEmoji)
+                    .font(.system(size: 22))
+                    .frame(width: 32)
                 
                 // Cash info (CENTER)
                 VStack(alignment: .leading, spacing: 2) {

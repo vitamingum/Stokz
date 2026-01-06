@@ -155,12 +155,12 @@ class AuthenticationService: NSObject, ObservableObject {
             .joined(separator: "&")
             .data(using: .utf8)
         
-        Logger.shared.networkRequest("POST", url: tokenEndpoint, category: .auth)
+        Logger.shared.net("POST", "token")
         
         do {
             let (data, response) = try await URLSession.shared.data(for: request)
             let httpResponse = response as? HTTPURLResponse
-            Logger.shared.networkResponse(httpResponse?.statusCode ?? 0, url: tokenEndpoint, category: .auth)
+            Logger.shared.netOK(httpResponse?.statusCode ?? 0, "token")
             
             let tokenResponse = try JSONDecoder().decode(TokenResponse.self, from: data)
             
@@ -208,12 +208,12 @@ class AuthenticationService: NSObject, ObservableObject {
         var request = URLRequest(url: URL(string: userInfoEndpoint)!)
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         
-        Logger.shared.networkRequest("GET", url: userInfoEndpoint, category: .auth)
+        Logger.shared.net("GET", "userinfo")
         
         do {
             let (data, response) = try await URLSession.shared.data(for: request)
             let httpResponse = response as? HTTPURLResponse
-            Logger.shared.networkResponse(httpResponse?.statusCode ?? 0, url: userInfoEndpoint, category: .auth)
+            Logger.shared.netOK(httpResponse?.statusCode ?? 0, "userinfo")
             
             let userInfo = try JSONDecoder().decode(GoogleUserInfo.self, from: data)
             
@@ -268,11 +268,11 @@ class AuthenticationService: NSObject, ObservableObject {
             .joined(separator: "&")
             .data(using: .utf8)
         
-        Logger.shared.networkRequest("POST", url: "\(tokenEndpoint) (refresh)", category: .auth)
+        Logger.shared.net("POST", "token/refresh")
         
         let (data, response) = try await URLSession.shared.data(for: request)
         let httpResponse = response as? HTTPURLResponse
-        Logger.shared.networkResponse(httpResponse?.statusCode ?? 0, url: "\(tokenEndpoint) (refresh)", category: .auth)
+        Logger.shared.netOK(httpResponse?.statusCode ?? 0, "token/refresh")
         
         let tokenResponse = try JSONDecoder().decode(TokenResponse.self, from: data)
         

@@ -2,15 +2,15 @@ import Foundation
 import os.log
 
 /// Centralized logging for Stokz app
-/// Uses Apple's unified logging system (os_log) for streaming via Console.app or log stream
 enum LogCategory: String {
     case auth = "Auth"
     case sheets = "Sheets"
     case stocks = "Stocks"
-    case portfolio = "Portfolio"
+    case portfolio = "Port"
     case app = "App"
-    case network = "Network"
+    case network = "Net"
     case ui = "UI"
+    case llm = "LLM"
 }
 
 enum LogLevel: String {
@@ -21,97 +21,119 @@ enum LogLevel: String {
     case success = "✅"
 }
 
-final class Logger {
+struct LogEntry: Identifiable {
+    let id = UUID()
+    let time: Date
+    let level: LogLevel
+    let category: LogCategory
+    let message: String
+    
+    var display: String {
+        let t = Self.timeFormatter.string(from: time)
+        return "\(level.rawValue) [\(t)][\(category.rawValue)] \(message)"
+    }
+    
+    private static let timeFormatter: DateFormatter = {
+        let f = DateFormatter()
+        f.dateFormat = "HH:mm:ss"
+        return f
+    }()
+}
+
+@MainActor
+final class Logger: ObservableObject {
     static let shared = Logger()
     
     private let subsystem = "com.stokz.app"
-    
-    // Category-specific loggers
     private var loggers: [LogCategory: OSLog] = [:]
     
+    @Published private(set) var entries: [LogEntry] = []
+    private let maxEntries = 500
+    
     private init() {
-        // Initialize loggers for each category
-        for category in [LogCategory.auth, .sheets, .stocks, .portfolio, .app, .network, .ui] {
+        for category in [LogCategory.auth, .sheets, .stocks, .portfolio, .app, .network, .ui, .llm] {
             loggers[category] = OSLog(subsystem: subsystem, category: category.rawValue)
         }
     }
     
-    // MARK: - Public Logging Methods
-    
-    func debug(_ message: String, category: LogCategory = .app, file: String = #file, function: String = #function, line: Int = #line) {
-        log(message, level: .debug, category: category, file: file, function: function, line: line)
+    func debug(_ message: String, category: LogCategory = .app) {
+        log(message, level: .debug, category: category)
     }
     
-    func info(_ message: String, category: LogCategory = .app, file: String = #file, function: String = #function, line: Int = #line) {
-        log(message, level: .info, category: category, file: file, function: function, line: line)
+    func info(_ message: String, category: LogCategory = .app) {
+        log(message, level: .info, category: category)
     }
     
-    func warning(_ message: String, category: LogCategory = .app, file: String = #file, function: String = #function, line: Int = #line) {
-        log(message, level: .warning, category: category, file: file, function: function, line: line)
+    func warning(_ message: String, category: LogCategory = .app) {
+        log(message, level: .warning, category: category)
     }
     
-    func error(_ message: String, category: LogCategory = .app, file: String = #file, function: String = #function, line: Int = #line) {
-        log(message, level: .error, category: category, file: file, function: function, line: line)
+    func error(_ message: String, category: LogCategory = .app) {
+        log(message, level: .error, category: category)
     }
     
-    func success(_ message: String, category: LogCategory = .app, file: String = #file, function: String = #function, line: Int = #line) {
-        log(message, level: .success, category: category, file: file, function: function, line: line)
+    func success(_ message: String, category: LogCategory = .app) {
+        log(message, level: .success, category: category)
     }
     
-    // MARK: - Specialized Logging
-    
-    func networkRequest(_ method: String, url: String, category: LogCategory = .network) {
-        info("📤 \(method) \(url)", category: category)
+    func net(_ method: String, _ url: String) {
+        info("\(method) \(url.suffix(40))", category: .network)
     }
     
-    func networkResponse(_ statusCode: Int, url: String, duration: TimeInterval? = nil, category: LogCategory = .network) {
-        let durationStr = duration.map { String(format: " (%.2fs)", $0) } ?? ""
-        if (200..<300).contains(statusCode) {
-            success("📥 \(statusCode) \(url)\(durationStr)", category: category)
-        } else {
-            error("📥 \(statusCode) \(url)\(durationStr)", category: category)
+    func netOK(_ code: Int, _ url: String) {
+        success("\(code) \(url.suffix(30))", category: .network)
+    }
+    
+    func netErr(_ err: String) {
+        error(err.prefix(60).description, category: .network)
+    }
+    
+    func clear() {
+        entries.removeAll()
+    }
+    
+    private func log(_ message: String, level: LogLevel, category: LogCategory) {
+        let entry = LogEntry(time: Date(), level: level, category: category, message: message)
+        
+        // Store in memory
+        entries.append(entry)
+        if entries.count > maxEntries {
+            entries.removeFirst(entries.count - maxEntries)
         }
-    }
-    
-    func networkError(_ error: Error, url: String, category: LogCategory = .network) {
-        self.error("📥 FAILED \(url): \(error.localizedDescription)", category: category)
-    }
-    
-    // MARK: - Private
-    
-    private func log(_ message: String, level: LogLevel, category: LogCategory, file: String, function: String, line: Int) {
-        let fileName = (file as NSString).lastPathComponent
-        let logMessage = "\(level.rawValue) [\(category.rawValue)] \(message) (\(fileName):\(line))"
         
-        // Use os_log for system logging - use .fault level to ensure visibility
+        // OS log
         let osLog = loggers[category] ?? OSLog.default
+        os_log("%{public}@", log: osLog, type: .default, entry.display)
         
-        // Always use .default or higher to ensure logs are captured
-        os_log("%{public}@", log: osLog, type: .default, logMessage)
-        
-        // Always print to console (not just DEBUG)
-        print(logMessage)
+        #if DEBUG
+        print(entry.display)
+        #endif
     }
 }
 
-// MARK: - Convenience Global Functions
+// MARK: - Global convenience
 
+@MainActor
 func logDebug(_ message: String, category: LogCategory = .app) {
     Logger.shared.debug(message, category: category)
 }
 
+@MainActor
 func logInfo(_ message: String, category: LogCategory = .app) {
     Logger.shared.info(message, category: category)
 }
 
+@MainActor
 func logWarning(_ message: String, category: LogCategory = .app) {
     Logger.shared.warning(message, category: category)
 }
 
+@MainActor
 func logError(_ message: String, category: LogCategory = .app) {
     Logger.shared.error(message, category: category)
 }
 
+@MainActor
 func logSuccess(_ message: String, category: LogCategory = .app) {
     Logger.shared.success(message, category: category)
 }

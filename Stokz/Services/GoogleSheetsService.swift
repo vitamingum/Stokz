@@ -64,10 +64,10 @@ class GoogleSheetsService: ObservableObject {
         let range = "\(usersSheet)!A2:E"
         let request = try buildAuthenticatedReadRequest(range: range)
         
-        Logger.shared.networkRequest("GET", url: request.url?.absoluteString ?? range, category: .sheets)
+        Logger.shared.net("GET", "sheets")
         let (data, response) = try await URLSession.shared.data(for: request)
         let httpResponse = response as? HTTPURLResponse
-        Logger.shared.networkResponse(httpResponse?.statusCode ?? 0, url: "Users sheet", category: .sheets)
+        Logger.shared.netOK(httpResponse?.statusCode ?? 0, "sheets")
         
         // Check for 403 - this means the token doesn't have the right scopes
         if httpResponse?.statusCode == 403 {
@@ -133,10 +133,10 @@ class GoogleSheetsService: ObservableObject {
         let range = "\(portfoliosSheet)!A2:E"
         let request = try buildAuthenticatedReadRequest(range: range)
         
-        Logger.shared.networkRequest("GET", url: "Portfolios sheet", category: .sheets)
+        Logger.shared.net("GET", "sheets")
         let (data, response) = try await URLSession.shared.data(for: request)
         let httpResponse = response as? HTTPURLResponse
-        Logger.shared.networkResponse(httpResponse?.statusCode ?? 0, url: "Portfolios sheet", category: .sheets)
+        Logger.shared.netOK(httpResponse?.statusCode ?? 0, "sheets")
         
         let sheetsResponse = try JSONDecoder().decode(SheetValuesResponse.self, from: data)
         
@@ -260,10 +260,10 @@ class GoogleSheetsService: ObservableObject {
         let range = "\(snapshotsSheet)!A2:D"
         let request = try buildAuthenticatedReadRequest(range: range)
         
-        Logger.shared.networkRequest("GET", url: "NetWorthSnapshots sheet", category: .sheets)
+        Logger.shared.net("GET", "sheets")
         let (data, response) = try await URLSession.shared.data(for: request)
         let httpResponse = response as? HTTPURLResponse
-        Logger.shared.networkResponse(httpResponse?.statusCode ?? 0, url: "NetWorthSnapshots sheet", category: .sheets)
+        Logger.shared.netOK(httpResponse?.statusCode ?? 0, "sheets")
         
         let sheetsResponse = try JSONDecoder().decode(SheetValuesResponse.self, from: data)
         
@@ -335,10 +335,10 @@ class GoogleSheetsService: ObservableObject {
         let range = "\(priceCacheSheet)!A2:D"
         let request = try buildAuthenticatedReadRequest(range: range)
         
-        Logger.shared.networkRequest("GET", url: "PriceCache sheet", category: .sheets)
+        Logger.shared.net("GET", "sheets")
         let (data, response) = try await URLSession.shared.data(for: request)
         let httpResponse = response as? HTTPURLResponse
-        Logger.shared.networkResponse(httpResponse?.statusCode ?? 0, url: "PriceCache sheet", category: .sheets)
+        Logger.shared.netOK(httpResponse?.statusCode ?? 0, "sheets")
         
         let sheetsResponse = try JSONDecoder().decode(SheetValuesResponse.self, from: data)
         
@@ -413,7 +413,7 @@ class GoogleSheetsService: ObservableObject {
         let body = ["values": values]
         request.httpBody = try JSONEncoder().encode(body)
         
-        Logger.shared.networkRequest("POST", url: "\(sheet) append", category: .sheets)
+        Logger.shared.net("POST", "sheets")
         let (data, response) = try await URLSession.shared.data(for: request)
         
         guard let httpResponse = response as? HTTPURLResponse else {
@@ -421,7 +421,7 @@ class GoogleSheetsService: ObservableObject {
             throw GoogleSheetsError.requestFailed
         }
         
-        Logger.shared.networkResponse(httpResponse.statusCode, url: "\(sheet) append", category: .sheets)
+        Logger.shared.netOK(httpResponse.statusCode, "sheets")
         
         guard (200...299).contains(httpResponse.statusCode) else {
             let errorBody = String(data: data, encoding: .utf8) ?? "no body"
@@ -449,7 +449,7 @@ class GoogleSheetsService: ObservableObject {
         let body = ["values": values]
         request.httpBody = try JSONEncoder().encode(body)
         
-        Logger.shared.networkRequest("PUT", url: range, category: .sheets)
+        Logger.shared.net("PUT", "sheets")
         let (_, response) = try await URLSession.shared.data(for: request)
         
         guard let httpResponse = response as? HTTPURLResponse else {
@@ -457,7 +457,7 @@ class GoogleSheetsService: ObservableObject {
             throw GoogleSheetsError.requestFailed
         }
         
-        Logger.shared.networkResponse(httpResponse.statusCode, url: range, category: .sheets)
+        Logger.shared.netOK(httpResponse.statusCode, "sheets")
         
         guard (200...299).contains(httpResponse.statusCode) else {
             logError("Update failed with status \(httpResponse.statusCode)", category: .sheets)
@@ -479,7 +479,7 @@ class GoogleSheetsService: ObservableObject {
         clearRequest.httpMethod = "POST"
         clearRequest.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         
-        Logger.shared.networkRequest("POST", url: "\(range):clear", category: .sheets)
+        Logger.shared.net("POST", "sheets")
         _ = try await URLSession.shared.data(for: clearRequest)
         
         // Write new data

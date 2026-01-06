@@ -4,6 +4,7 @@ import SwiftUI
 /// LIQUID DEATH STYLE - Bold Black & White
 struct LeaderboardView: View {
     @EnvironmentObject var appState: AppState
+    @StateObject private var llmService = LocalLLMService.shared
     @State private var selectedUser: User?
     
     var body: some View {
@@ -124,12 +125,23 @@ struct LeaderboardView: View {
     
     // MARK: - Leaderboard List (Liquid Death Style)
     private var leaderboardList: some View {
-        VStack(spacing: 0) {
+        let _ = llmService.resetLeaderboardEmojis() // Reset deduplication for this render
+        return VStack(spacing: 0) {
             ForEach(appState.leaderboard) { entry in
+                let emoji = llmService.getLeaderboardEmoji(
+                    userId: entry.user.id,
+                    rank: entry.rank,
+                    totalPlayers: appState.leaderboard.count,
+                    profitLossPercent: entry.profitLossPercent
+                )
                 VStack(spacing: 0) {
-                    LeaderboardRow(entry: entry, onTap: {
-                        selectedUser = entry.user
-                    })
+                    LeaderboardRow(
+                        entry: entry,
+                        emoji: emoji,
+                        onTap: {
+                            selectedUser = entry.user
+                        }
+                    )
                     .padding(.horizontal)
                     
                     if entry.id != appState.leaderboard.last?.id {
@@ -149,20 +161,25 @@ struct LeaderboardView: View {
 // MARK: - Leaderboard Row (Liquid Death Style)
 struct LeaderboardRow: View {
     let entry: LeaderboardEntry
+    var emoji: String? = nil
     var onTap: (() -> Void)?
     
     var body: some View {
         Button(action: { onTap?() }) {
             HStack(spacing: 12) {
-                // Rank
+                // AI Emoji (LEFT) - replaces rank circle for non-top-3
                 ZStack {
                     Circle()
                         .fill(rankColor)
                         .frame(width: 32, height: 32)
                     
                     if entry.rank <= 3 {
-                        Text("💀")
-                            .font(.system(size: 14))
+                        Text("\(entry.rank)")
+                            .font(.system(size: 12, weight: .black))
+                            .foregroundColor(.black)
+                    } else if let emoji = emoji {
+                        Text(emoji)
+                            .font(.system(size: 16))
                     } else {
                         Text("\(entry.rank)")
                             .font(.system(size: 12, weight: .black))
@@ -175,10 +192,18 @@ struct LeaderboardRow: View {
                 
                 // Name and Performance
                 VStack(alignment: .leading, spacing: 4) {
-                    Text(entry.user.displayName.uppercased())
-                        .font(.system(size: 14, weight: .bold))
-                        .tracking(1)
-                        .foregroundColor(.white)
+                    HStack(spacing: 6) {
+                        Text(entry.user.displayName.uppercased())
+                            .font(.system(size: 14, weight: .bold))
+                            .tracking(1)
+                            .foregroundColor(.white)
+                        
+                        // Emoji for top 3 shows after name
+                        if entry.rank <= 3, let emoji = emoji {
+                            Text(emoji)
+                                .font(.system(size: 16))
+                        }
+                    }
                     
                     HStack(spacing: 4) {
                         Image(systemName: entry.isPositive ? "arrow.up.right" : "arrow.down.right")

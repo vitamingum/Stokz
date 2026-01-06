@@ -36,7 +36,7 @@ class StockPriceService: ObservableObject {
         var request = URLRequest(url: url)
         request.setValue("Mozilla/5.0", forHTTPHeaderField: "User-Agent")
         
-        Logger.shared.networkRequest("GET", url: "Yahoo Finance: \(symbol)", category: .stocks)
+        Logger.shared.net("GET", "Yahoo/\(symbol)")
         let (data, response) = try await URLSession.shared.data(for: request)
         
         guard let httpResponse = response as? HTTPURLResponse else {
@@ -44,7 +44,7 @@ class StockPriceService: ObservableObject {
             throw StockPriceError.requestFailed
         }
         
-        Logger.shared.networkResponse(httpResponse.statusCode, url: "Yahoo Finance: \(symbol)", category: .stocks)
+        Logger.shared.netOK(httpResponse.statusCode, "Yahoo/\(symbol)")
         
         guard (200...299).contains(httpResponse.statusCode) else {
             logError("Request failed for \(symbol): HTTP \(httpResponse.statusCode)", category: .stocks)
@@ -137,7 +137,7 @@ class StockPriceService: ObservableObject {
         var request = URLRequest(url: url)
         request.setValue("Mozilla/5.0", forHTTPHeaderField: "User-Agent")
         
-        Logger.shared.networkRequest("GET", url: "Yahoo Search: \(query)", category: .stocks)
+        Logger.shared.net("GET", "Yahoo/search/\(query)")
         let (data, response) = try await URLSession.shared.data(for: request)
         
         guard let httpResponse = response as? HTTPURLResponse else {
@@ -145,7 +145,7 @@ class StockPriceService: ObservableObject {
             throw StockPriceError.requestFailed
         }
         
-        Logger.shared.networkResponse(httpResponse.statusCode, url: "Yahoo Search: \(query)", category: .stocks)
+        Logger.shared.netOK(httpResponse.statusCode, "Yahoo/search")
         
         guard (200...299).contains(httpResponse.statusCode) else {
             logError("Search request failed: HTTP \(httpResponse.statusCode)", category: .stocks)

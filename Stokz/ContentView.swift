@@ -49,6 +49,12 @@ struct ContentView: View {
                     Label("SCORES", systemImage: "trophy.fill")
                 }
                 .tag(3)
+            
+            SettingsView()
+                .tabItem {
+                    Label("SETTINGS", systemImage: "gearshape.fill")
+                }
+                .tag(4)
         }
         .tint(.white)
         .background(Color.black)

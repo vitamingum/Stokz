@@ -220,17 +220,14 @@ class AppState: ObservableObject {
             do {
                 try await self?.sheetsService.savePortfolio(portfolio)
                 let saveTime = Date().timeIntervalSince(saveStart)
-                logSuccess("🌐 [NET] Portfolio saved to Sheets in \(String(format: "%.0f", saveTime * 1000))ms", category: .portfolio)
+                await MainActor.run { logSuccess("🌐 Sheets saved in \(String(format: "%.0f", saveTime * 1000))ms", category: .portfolio) }
             } catch {
-                logError("🌐 [NET] Failed to save portfolio: \(error.localizedDescription)", category: .portfolio)
+                await MainActor.run { logError("🌐 Save failed: \(error.localizedDescription)", category: .portfolio) }
                 await MainActor.run {
                     self?.error = "Failed to save: \(error.localizedDescription)"
                 }
             }
         }
-        
-        let totalTime = Date().timeIntervalSince(startTime)
-        logInfo("📱 [UI] addStock completed after \(String(format: "%.0f", totalTime * 1000))ms", category: .portfolio)
     }
     
     func removeStock(symbol: String) async {
@@ -261,9 +258,9 @@ class AppState: ObservableObject {
             do {
                 try await self?.sheetsService.savePortfolio(portfolio)
                 let saveTime = Date().timeIntervalSince(saveStart)
-                logSuccess("🌐 [NET] Portfolio saved to Sheets in \(String(format: "%.0f", saveTime * 1000))ms", category: .portfolio)
+                await MainActor.run { logSuccess("🌐 Sheets saved in \(String(format: "%.0f", saveTime * 1000))ms", category: .portfolio) }
             } catch {
-                logError("🌐 [NET] Failed to save portfolio: \(error.localizedDescription)", category: .portfolio)
+                await MainActor.run { logError("🌐 Save failed: \(error.localizedDescription)", category: .portfolio) }
                 await MainActor.run {
                     self?.error = "Failed to save: \(error.localizedDescription)"
                 }
@@ -305,9 +302,9 @@ class AppState: ObservableObject {
             do {
                 try await self?.sheetsService.savePortfolio(portfolio)
                 let saveTime = Date().timeIntervalSince(saveStart)
-                logSuccess("🌐 [NET] Portfolio saved to Sheets in \(String(format: "%.0f", saveTime * 1000))ms", category: .portfolio)
+                await MainActor.run { logSuccess("🌐 Sheets saved in \(String(format: "%.0f", saveTime * 1000))ms", category: .portfolio) }
             } catch {
-                logError("🌐 [NET] Failed to save portfolio: \(error.localizedDescription)", category: .portfolio)
+                await MainActor.run { logError("🌐 Save failed: \(error.localizedDescription)", category: .portfolio) }
                 await MainActor.run {
                     self?.error = "Failed to save: \(error.localizedDescription)"
                 }
@@ -346,9 +343,9 @@ class AppState: ObservableObject {
             do {
                 try await self?.sheetsService.savePortfolio(portfolio)
                 let saveTime = Date().timeIntervalSince(saveStart)
-                logSuccess("🌐 [NET] Portfolio saved to Sheets in \(String(format: "%.0f", saveTime * 1000))ms", category: .portfolio)
+                await MainActor.run { logSuccess("🌐 Sheets saved in \(String(format: "%.0f", saveTime * 1000))ms", category: .portfolio) }
             } catch {
-                logError("🌐 [NET] Failed to save portfolio: \(error.localizedDescription)", category: .portfolio)
+                await MainActor.run { logError("🌐 Save failed: \(error.localizedDescription)", category: .portfolio) }
                 await MainActor.run {
                     self?.error = "Failed to save: \(error.localizedDescription)"
                 }
@@ -382,9 +379,9 @@ class AppState: ObservableObject {
             do {
                 try await self?.sheetsService.savePortfolio(portfolio)
                 let saveTime = Date().timeIntervalSince(saveStart)
-                logSuccess("🌐 [NET] Portfolio saved to Sheets in \(String(format: "%.0f", saveTime * 1000))ms", category: .portfolio)
+                await MainActor.run { logSuccess("🌐 Sheets saved in \(String(format: "%.0f", saveTime * 1000))ms", category: .portfolio) }
             } catch {
-                logError("🌐 [NET] Failed to save portfolio: \(error.localizedDescription)", category: .portfolio)
+                await MainActor.run { logError("🌐 Save failed: \(error.localizedDescription)", category: .portfolio) }
                 await MainActor.run {
                     self?.error = "Failed to save: \(error.localizedDescription)"
                 }

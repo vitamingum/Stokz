@@ -4,6 +4,7 @@ import SwiftUI
 /// LIQUID DEATH STYLE - Bold Black & White
 struct StocksView: View {
     @EnvironmentObject var appState: AppState
+    @StateObject private var llmService = LocalLLMService.shared
     @State private var selectedStock: StockWithOwners?
     
     var body: some View {
@@ -14,9 +15,15 @@ struct StocksView: View {
                 ScrollView {
                     LazyVStack(spacing: 0) {
                         ForEach(appState.allStocksWithOwners) { stockWithOwners in
+                            let emoji = llmService.getStocksTabEmoji(
+                                symbol: stockWithOwners.stock.symbol,
+                                priceChangePercent: stockWithOwners.stock.priceChangePercent,
+                                holderCount: stockWithOwners.owners.count
+                            )
                             VStack(spacing: 0) {
                                 StockWithOwnersRow(
                                     stockWithOwners: stockWithOwners,
+                                    emoji: emoji,
                                     onTap: {
                                         selectedStock = stockWithOwners
                                     }
@@ -78,6 +85,7 @@ struct StocksView: View {
 // MARK: - Stock with Owners Row (Liquid Death Style)
 struct StockWithOwnersRow: View {
     let stockWithOwners: StockWithOwners
+    var emoji: String = LocalLLMService.placeholder
     var onTap: (() -> Void)?
     
     var body: some View {
@@ -85,6 +93,11 @@ struct StockWithOwnersRow: View {
             VStack(alignment: .leading, spacing: 10) {
                 // Stock Info
                 HStack {
+                    // Emoji
+                    Text(emoji)
+                        .font(.system(size: 22))
+                        .frame(width: 32)
+                    
                     VStack(alignment: .leading, spacing: 4) {
                         Text(stockWithOwners.stock.symbol)
                             .font(.system(size: 18, weight: .black))

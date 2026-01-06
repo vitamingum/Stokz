@@ -72,7 +72,13 @@ struct LeaderboardView: View {
     }
     
     private func podiumItem(entry: LeaderboardEntry, height: CGFloat) -> some View {
-        VStack(spacing: 8) {
+        let emoji = llmService.getLeaderboardEmoji(
+            userId: entry.user.id,
+            rank: entry.rank,
+            totalPlayers: appState.leaderboard.count,
+            profitLossPercent: entry.profitLossPercent
+        )
+        return VStack(spacing: 8) {
             // Rank Medal
             ZStack {
                 Circle()
@@ -87,12 +93,16 @@ struct LeaderboardView: View {
             // Avatar
             UserAvatarView(user: entry.user, size: 50)
             
-            // Name
-            Text(entry.user.displayName.uppercased())
-                .font(.system(size: 10, weight: .bold))
-                .tracking(1)
-                .foregroundColor(.white)
-                .lineLimit(1)
+            // Name with emoji
+            HStack(spacing: 4) {
+                Text(entry.user.displayName.uppercased())
+                    .font(.system(size: 10, weight: .bold))
+                    .tracking(1)
+                    .foregroundColor(.white)
+                    .lineLimit(1)
+                Text(emoji)
+                    .font(.system(size: 14))
+            }
             
             // Net Worth
             Text(entry.netWorth.asCompactCurrency)
@@ -161,36 +171,27 @@ struct LeaderboardView: View {
 // MARK: - Leaderboard Row (Liquid Death Style)
 struct LeaderboardRow: View {
     let entry: LeaderboardEntry
-    var emoji: String? = nil
+    var emoji: String = ""
     var onTap: (() -> Void)?
     
     var body: some View {
         Button(action: { onTap?() }) {
             HStack(spacing: 12) {
-                // AI Emoji (LEFT) - replaces rank circle for non-top-3
+                // Rank number (LEFT)
                 ZStack {
                     Circle()
                         .fill(rankColor)
                         .frame(width: 32, height: 32)
                     
-                    if entry.rank <= 3 {
-                        Text("\(entry.rank)")
-                            .font(.system(size: 12, weight: .black))
-                            .foregroundColor(.black)
-                    } else if let emoji = emoji {
-                        Text(emoji)
-                            .font(.system(size: 16))
-                    } else {
-                        Text("\(entry.rank)")
-                            .font(.system(size: 12, weight: .black))
-                            .foregroundColor(.black)
-                    }
+                    Text("\(entry.rank)")
+                        .font(.system(size: 12, weight: .black))
+                        .foregroundColor(.black)
                 }
                 
                 // Avatar
                 UserAvatarView(user: entry.user, size: 40)
                 
-                // Name and Performance
+                // Name, Emoji, and Performance
                 VStack(alignment: .leading, spacing: 4) {
                     HStack(spacing: 6) {
                         Text(entry.user.displayName.uppercased())
@@ -198,11 +199,8 @@ struct LeaderboardRow: View {
                             .tracking(1)
                             .foregroundColor(.white)
                         
-                        // Emoji for top 3 shows after name
-                        if entry.rank <= 3, let emoji = emoji {
-                            Text(emoji)
-                                .font(.system(size: 16))
-                        }
+                        Text(emoji.isEmpty ? "" : emoji)
+                            .font(.system(size: 18))
                     }
                     
                     HStack(spacing: 4) {
@@ -216,7 +214,7 @@ struct LeaderboardRow: View {
                 
                 Spacer()
                 
-                // Net Worth
+                // Net Worth (RIGHT)
                 VStack(alignment: .trailing, spacing: 4) {
                     Text(entry.netWorth.asCurrency)
                         .font(.system(size: 14, weight: .black))

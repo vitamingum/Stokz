@@ -387,9 +387,9 @@ class PortfolioManager: ObservableObject {
     }
     
     // MARK: - Get All Stocks with Owners
-    func getStocksWithOwners(users: [User], portfolios: [String: Portfolio], prices: [String: Double]) -> [StockWithOwners] {
+    func getStocksWithOwners(users: [User], portfolios: [String: Portfolio], prices: [String: Double], stocks: [String: Stock] = [:]) -> [StockWithOwners] {
         var stockOwners: [String: [User]] = [:]
-        var stockPrices: [String: Stock] = [:]
+        var stockData: [String: Stock] = [:]
         
         for user in users {
             guard let portfolio = portfolios[user.id] else { continue }
@@ -400,21 +400,26 @@ class PortfolioManager: ObservableObject {
                 }
                 stockOwners[holding.symbol]?.append(user)
                 
-                // Create stock object if not exists
-                if stockPrices[holding.symbol] == nil {
-                    let price = prices[holding.symbol] ?? holding.entryPrice
-                    stockPrices[holding.symbol] = Stock(
-                        symbol: holding.symbol,
-                        currentPrice: price,
-                        previousClose: price, // Would be updated from API
-                        lastUpdated: Date()
-                    )
+                // Use actual Stock object from priceService if available (has correct previousClose)
+                if stockData[holding.symbol] == nil {
+                    if let stock = stocks[holding.symbol] {
+                        stockData[holding.symbol] = stock
+                    } else {
+                        // Fallback: create stock with current price as both (0% change)
+                        let price = prices[holding.symbol] ?? holding.entryPrice
+                        stockData[holding.symbol] = Stock(
+                            symbol: holding.symbol,
+                            currentPrice: price,
+                            previousClose: price,
+                            lastUpdated: Date()
+                        )
+                    }
                 }
             }
         }
         
         return stockOwners.compactMap { symbol, owners in
-            guard let stock = stockPrices[symbol] else { return nil }
+            guard let stock = stockData[symbol] else { return nil }
             return StockWithOwners(stock: stock, owners: owners)
         }.sorted { $0.stock.symbol < $1.stock.symbol }
     }

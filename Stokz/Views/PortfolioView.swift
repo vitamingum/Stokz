@@ -133,37 +133,55 @@ struct PortfolioView: View {
     
     // MARK: - Holdings List (Liquid Death Style)
     private var holdingsList: some View {
-        let _ = llmService.resetPortfolioEmojis() // Reset deduplication for this render
+        // Rank holdings by daily change percent (best first)
+        let allocations = appState.getAllocations()
+        let sortedAllocations = allocations.sorted { a, b in
+            let aChange = appState.priceService.stocks[a.symbol]?.priceChangePercent ?? 0
+            let bChange = appState.priceService.stocks[b.symbol]?.priceChangePercent ?? 0
+            return aChange > bChange
+        }
+        let totalHoldings = sortedAllocations.count
+        
         return LazyVStack(spacing: 0) {
             // Cash row (always first)
             if let portfolio = appState.currentUserPortfolio {
                 cashRow(cashBalance: portfolio.cashBalance, totalValue: appState.getNetWorth())
             }
             
-            ForEach(appState.getAllocations(), id: \.symbol) { allocation in
+            ForEach(Array(sortedAllocations.enumerated()), id: \.element.symbol) { index, allocation in
+                let rank = index + 1
                 let stock = appState.priceService.stocks[allocation.symbol]
                 let holding = appState.currentUserPortfolio?.holdings.first(where: { $0.symbol == allocation.symbol })
                 let dayChangePercent = stock?.priceChangePercent ?? 0
                 let emoji = llmService.getPortfolioEmoji(
                     symbol: allocation.symbol,
+                    rank: rank,
+                    totalHoldings: totalHoldings,
                     dayChangePercent: dayChangePercent
                 )
                 
                 VStack(spacing: 0) {
                     HStack(spacing: 8) {
-                        // Emoji (LEFT) - only shows for big moves
-                        if !emoji.isEmpty {
-                            Text(emoji)
-                                .font(.system(size: 22))
-                                .frame(width: 32)
-                        }
+                        // Emoji (LEFT) - always shows based on ranking
+                        Text(emoji)
+                            .font(.system(size: 22))
+                            .frame(width: 32)
                         
                         // Stock info (CENTER)
                         VStack(alignment: .leading, spacing: 2) {
-                            Text(allocation.symbol)
-                                .font(.system(size: 16, weight: .black))
-                                .tracking(1)
-                                .foregroundColor(.white)
+                            HStack(spacing: 6) {
+                                Text(allocation.symbol)
+                                    .font(.system(size: 16, weight: .black))
+                                    .tracking(1)
+                                    .foregroundColor(.white)
+                                
+                                // Daily change
+                                if let stock = stock {
+                                    Text("\(stock.priceChangePercent >= 0 ? "+" : "")\(String(format: "%.1f", stock.priceChangePercent))%")
+                                        .font(.system(size: 11, weight: .bold))
+                                        .foregroundColor(stock.priceChangePercent >= 0 ? .green : .red)
+                                }
+                            }
                             
                             if let stock = stock, let holding = holding {
                                 // Show: shares @ current price (entry: $X)

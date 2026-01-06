@@ -3,7 +3,7 @@ import SwiftUI
 /// ContentView - Main tab-based navigation
 struct ContentView: View {
     @EnvironmentObject var appState: AppState
-    @State private var selectedTab = 0
+    @AppStorage("selectedTab") private var selectedTab = 0
     
     var body: some View {
         Group {
@@ -11,8 +11,8 @@ struct ContentView: View {
                 // Show loading screen while initializing
                 LoadingView()
             } else if appState.authService.isAuthenticated {
-                if appState.isLoading && appState.currentUserPortfolio == nil {
-                    // Still loading data after auth
+                if appState.isLoading && appState.leaderboard.isEmpty && appState.allStocksWithOwners.isEmpty {
+                    // Still loading data after auth - check multiple data sources
                     LoadingView(message: "Loading portfolio...")
                 } else {
                     mainTabView

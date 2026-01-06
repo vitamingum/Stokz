@@ -144,7 +144,8 @@ class AppState: ObservableObject {
         allStocksWithOwners = portfolioManager.getStocksWithOwners(
             users: sheetsService.users,
             portfolios: portfoliosWithOptimistic,
-            prices: priceService.prices
+            prices: priceService.prices,
+            stocks: priceService.stocks
         )
     }
     
@@ -463,7 +464,8 @@ class AppState: ObservableObject {
         allStocksWithOwners = portfolioManager.getStocksWithOwners(
             users: sheetsService.users,
             portfolios: sheetsService.portfolios,
-            prices: priceService.prices
+            prices: priceService.prices,
+            stocks: priceService.stocks
         )
         
         // Update current user portfolio from server (source of truth)
@@ -532,25 +534,31 @@ class AppState: ObservableObject {
         
         if authService.isAuthenticated {
             logSuccess("Sign in successful", category: .auth)
+            
+            // IMPORTANT: Load data FIRST so we can check if portfolio exists
+            await loadAllData()
+            
             // Save user to backend if new
             if let user = authService.currentUser {
                 logInfo("User: \(user.displayName) (\(user.email))", category: .auth)
                 do {
                     try await sheetsService.saveUser(user)
                     
-                    // Create initial portfolio if needed
+                    // Create initial portfolio ONLY if user has no existing portfolio
                     if sheetsService.portfolios[user.id] == nil {
                         logInfo("Creating initial portfolio for new user", category: .portfolio)
                         let portfolio = portfolioManager.createInitialPortfolio(for: user.id)
                         try await sheetsService.savePortfolio(portfolio)
+                        // Refresh to pick up the new portfolio
+                        await loadAllData()
+                    } else {
+                        logInfo("Found existing portfolio for user", category: .portfolio)
                     }
                 } catch {
                     logError("Failed to save user/portfolio: \(error.localizedDescription)", category: .app)
                     self.error = error.localizedDescription
                 }
             }
-            
-            await loadAllData()
         } else {
             logWarning("Sign in was not successful", category: .auth)
         }

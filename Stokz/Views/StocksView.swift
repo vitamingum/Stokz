@@ -7,6 +7,12 @@ struct StocksView: View {
     @StateObject private var llmService = LocalLLMService.shared
     @State private var selectedStock: StockWithOwners?
     
+    // Sort stocks by day change for ranking
+    private var rankedStocks: [(stock: StockWithOwners, rank: Int)] {
+        let sorted = appState.allStocksWithOwners.sorted { $0.stock.priceChangePercent > $1.stock.priceChangePercent }
+        return sorted.enumerated().map { (stock: $0.element, rank: $0.offset + 1) }
+    }
+    
     var body: some View {
         NavigationStack {
             ZStack {
@@ -14,18 +20,19 @@ struct StocksView: View {
                 
                 ScrollView {
                     LazyVStack(spacing: 0) {
-                        ForEach(appState.allStocksWithOwners) { stockWithOwners in
+                        ForEach(rankedStocks, id: \.stock.id) { item in
                             let emoji = llmService.getStocksTabEmoji(
-                                symbol: stockWithOwners.stock.symbol,
-                                priceChangePercent: stockWithOwners.stock.priceChangePercent,
-                                holderCount: stockWithOwners.owners.count
+                                symbol: item.stock.stock.symbol,
+                                rank: item.rank,
+                                totalStocks: rankedStocks.count,
+                                dayChangePercent: item.stock.stock.priceChangePercent
                             )
                             VStack(spacing: 0) {
                                 StockWithOwnersRow(
-                                    stockWithOwners: stockWithOwners,
+                                    stockWithOwners: item.stock,
                                     emoji: emoji,
                                     onTap: {
-                                        selectedStock = stockWithOwners
+                                        selectedStock = item.stock
                                     }
                                 )
                                 .padding(.horizontal)
@@ -99,10 +106,17 @@ struct StockWithOwnersRow: View {
                         .frame(width: 32)
                     
                     VStack(alignment: .leading, spacing: 4) {
-                        Text(stockWithOwners.stock.symbol)
-                            .font(.system(size: 18, weight: .black))
-                            .tracking(1)
-                            .foregroundColor(.white)
+                        HStack(spacing: 6) {
+                            Text(stockWithOwners.stock.symbol)
+                                .font(.system(size: 18, weight: .black))
+                                .tracking(1)
+                                .foregroundColor(.white)
+                            
+                            // Daily change - small colored text
+                            Text("\(stockWithOwners.stock.priceChangePercent >= 0 ? "+" : "")\(String(format: "%.1f", stockWithOwners.stock.priceChangePercent))%")
+                                .font(.system(size: 11, weight: .bold))
+                                .foregroundColor(stockWithOwners.stock.priceChangePercent >= 0 ? .green : .red)
+                        }
                         
                         Text(stockName(for: stockWithOwners.stock.symbol).uppercased())
                             .font(.system(size: 10, weight: .bold))

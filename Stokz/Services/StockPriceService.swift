@@ -76,10 +76,13 @@ class StockPriceService: ObservableObject {
         }
         
         // Try multiple fields for previous close - Yahoo Finance API varies
-        let previousClose = meta["previousClose"] as? Double 
-            ?? meta["chartPreviousClose"] as? Double
+        let previousClose = meta["chartPreviousClose"] as? Double
+            ?? meta["previousClose"] as? Double 
             ?? meta["regularMarketPreviousClose"] as? Double
             ?? regularMarketPrice // fallback to current price if not available
+        
+        // Calculate change for logging
+        let dayChange = previousClose > 0 ? ((regularMarketPrice - previousClose) / previousClose) * 100 : 0
         
         let stock = Stock(
             symbol: symbol,
@@ -88,7 +91,7 @@ class StockPriceService: ObservableObject {
             lastUpdated: Date()
         )
         
-        logSuccess("\(symbol): $\(String(format: "%.2f", regularMarketPrice)) (prev: $\(String(format: "%.2f", previousClose)))", category: .stocks)
+        logSuccess("\(symbol): $\(String(format: "%.2f", regularMarketPrice)) prev:$\(String(format: "%.2f", previousClose)) (\(String(format: "%+.1f", dayChange))%)", category: .stocks)
         
         // Update cache
         priceCache[symbol] = PriceCacheEntry(

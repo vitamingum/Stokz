@@ -94,14 +94,8 @@ struct AddStockView: View {
     
     @ViewBuilder
     private func stockRow(symbol: String, name: String, isResult: Bool) -> some View {
-        let emoji = llmService.getStockSearchEmoji(symbol: symbol, companyName: name)
         Button(action: { addStock(symbol) }) {
             HStack {
-                // Emoji
-                Text(emoji)
-                    .font(.system(size: 22))
-                    .frame(width: 32)
-                
                 VStack(alignment: .leading, spacing: 4) {
                     Text(symbol)
                         .font(.system(size: 18, weight: .black))

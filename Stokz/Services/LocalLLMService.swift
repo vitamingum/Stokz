@@ -178,12 +178,9 @@ class LocalLLMService: ObservableObject {
     
     // MARK: - Stocks Tab Emoji (Ranked WSB Style)
     
-    /// Get emoji for stocks tab based on rank among all stocks
-    /// Best daily performer gets diamond, worst gets clown
+    /// Get emoji for stocks tab - only 🚀 for best performer at +7%, 🤡 for worst at -7%
     func getStocksTabEmoji(symbol: String, rank: Int, totalStocks: Int, dayChangePercent: Double) -> String {
-        // Always show ranked emoji based on daily change performance
-        // Best performer = 💎, worst = 🤡
-        return getRankedEmoji(rank: rank, total: totalStocks)
+        return getRankedEmoji(rank: rank, total: totalStocks, dayChangePercent: dayChangePercent)
     }
     
     /// Get emoji based on day change (for notable moves)
@@ -200,40 +197,18 @@ class LocalLLMService: ObservableObject {
         return ""
     }
     
-    /// Get emoji based on rank position (normalized WSB scale)
-    private func getRankedEmoji(rank: Int, total: Int) -> String {
+    /// Get emoji based on rank position - SIMPLIFIED: only rocket and clown for extreme performers
+    private func getRankedEmoji(rank: Int, total: Int, dayChangePercent: Double) -> String {
         guard total > 0 else { return "" }
         
-        // Full WSB scale - everyone gets an emoji based on relative performance
-        let wsbScale: [String] = [
-            "💎",  // Diamond - #1
-            "🦍",  // Ape
-            "🚀",  // Rocket
-            "🐂",  // Bull
-            "💪",  // Gains
-            "📈",  // Chart up
-            "👍",  // Thumbs up
-            "😐",  // Neutral
-            "📉",  // Chart down
-            "🐻",  // Bear
-            "💸",  // Money gone
-            "😰",  // Sweating
-            "☠️",  // Dead
-            "💀",  // Skull
-            "🤡"   // Clown - last place
-        ]
-        
-        let scaleSize = wsbScale.count
-        let normalizedPosition: Int
-        
-        if total == 1 {
-            normalizedPosition = 0  // Only stock gets diamond
-        } else {
-            let ratio = Double(rank - 1) / Double(total - 1)
-            normalizedPosition = min(Int(ratio * Double(scaleSize - 1)), scaleSize - 1)
+        // Only show emoji for ±7% daily change AND must be best/worst performer
+        if dayChangePercent >= 7 && rank == 1 {
+            return "🚀"  // Rocket for best performer with +7%+
+        } else if dayChangePercent <= -7 && rank == total {
+            return "🤡"  // Clown for worst performer with -7%+
         }
         
-        return wsbScale[normalizedPosition]
+        return ""  // No emoji for normal moves
     }
     
         // MARK: - Portfolio Emoji (with deduplication)
@@ -243,55 +218,18 @@ class LocalLLMService: ObservableObject {
         usedPortfolioEmojis.removeAll()
     }
     
-    /// Get emoji for portfolio based on rank among user's holdings
-    /// Best daily performer gets diamond, worst gets clown
+    /// Get emoji for portfolio - only 🚀 for best performer at +7%, 🤡 for worst at -7%
     func getPortfolioEmoji(symbol: String, rank: Int, totalHoldings: Int, dayChangePercent: Double) -> String {
-        // Use same ranking system as stocks tab
-        return getRankedEmoji(rank: rank, total: totalHoldings)
+        return getRankedEmoji(rank: rank, total: totalHoldings, dayChangePercent: dayChangePercent)
     }
     
-    // Keep old signature for backward compatibility but redirect to ranking
+    // Keep old signature for backward compatibility
     func getPortfolioEmoji(symbol: String, dayChangePercent: Double) -> String {
-        // Fallback: just use movement emoji for single calls
-        return getMovementEmoji(dayChange: dayChangePercent)
+        return ""  // No emoji without rank context
     }
     
     private func generatePortfolioEmoji(symbol: String, dayChange: Double) -> String {
-        let hash = abs(symbol.hashValue)
-        
-        // WSB-style: Only show emojis when noteworthy moves happen!
-        // Otherwise return empty string for clean look
-        
-        let pool: [String]
-        
-        if dayChange >= 10 {
-            // TO THE MOON - massive day (+10%+)
-            pool = ["🚀", "💎", "🦍", "🌙", "🍗", "🤑", "👑", "🐂"]
-        } else if dayChange >= 5 {
-            // Diamond hands paying off (+5-10%)
-            pool = ["💪", "🔥", "📈", "💰", "🎰", "🦧"]
-        } else if dayChange <= -10 {
-            // LOSS PORN - GUH moment (-10%+)
-            pool = ["💀", "☠️", "🤡", "🗑️", "⚰️", "😵", "🪦"]
-        } else if dayChange <= -5 {
-            // Behind Wendy's territory (-5-10%)
-            pool = ["📉", "🐻", "💸", "😰", "🥶", "😬"]
-        } else {
-            // Boring day - no emoji needed
-            return ""
-        }
-        
-        // Find first emoji not already used this render
-        for i in 0..<pool.count {
-            let idx = (hash + i) % pool.count
-            let emoji = pool[idx]
-            if !usedPortfolioEmojis.contains(emoji) {
-                return emoji
-            }
-        }
-        
-        // All used? Still return one (duplicates better than nothing for big moves)
-        return pool[hash % pool.count]
+        return ""  // Deprecated - no longer used
     }
     
     // MARK: - Leaderboard Emoji (with deduplication)
@@ -300,52 +238,29 @@ class LocalLLMService: ObservableObject {
     func resetLeaderboardEmojis() {
         usedLeaderboardEmojis.removeAll()
     }
-    
+
+    /// Get emoji for leaderboard - only 💎 for 1st place, 🤡 for last place
     func getLeaderboardEmoji(userId: String, rank: Int, totalPlayers: Int, profitLossPercent: Double) -> String {
-        // WSB emoji based purely on rank position - instant
         return generateLeaderboardEmoji(rank: rank, total: totalPlayers)
     }
     
     private func generateLeaderboardEmoji(rank: Int, total: Int) -> String {
-        // WSB-style ranking: 💎 diamond hands at top, 🤡 clown at bottom
+        // Only first and last place get emojis
+        guard total > 1 else { return "" }
         
-        let wsbScale: [String] = [
-            "💎",  // 1st - Diamond hands
-            "🦍",  // 2nd - Ape
-            "🚀",  // 3rd - Rocket
-            "🐂",  // 4th - Bull
-            "💪",  // 5th - Gains
-            "📈",  // 6th - Up
-            "👍",  // 7th - Good
-            "😐",  // 8th - Flat
-            "📉",  // 9th - Down
-            "🐻",  // 10th - Bear
-            "💸",  // 11th - Money gone
-            "😰",  // 12th - Sweating
-            "☠️",  // 13th - Dead
-            "💀",  // 14th - Skull
-            "🤡"   // Last - Clown
-        ]
-        
-        guard total > 0 else { return "🤷" }
-        
-        let scaleSize = wsbScale.count
-        let normalizedPosition: Int
-        
-        if total == 1 {
-            normalizedPosition = 0
-        } else {
-            let ratio = Double(rank - 1) / Double(total - 1)
-            normalizedPosition = min(Int(ratio * Double(scaleSize - 1)), scaleSize - 1)
+        if rank == 1 {
+            return "💎"  // Diamond for 1st place
+        } else if rank == total {
+            return "🤡"  // Clown for last place
         }
         
-        return wsbScale[normalizedPosition]
+        return ""  // No emoji for middle ranks
     }
     
-    // MARK: - Cash Emoji (Portfolio View)
+    // MARK: - Cash Emoji (Portfolio View) - REMOVED
     
     func getCashEmoji(cashBalance: Double, totalValue: Double) -> String {
-        return "💵"  // Hard-coded cash emoji
+        return ""  // No cash emoji
     }
     
     // MARK: - Net Worth Movement Emoji (Portfolio View)

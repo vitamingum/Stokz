@@ -84,24 +84,10 @@ struct PortfolioView: View {
                 .tracking(3)
                 .foregroundColor(Color(white: 0.5))
             
-            // Net Worth with movement emoji
-            if let portfolio = appState.currentUserPortfolio {
-                let profitLossPercent = portfolio.totalProfitLossPercent(prices: appState.priceService.prices)
-                let nwEmoji = llmService.getNetWorthEmoji(profitLossPercent: profitLossPercent)
-                
-                HStack(spacing: 8) {
-                    Text(appState.getNetWorth().asCurrency)
-                        .font(.system(size: 48, weight: .black))
-                        .foregroundColor(.white)
-                    
-                    Text(nwEmoji)
-                        .font(.system(size: 32))
-                }
-            } else {
-                Text(appState.getNetWorth().asCurrency)
-                    .font(.system(size: 48, weight: .black))
-                    .foregroundColor(.white)
-            }
+            // Net Worth (no emoji)
+            Text(appState.getNetWorth().asCurrency)
+                .font(.system(size: 48, weight: .black))
+                .foregroundColor(.white)
             
             // Profit/Loss
             if let portfolio = appState.currentUserPortfolio {

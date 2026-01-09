@@ -1,5 +1,37 @@
 # AI Context - Stokz
 
+## Project Layout (25 Swift files, ~6,800 LOC)
+
+```
+Stokz/
+├── StokzApp.swift          # Entry point
+├── ContentView.swift       # Tab container
+├── AppState.swift          # Global state coordinator
+├── Models/
+│   └── Models.swift        # User, Portfolio, Stock, LeaderboardEntry
+├── Services/
+│   ├── GoogleSheetsService # Users + portfolios from Sheets
+│   ├── StockPriceService   # Live prices from Finnhub
+│   ├── StockDataService    # Company info from JSON bundle
+│   ├── PortfolioManager    # Buy/sell logic
+│   ├── AuthenticationService
+│   └── Logger
+├── Views/
+│   ├── PortfolioView       # User's holdings
+│   ├── LeaderboardView     # Ranked players
+│   ├── UsersView           # All players
+│   ├── StocksView          # All stocks union
+│   ├── SettingsView        # Debug console
+│   ├── AddStockView        # Search + add stocks
+│   ├── StockDiscoveryView  # AI company info
+│   └── (5 more views)
+├── Components/
+│   ├── StockRowView
+│   └── UserRowView
+├── Extensions.swift        # Currency/date formatters
+└── stock_data_bundle.json  # 1005 companies (788KB)
+```
+
 ## Dev Workflow (Build + Deploy + Logs)
 
 **One command to build, install, and launch with live console:**
@@ -12,12 +44,7 @@ xcrun devicectl device process launch --device 00008150-001E08190A38401C \
   --terminate-existing --console com.stokz.app 2>&1 | tee /tmp/stokz_log.txt
 ```
 
-This kills any running app, launches fresh, and streams all `print()` output to terminal AND `/tmp/stokz_log.txt`.
-
-**Check logs after user tests:**
-```bash
-cat /tmp/stokz_log.txt | tail -100
-```
+**Check logs:** `cat /tmp/stokz_log.txt | tail -100`
 
 ## Key IDs
 - **Bundle**: `com.stokz.app`
@@ -31,11 +58,7 @@ fastlane beta  # Build + upload to TestFlight
 ```
 
 ## AI Stock Data Pipeline
-
-Data: `Stokz/stock_data_bundle.json` (~1005 stocks, 788KB)
-
 ```bash
 cd /Users/charlesburns/Stokz/pipeline
-/Users/charlesburns/Stokz/.venv/bin/python run_russell3000_pipeline.py
-# Options: --skip-wiki, --skip-facts
+.venv/bin/python run_russell3000_pipeline.py  # Options: --skip-wiki, --skip-facts
 ```

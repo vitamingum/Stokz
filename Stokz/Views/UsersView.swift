@@ -4,9 +4,7 @@ import SwiftUI
 /// LIQUID DEATH STYLE - Bold Black & White
 struct UsersView: View {
     @EnvironmentObject var appState: AppState
-    @ObservedObject private var llmService = LocalLLMService.shared
     @State private var selectedUser: User?
-    @State private var investmentStyles: [String: String] = [:]
     
     var body: some View {
         NavigationStack {
@@ -19,26 +17,16 @@ struct UsersView: View {
                             let entry = appState.leaderboard.first { $0.user.id == user.id }
                             
                             VStack(spacing: 0) {
-                                VStack(alignment: .leading, spacing: 4) {
-                                    UserRowView(
-                                        user: user,
-                                        rank: entry?.rank,
-                                        netWorth: entry?.netWorth,
-                                        profitLossPercent: entry?.profitLossPercent,
-                                        showRank: false,
-                                        onTap: {
-                                            selectedUser = user
-                                        }
-                                    )
-                                    
-                                    // Investment Style
-                                    if let style = investmentStyles[user.id] {
-                                        Text(style)
-                                            .font(.system(size: 11, weight: .medium))
-                                            .foregroundColor(Color(white: 0.5))
-                                            .padding(.leading, 52)  // Align with name (avatar width + spacing)
+                                UserRowView(
+                                    user: user,
+                                    rank: entry?.rank,
+                                    netWorth: entry?.netWorth,
+                                    profitLossPercent: entry?.profitLossPercent,
+                                    showRank: false,
+                                    onTap: {
+                                        selectedUser = user
                                     }
-                                }
+                                )
                                 .padding(.horizontal)
                                 .padding(.vertical, 12)
                                 
@@ -64,48 +52,11 @@ struct UsersView: View {
             }
             .refreshable {
                 await appState.loadAllData()
-                investmentStyles.removeAll()
-                await loadInvestmentStyles()
-            }
-            .task {
-                await loadInvestmentStyles()
-            }
-            .onChange(of: appState.sheetsService.users.count) { _, _ in
-                investmentStyles.removeAll()
-                Task {
-                    await loadInvestmentStyles()
-                }
-            }
-            .onChange(of: appState.leaderboard) { _, _ in
-                // Leaderboard changes when portfolios change
-                investmentStyles.removeAll()
-                Task {
-                    await loadInvestmentStyles()
-                }
-            }
-            .onChange(of: llmService.isModelLoaded) { _, isLoaded in
-                // Reload styles when model becomes ready
-                if isLoaded {
-                    investmentStyles.removeAll()
-                    Task {
-                        await loadInvestmentStyles()
-                    }
-                }
             }
             .overlay {
                 if appState.sheetsService.users.isEmpty {
                     emptyStateView
                 }
-            }
-        }
-    }
-    
-    private func loadInvestmentStyles() async {
-        for user in appState.sheetsService.users {
-            let holdings = appState.sheetsService.portfolios[user.id]?.holdings.map { $0.symbol } ?? []
-            let style = await LocalLLMService.shared.getInvestmentStyle(userId: user.id, holdings: holdings)
-            await MainActor.run {
-                investmentStyles[user.id] = style
             }
         }
     }

@@ -29,14 +29,9 @@
 		A1000019 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000019 /* AppState.swift */; };
 		A1000020 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000020 /* Extensions.swift */; };
 		A1000021 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000022 /* Logger.swift */; };
-		A1000025 /* LocalLLMService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000025 /* LocalLLMService.swift */; };
-		A1000026 /* AIContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000026 /* AIContext.swift */; };
 		A1000028 /* StockDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000028 /* StockDataService.swift */; };
 		A1000024 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000024 /* SettingsView.swift */; };
 		A1000029 /* StockDiscoveryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000029 /* StockDiscoveryView.swift */; };
-		A1000030 /* LlamaContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000030 /* LlamaContext.swift */; };
-		A1000031 /* llama.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = A2000031 /* llama.xcframework */; };
-		A1000032 /* llama.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A2000031 /* llama.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -46,7 +41,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				A1000032 /* llama.xcframework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -77,14 +71,10 @@
 		A2000020 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		A2000021 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A2000022 /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
-		A2000025 /* LocalLLMService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalLLMService.swift; sourceTree = "<group>"; };
-		A2000026 /* AIContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIContext.swift; sourceTree = "<group>"; };
 		A2000024 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		A2000027 /* stock_data_bundle.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = stock_data_bundle.json; sourceTree = "<group>"; };
 		A2000028 /* StockDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StockDataService.swift; sourceTree = "<group>"; };
 		A2000029 /* StockDiscoveryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StockDiscoveryView.swift; sourceTree = "<group>"; };
-		A2000030 /* LlamaContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LlamaContext.swift; sourceTree = "<group>"; };
-		A2000031 /* llama.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = llama.xcframework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -92,7 +82,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A1000031 /* llama.xcframework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -111,7 +100,6 @@
 		A4000007 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				A2000031 /* llama.xcframework */,
 			);
 			name = Frameworks;
 			path = Frameworks;
@@ -159,10 +147,7 @@
 				A2000007 /* StockPriceService.swift */,
 				A2000008 /* AuthenticationService.swift */,
 				A2000022 /* Logger.swift */,
-				A2000025 /* LocalLLMService.swift */,
-				A2000026 /* AIContext.swift */,
 				A2000028 /* StockDataService.swift */,
-				A2000030 /* LlamaContext.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -284,12 +269,9 @@
 				A1000019 /* AppState.swift in Sources */,
 				A1000020 /* Extensions.swift in Sources */,
 				A1000021 /* Logger.swift in Sources */,
-				A1000025 /* LocalLLMService.swift in Sources */,
-				A1000026 /* AIContext.swift in Sources */,
 				A1000028 /* StockDataService.swift in Sources */,
 				A1000024 /* SettingsView.swift in Sources */,
 				A1000029 /* StockDiscoveryView.swift in Sources */,
-				A1000030 /* LlamaContext.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

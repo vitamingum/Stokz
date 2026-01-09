@@ -4,7 +4,6 @@ import SwiftUI
 /// LIQUID DEATH STYLE - Bold Black & White
 struct AddStockView: View {
     @EnvironmentObject var appState: AppState
-    @StateObject private var llmService = LocalLLMService.shared
     @Environment(\.dismiss) var dismiss
     
     @State private var searchText = ""

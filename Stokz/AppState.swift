@@ -66,11 +66,6 @@ class AppState: ObservableObject {
         
         // Start price update timer
         startPriceUpdates()
-        
-        // Auto setup LLM in background (download if needed, then load)
-        Task {
-            await LocalLLMService.shared.autoSetup()
-        }
     }
     
     // MARK: - Handle Return to Foreground

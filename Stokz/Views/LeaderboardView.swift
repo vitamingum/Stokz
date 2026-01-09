@@ -4,9 +4,7 @@ import SwiftUI
 /// LIQUID DEATH STYLE - Bold Black & White
 struct LeaderboardView: View {
     @EnvironmentObject var appState: AppState
-    @StateObject private var llmService = LocalLLMService.shared
     @State private var selectedUser: User?
-    @State private var investmentStyles: [String: String] = [:] // userId -> style
     
     var body: some View {
         NavigationStack {
@@ -39,37 +37,6 @@ struct LeaderboardView: View {
             }
             .refreshable {
                 await appState.loadAllData()
-            }
-            .task {
-                await loadInvestmentStyles()
-            }
-            .onChange(of: appState.leaderboard) { _, _ in
-                // Clear cached styles so they regenerate with new portfolio data
-                investmentStyles.removeAll()
-                Task { await loadInvestmentStyles() }
-            }
-            .onChange(of: llmService.isModelLoaded) { _, isLoaded in
-                // Reload styles when model becomes ready
-                if isLoaded {
-                    investmentStyles.removeAll()
-                    Task { await loadInvestmentStyles() }
-                }
-            }
-        }
-    }
-    
-    // MARK: - Load Investment Styles
-    private func loadInvestmentStyles() async {
-        for entry in appState.leaderboard {
-            // Get user's holdings
-            if let portfolio = GoogleSheetsService.shared.portfolios[entry.user.id] {
-                let holdings = portfolio.holdings.map { $0.symbol }
-                if !holdings.isEmpty {
-                    let style = await llmService.getInvestmentStyle(userId: entry.user.id, holdings: holdings)
-                    await MainActor.run {
-                        investmentStyles[entry.user.id] = style
-                    }
-                }
             }
         }
     }
@@ -104,13 +71,7 @@ struct LeaderboardView: View {
     }
     
     private func podiumItem(entry: LeaderboardEntry, height: CGFloat) -> some View {
-        let emoji = llmService.getLeaderboardEmoji(
-            userId: entry.user.id,
-            rank: entry.rank,
-            totalPlayers: appState.leaderboard.count,
-            profitLossPercent: entry.profitLossPercent
-        )
-        return VStack(spacing: 8) {
+        VStack(spacing: 8) {
             // Rank Medal
             ZStack {
                 Circle()
@@ -125,16 +86,12 @@ struct LeaderboardView: View {
             // Avatar
             UserAvatarView(user: entry.user, size: 50)
             
-            // Name with emoji
-            HStack(spacing: 4) {
-                Text(entry.user.displayName.uppercased())
-                    .font(.system(size: 10, weight: .bold))
-                    .tracking(1)
-                    .foregroundColor(.white)
-                    .lineLimit(1)
-                Text(emoji)
-                    .font(.system(size: 14))
-            }
+            // Name
+            Text(entry.user.displayName.uppercased())
+                .font(.system(size: 10, weight: .bold))
+                .tracking(1)
+                .foregroundColor(.white)
+                .lineLimit(1)
             
             // Net Worth
             Text(entry.netWorth.asCompactCurrency)
@@ -167,21 +124,11 @@ struct LeaderboardView: View {
     
     // MARK: - Leaderboard List (Liquid Death Style)
     private var leaderboardList: some View {
-        let _ = llmService.resetLeaderboardEmojis() // Reset deduplication for this render
-        return VStack(spacing: 0) {
+        VStack(spacing: 0) {
             ForEach(appState.leaderboard) { entry in
-                let emoji = llmService.getLeaderboardEmoji(
-                    userId: entry.user.id,
-                    rank: entry.rank,
-                    totalPlayers: appState.leaderboard.count,
-                    profitLossPercent: entry.profitLossPercent
-                )
-                let style = investmentStyles[entry.user.id] ?? ""
                 VStack(spacing: 0) {
                     LeaderboardRow(
                         entry: entry,
-                        emoji: emoji,
-                        investmentStyle: style,
                         onTap: {
                             selectedUser = entry.user
                         }
@@ -206,8 +153,6 @@ struct LeaderboardView: View {
 struct LeaderboardRow: View {
     @EnvironmentObject var appState: AppState
     let entry: LeaderboardEntry
-    var emoji: String = ""
-    var investmentStyle: String = ""
     var onTap: (() -> Void)?
     
     var body: some View {
@@ -227,26 +172,12 @@ struct LeaderboardRow: View {
                 // Avatar
                 UserAvatarView(user: entry.user, size: 40)
                 
-                // Name, Emoji, Style, and Performance
+                // Name and Performance
                 VStack(alignment: .leading, spacing: 3) {
-                    HStack(spacing: 6) {
-                        Text(entry.user.displayName.uppercased())
-                            .font(.system(size: 14, weight: .bold))
-                            .tracking(1)
-                            .foregroundColor(.white)
-                        
-                        Text(emoji.isEmpty ? "" : emoji)
-                            .font(.system(size: 18))
-                    }
-                    
-                    // Investment style tagline - own line, no truncation
-                    if !investmentStyle.isEmpty {
-                        Text(investmentStyle)
-                            .font(.system(size: 11, weight: .medium))
-                            .italic()
-                            .foregroundColor(Color(white: 0.5))
-                            .fixedSize(horizontal: false, vertical: true)
-                    }
+                    Text(entry.user.displayName.uppercased())
+                        .font(.system(size: 14, weight: .bold))
+                        .tracking(1)
+                        .foregroundColor(.white)
                     
                     HStack(spacing: 4) {
                         Image(systemName: entry.isPositive ? "arrow.up.right" : "arrow.down.right")

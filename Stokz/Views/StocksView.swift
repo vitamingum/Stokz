@@ -4,7 +4,6 @@ import SwiftUI
 /// LIQUID DEATH STYLE - Bold Black & White
 struct StocksView: View {
     @EnvironmentObject var appState: AppState
-    @StateObject private var llmService = LocalLLMService.shared
     @State private var selectedStock: StockWithOwners?
     
     // Sort stocks by day change for ranking
@@ -21,16 +20,9 @@ struct StocksView: View {
                 ScrollView {
                     LazyVStack(spacing: 0) {
                         ForEach(rankedStocks, id: \.stock.id) { item in
-                            let emoji = llmService.getStocksTabEmoji(
-                                symbol: item.stock.stock.symbol,
-                                rank: item.rank,
-                                totalStocks: rankedStocks.count,
-                                dayChangePercent: item.stock.stock.priceChangePercent
-                            )
                             VStack(spacing: 0) {
                                 StockWithOwnersRow(
                                     stockWithOwners: item.stock,
-                                    emoji: emoji,
                                     onTap: {
                                         selectedStock = item.stock
                                     }
@@ -92,26 +84,13 @@ struct StocksView: View {
 // MARK: - Stock with Owners Row (Liquid Death Style)
 struct StockWithOwnersRow: View {
     let stockWithOwners: StockWithOwners
-    var emoji: String = LocalLLMService.placeholder
     var onTap: (() -> Void)?
-    
-    // Check if we have a real emoji (not placeholder)
-    private var hasEmoji: Bool {
-        emoji != LocalLLMService.placeholder && !emoji.isEmpty
-    }
     
     var body: some View {
         Button(action: { onTap?() }) {
             VStack(alignment: .leading, spacing: 10) {
                 // Stock Info
                 HStack {
-                    // Only show emoji if we have one (not placeholder)
-                    if hasEmoji {
-                        Text(emoji)
-                            .font(.system(size: 22))
-                            .frame(width: 32)
-                    }
-                    
                     VStack(alignment: .leading, spacing: 4) {
                         HStack(spacing: 6) {
                             Text(stockWithOwners.stock.symbol)

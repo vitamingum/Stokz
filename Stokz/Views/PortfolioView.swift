@@ -10,7 +10,6 @@ struct DiscoveryItem: Identifiable {
 /// LIQUID DEATH STYLE - Bold Black & White
 struct PortfolioView: View {
     @EnvironmentObject var appState: AppState
-    @StateObject private var llmService = LocalLLMService.shared
     @State private var showAddStock = false
     @State private var selectedStock: String?
     @State private var showAdjustAllocation = false
@@ -164,30 +163,16 @@ struct PortfolioView: View {
                 let rank = index + 1
                 let stock = appState.priceService.stocks[allocation.symbol]
                 let holding = appState.currentUserPortfolio?.holdings.first(where: { $0.symbol == allocation.symbol })
-                let dayChangePercent = stock?.priceChangePercent ?? 0
-                let emoji = llmService.getPortfolioEmoji(
-                    symbol: allocation.symbol,
-                    rank: rank,
-                    totalHoldings: totalHoldings,
-                    dayChangePercent: dayChangePercent
-                )
                 
                 VStack(spacing: 0) {
                     HStack(spacing: 8) {
-                        // Tappable area for discovery (emoji + stock info)
+                        // Tappable area for discovery (stock info)
                         Button(action: {
                             print("🔮 [Portfolio] Tapped stock: \(allocation.symbol)")
                             discoveryItem = DiscoveryItem(ticker: allocation.symbol)
                             print("🔮 [Portfolio] Set discoveryItem for \(allocation.symbol)")
                         }) {
                             HStack(spacing: 8) {
-                                // Emoji (LEFT) - only show if we have a real emoji
-                                if emoji != LocalLLMService.placeholder && !emoji.isEmpty {
-                                    Text(emoji)
-                                        .font(.system(size: 22))
-                                        .frame(width: 32)
-                                }
-                                
                                 // Stock info (CENTER)
                                 VStack(alignment: .leading, spacing: 2) {
                                     HStack(spacing: 6) {
@@ -285,12 +270,11 @@ struct PortfolioView: View {
     // MARK: - Cash Row (No X or +/- buttons)
     private func cashRow(cashBalance: Double, totalValue: Double) -> some View {
         let percent = totalValue > 0 ? (cashBalance / totalValue) * 100 : 0
-        let cashEmoji = llmService.getCashEmoji(cashBalance: cashBalance, totalValue: totalValue)
         
         return VStack(spacing: 0) {
             HStack(spacing: 8) {
                 // Cash Emoji (LEFT)
-                Text(cashEmoji)
+                Text("💵")
                     .font(.system(size: 22))
                     .frame(width: 32)
                 

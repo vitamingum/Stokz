@@ -105,9 +105,30 @@ final class Logger: ObservableObject {
         let osLog = loggers[category] ?? OSLog.default
         os_log("%{public}@", log: osLog, type: .default, entry.display)
         
+        // File log - write to shared container for easy access
+        writeToFile(entry.display)
+        
         #if DEBUG
         print(entry.display)
         #endif
+    }
+    
+    private func writeToFile(_ message: String) {
+        Task.detached {
+            let fileURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0].appendingPathComponent("stokz_log.txt")
+            let line = message + "\n"
+            if let data = line.data(using: .utf8) {
+                if FileManager.default.fileExists(atPath: fileURL.path) {
+                    if let handle = try? FileHandle(forWritingTo: fileURL) {
+                        try? handle.seekToEnd()
+                        try? handle.write(contentsOf: data)
+                        try? handle.close()
+                    }
+                } else {
+                    try? data.write(to: fileURL)
+                }
+            }
+        }
     }
 }
 

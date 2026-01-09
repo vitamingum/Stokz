@@ -292,16 +292,12 @@ class PortfolioManager: ObservableObject {
         for holding in portfolio.holdings {
             let price = prices[holding.symbol] ?? holding.entryPrice
             let value = holding.currentValue(at: price)
-            print("🧮 \(holding.symbol): \(holding.shares) shares × $\(price) = $\(value)")
             holdingsValue += value
         }
         let totalValue = holdingsValue + portfolio.cashBalance
         
-        print("💵 Holdings=$\(holdingsValue) + Cash=$\(portfolio.cashBalance) = NET WORTH $\(totalValue)")
-        
         // If completely empty (no holdings, no cash), return initial cash
         if portfolio.holdings.isEmpty && portfolio.cashBalance == 0 {
-            print("💵 Empty portfolio - returning initial: $\(PortfolioManager.initialCash)")
             return PortfolioManager.initialCash
         }
         return totalValue

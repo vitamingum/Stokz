@@ -4,6 +4,7 @@ import SwiftUI
 struct SettingsView: View {
     @EnvironmentObject var appState: AppState
     @StateObject private var logger = Logger.shared
+    @StateObject private var llmService = LocalLLMService.shared
     @State private var showDebugConsole = false
     
     var body: some View {
@@ -15,6 +16,9 @@ struct SettingsView: View {
                     VStack(spacing: 24) {
                         // Account Section  
                         accountSection
+                        
+                        // LLM Section
+                        llmSection
                         
                         // About Section
                         aboutSection
@@ -103,6 +107,72 @@ struct SettingsView: View {
                     Text(Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "1")
                         .font(.system(size: 12, weight: .bold))
                         .foregroundColor(.white)
+                }
+            }
+            .padding()
+            .background(Color(white: 0.1))
+            .cornerRadius(8)
+        }
+    }
+    
+    // MARK: - LLM Section
+    private var llmSection: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            sectionHeader("LOCAL AI", icon: "brain")
+            
+            VStack(spacing: 12) {
+                // Status message
+                HStack {
+                    Text("STATUS")
+                        .font(.system(size: 12, weight: .bold))
+                        .foregroundColor(Color(white: 0.5))
+                    Spacer()
+                    Text(llmService.statusMessage)
+                        .font(.system(size: 12, weight: .bold))
+                        .foregroundColor(llmService.isModelLoaded ? .green : (llmService.isDownloading || llmService.isLoadingModel ? .yellow : Color(white: 0.4)))
+                }
+                
+                // Download progress
+                if llmService.isDownloading {
+                    VStack(spacing: 8) {
+                        ProgressView(value: llmService.downloadProgress)
+                            .progressViewStyle(.linear)
+                            .tint(.green)
+                        Text("\(Int(llmService.downloadProgress * 100))% downloaded")
+                            .font(.system(size: 11))
+                            .foregroundColor(Color(white: 0.5))
+                    }
+                }
+                
+                // Loading indicator
+                if llmService.isLoadingModel {
+                    HStack(spacing: 8) {
+                        ProgressView()
+                            .progressViewStyle(.circular)
+                            .scaleEffect(0.7)
+                        Text("Loading model into memory...")
+                            .font(.system(size: 11))
+                            .foregroundColor(Color(white: 0.5))
+                    }
+                }
+                
+                // Model size info
+                HStack {
+                    Text("MODEL SIZE")
+                        .font(.system(size: 12, weight: .bold))
+                        .foregroundColor(Color(white: 0.5))
+                    Spacer()
+                    Text(llmService.modelSizeString)
+                        .font(.system(size: 12, weight: .bold))
+                        .foregroundColor(.white)
+                }
+                
+                // Error message
+                if let error = llmService.lastError {
+                    Text(error)
+                        .font(.system(size: 11))
+                        .foregroundColor(.red)
+                        .frame(maxWidth: .infinity, alignment: .leading)
                 }
             }
             .padding()

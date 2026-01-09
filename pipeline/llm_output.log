@@ -1,0 +1,25 @@
+🤖 Loading model: mlx-community/Qwen2.5-7B-Instruct-4bit
+   This may take a minute on first run (downloading ~5GB)...
+Fetching 9 files:   0%|          | 0/9 [00:00<?, ?it/s]Fetching 9 files:  44%|████▍     | 4/9 [01:23<01:44, 20.99s/it]Fetching 9 files: 100%|██████████| 9/9 [01:23<00:00,  9.33s/it]
+✅ Model loaded!
+
+📝 Generating fact cards for 503 companies...
+  0%|          | 0/503 [00:00<?, ?it/s]  0%|          | 0/503 [00:00<?, ?it/s]
+Traceback (most recent call last):
+  File "/Users/charlesburns/Stokz/pipeline/generate_facts.py", line 97, in <module>
+    main()
+    ~~~~^^
+  File "/Users/charlesburns/Stokz/pipeline/generate_facts.py", line 76, in main
+    fact_card = generate_fact_card(model, tokenizer, stock)
+  File "/Users/charlesburns/Stokz/pipeline/generate_facts.py", line 38, in generate_fact_card
+    response = mlx_lm.generate(
+        model,
+    ...<3 lines>...
+        temp=0.3
+    )
+  File "/Users/charlesburns/Stokz/.venv/lib/python3.13/site-packages/mlx_lm/generate.py", line 762, in generate
+    for response in stream_generate(model, tokenizer, prompt, **kwargs):
+                    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/charlesburns/Stokz/.venv/lib/python3.13/site-packages/mlx_lm/generate.py", line 686, in stream_generate
+    token_generator = generate_step(prompt, model, **kwargs)
+TypeError: generate_step() got an unexpected keyword argument 'temp'

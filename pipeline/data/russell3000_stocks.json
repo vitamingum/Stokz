@@ -1,0 +1,7100 @@
+[
+  {
+    "ticker": "A",
+    "company": "Agilent Technologies",
+    "sector": "Health Care",
+    "sub_industry": "Life Sciences Tools & Services",
+    "source": "unknown"
+  },
+  {
+    "ticker": "AA",
+    "company": "Alcoa",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "AAL",
+    "company": "American Airlines Group",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "AAON",
+    "company": "AAON",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "AAPL",
+    "company": "Apple Inc.",
+    "sector": "Information Technology",
+    "sub_industry": "Technology Hardware, Storage & Peripherals",
+    "source": "unknown"
+  },
+  {
+    "ticker": "ABBV",
+    "company": "AbbVie",
+    "sector": "Health Care",
+    "sub_industry": "Biotechnology",
+    "source": "unknown"
+  },
+  {
+    "ticker": "ABNB",
+    "company": "Airbnb",
+    "sector": "Consumer Discretionary",
+    "sub_industry": "Hotels, Resorts & Cruise Lines",
+    "source": "unknown"
+  },
+  {
+    "ticker": "ABT",
+    "company": "Abbott Laboratories",
+    "sector": "Health Care",
+    "sub_industry": "Health Care Equipment",
+    "source": "unknown"
+  },
+  {
+    "ticker": "ACGL",
+    "company": "Arch Capital Group",
+    "sector": "Financials",
+    "sub_industry": "Property & Casualty Insurance",
+    "source": "unknown"
+  },
+  {
+    "ticker": "ACHC",
+    "company": "Acadia Healthcare",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "ACI",
+    "company": "Albertsons",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "ACM",
+    "company": "AECOM",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "ACN",
+    "company": "Accenture",
+    "sector": "Information Technology",
+    "sub_industry": "IT Consulting & Other Services",
+    "source": "unknown"
+  },
+  {
+    "ticker": "ADBE",
+    "company": "Adobe Inc.",
+    "sector": "Information Technology",
+    "sub_industry": "Application Software",
+    "source": "unknown"
+  },
+  {
+    "ticker": "ADC",
+    "company": "Agree Realty",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "ADI",
+    "company": "Analog Devices",
+    "sector": "Information Technology",
+    "sub_industry": "Semiconductors",
+    "source": "unknown"
+  },
+  {
+    "ticker": "ADM",
+    "company": "Archer Daniels Midland",
+    "sector": "Consumer Staples",
+    "sub_industry": "Agricultural Products & Services",
+    "source": "unknown"
+  },
+  {
+    "ticker": "ADP",
+    "company": "Automatic Data Processing",
+    "sector": "Industrials",
+    "sub_industry": "Human Resource & Employment Services",
+    "source": "unknown"
+  },
+  {
+    "ticker": "ADSK",
+    "company": "Autodesk",
+    "sector": "Information Technology",
+    "sub_industry": "Application Software",
+    "source": "unknown"
+  },
+  {
+    "ticker": "ADT",
+    "company": "ADT Inc.",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "AEE",
+    "company": "Ameren",
+    "sector": "Utilities",
+    "sub_industry": "Multi-Utilities",
+    "source": "unknown"
+  },
+  {
+    "ticker": "AEP",
+    "company": "American Electric Power",
+    "sector": "Utilities",
+    "sub_industry": "Electric Utilities",
+    "source": "unknown"
+  },
+  {
+    "ticker": "AES",
+    "company": "AES Corporation",
+    "sector": "Utilities",
+    "sub_industry": "Independent Power Producers & Energy Traders",
+    "source": "unknown"
+  },
+  {
+    "ticker": "AFG",
+    "company": "American Financial Group",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "AFL",
+    "company": "Aflac",
+    "sector": "Financials",
+    "sub_industry": "Life & Health Insurance",
+    "source": "unknown"
+  },
+  {
+    "ticker": "AFRM",
+    "company": "Affirm Holdings",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "AGCO",
+    "company": "AGCO",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "AGNC",
+    "company": "AGNC Investment",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "AGO",
+    "company": "Assured Guaranty",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "AIG",
+    "company": "American International Group",
+    "sector": "Financials",
+    "sub_industry": "Multi-line Insurance",
+    "source": "unknown"
+  },
+  {
+    "ticker": "AIT",
+    "company": "Applied Industrial Technologies",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "AIZ",
+    "company": "Assurant",
+    "sector": "Financials",
+    "sub_industry": "Multi-line Insurance",
+    "source": "unknown"
+  },
+  {
+    "ticker": "AJG",
+    "company": "Arthur J. Gallagher & Co.",
+    "sector": "Financials",
+    "sub_industry": "Insurance Brokers",
+    "source": "unknown"
+  },
+  {
+    "ticker": "AKAM",
+    "company": "Akamai Technologies",
+    "sector": "Information Technology",
+    "sub_industry": "Internet Services & Infrastructure",
+    "source": "unknown"
+  },
+  {
+    "ticker": "AL",
+    "company": "Air Lease Corporation",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "ALAB",
+    "company": "Astera Labs",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "ALB",
+    "company": "Albemarle Corporation",
+    "sector": "Materials",
+    "sub_industry": "Specialty Chemicals",
+    "source": "unknown"
+  },
+  {
+    "ticker": "ALGM",
+    "company": "Allegro MicroSystems",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "ALGN",
+    "company": "Align Technology",
+    "sector": "Health Care",
+    "sub_industry": "Health Care Supplies",
+    "source": "unknown"
+  },
+  {
+    "ticker": "ALK",
+    "company": "Alaska Air Group",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "ALL",
+    "company": "Allstate",
+    "sector": "Financials",
+    "sub_industry": "Property & Casualty Insurance",
+    "source": "unknown"
+  },
+  {
+    "ticker": "ALLE",
+    "company": "Allegion",
+    "sector": "Industrials",
+    "sub_industry": "Building Products",
+    "source": "unknown"
+  },
+  {
+    "ticker": "ALLY",
+    "company": "Ally Financial",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "ALNY",
+    "company": "Alnylam Pharmaceuticals",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "ALSN",
+    "company": "Allison Transmission",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "AM",
+    "company": "Antero Midstream",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "AMAT",
+    "company": "Applied Materials",
+    "sector": "Information Technology",
+    "sub_industry": "Semiconductor Materials & Equipment",
+    "source": "unknown"
+  },
+  {
+    "ticker": "AMCR",
+    "company": "Amcor",
+    "sector": "Materials",
+    "sub_industry": "Paper & Plastic Packaging Products & Materials",
+    "source": "unknown"
+  },
+  {
+    "ticker": "AMD",
+    "company": "Advanced Micro Devices",
+    "sector": "Information Technology",
+    "sub_industry": "Semiconductors",
+    "source": "unknown"
+  },
+  {
+    "ticker": "AME",
+    "company": "Ametek",
+    "sector": "Industrials",
+    "sub_industry": "Electrical Components & Equipment",
+    "source": "unknown"
+  },
+  {
+    "ticker": "AMG",
+    "company": "Affiliated Managers Group",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "AMGN",
+    "company": "Amgen",
+    "sector": "Health Care",
+    "sub_industry": "Biotechnology",
+    "source": "unknown"
+  },
+  {
+    "ticker": "AMH",
+    "company": "American Homes 4 Rent",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "AMKR",
+    "company": "Amkor Technology",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "AMP",
+    "company": "Ameriprise Financial",
+    "sector": "Financials",
+    "sub_industry": "Asset Management & Custody Banks",
+    "source": "unknown"
+  },
+  {
+    "ticker": "AMT",
+    "company": "American Tower",
+    "sector": "Real Estate",
+    "sub_industry": "Telecom Tower REITs",
+    "source": "unknown"
+  },
+  {
+    "ticker": "AMTM",
+    "company": "Amentum",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "AMZN",
+    "company": "Amazon",
+    "sector": "Consumer Discretionary",
+    "sub_industry": "Broadline Retail",
+    "source": "unknown"
+  },
+  {
+    "ticker": "AN",
+    "company": "AutoNation",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "ANET",
+    "company": "Arista Networks",
+    "sector": "Information Technology",
+    "sub_industry": "Communications Equipment",
+    "source": "unknown"
+  },
+  {
+    "ticker": "AON",
+    "company": "Aon plc",
+    "sector": "Financials",
+    "sub_industry": "Insurance Brokers",
+    "source": "unknown"
+  },
+  {
+    "ticker": "AOS",
+    "company": "A. O. Smith",
+    "sector": "Industrials",
+    "sub_industry": "Building Products",
+    "source": "unknown"
+  },
+  {
+    "ticker": "APA",
+    "company": "APA Corporation",
+    "sector": "Energy",
+    "sub_industry": "Oil & Gas Exploration & Production",
+    "source": "unknown"
+  },
+  {
+    "ticker": "APD",
+    "company": "Air Products",
+    "sector": "Materials",
+    "sub_industry": "Industrial Gases",
+    "source": "unknown"
+  },
+  {
+    "ticker": "APG",
+    "company": "APi Group",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "APH",
+    "company": "Amphenol",
+    "sector": "Information Technology",
+    "sub_industry": "Electronic Components",
+    "source": "unknown"
+  },
+  {
+    "ticker": "APLS",
+    "company": "Apellis Pharmaceuticals",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "APO",
+    "company": "Apollo Global Management",
+    "sector": "Financials",
+    "sub_industry": "Asset Management & Custody Banks",
+    "source": "unknown"
+  },
+  {
+    "ticker": "APP",
+    "company": "AppLovin",
+    "sector": "Information Technology",
+    "sub_industry": "Application Software",
+    "source": "unknown"
+  },
+  {
+    "ticker": "APPF",
+    "company": "AppFolio",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "APTV",
+    "company": "Aptiv",
+    "sector": "Consumer Discretionary",
+    "sub_industry": "Automotive Parts & Equipment",
+    "source": "unknown"
+  },
+  {
+    "ticker": "AR",
+    "company": "Antero Resources",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "ARE",
+    "company": "Alexandria Real Estate Equities",
+    "sector": "Real Estate",
+    "sub_industry": "Office REITs",
+    "source": "unknown"
+  },
+  {
+    "ticker": "ARES",
+    "company": "Ares Management",
+    "sector": "Financials",
+    "sub_industry": "Asset Management & Custody Banks",
+    "source": "unknown"
+  },
+  {
+    "ticker": "ARMK",
+    "company": "Aramark",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "ARW",
+    "company": "Arrow Electronics",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "AS",
+    "company": "Amer Sports",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "ASH",
+    "company": "Ashland Global",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "ASTS",
+    "company": "AST SpaceMobile",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "ATI",
+    "company": "ATI Inc.",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "ATO",
+    "company": "Atmos Energy",
+    "sector": "Utilities",
+    "sub_industry": "Gas Utilities",
+    "source": "unknown"
+  },
+  {
+    "ticker": "ATR",
+    "company": "AptarGroup",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "AU",
+    "company": "AngloGold Ashanti",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "AUR",
+    "company": "Aurora Innovation",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "AVB",
+    "company": "AvalonBay Communities",
+    "sector": "Real Estate",
+    "sub_industry": "Multi-Family Residential REITs",
+    "source": "unknown"
+  },
+  {
+    "ticker": "AVGO",
+    "company": "Broadcom",
+    "sector": "Information Technology",
+    "sub_industry": "Semiconductors",
+    "source": "unknown"
+  },
+  {
+    "ticker": "AVT",
+    "company": "Avnet",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "AVTR",
+    "company": "Avantor",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "AVY",
+    "company": "Avery Dennison",
+    "sector": "Materials",
+    "sub_industry": "Paper & Plastic Packaging Products & Materials",
+    "source": "unknown"
+  },
+  {
+    "ticker": "AWI",
+    "company": "Armstrong World Industries",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "AWK",
+    "company": "American Water Works",
+    "sector": "Utilities",
+    "sub_industry": "Water Utilities",
+    "source": "unknown"
+  },
+  {
+    "ticker": "AXON",
+    "company": "Axon Enterprise",
+    "sector": "Industrials",
+    "sub_industry": "Aerospace & Defense",
+    "source": "unknown"
+  },
+  {
+    "ticker": "AXP",
+    "company": "American Express",
+    "sector": "Financials",
+    "sub_industry": "Consumer Finance",
+    "source": "unknown"
+  },
+  {
+    "ticker": "AXS",
+    "company": "AXIS Capital",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "AXTA",
+    "company": "Axalta",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "AYI",
+    "company": "Acuity Brands",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "AZO",
+    "company": "AutoZone",
+    "sector": "Consumer Discretionary",
+    "sub_industry": "Automotive Retail",
+    "source": "unknown"
+  },
+  {
+    "ticker": "BA",
+    "company": "Boeing",
+    "sector": "Industrials",
+    "sub_industry": "Aerospace & Defense",
+    "source": "unknown"
+  },
+  {
+    "ticker": "BAC",
+    "company": "Bank of America",
+    "sector": "Financials",
+    "sub_industry": "Diversified Banks",
+    "source": "unknown"
+  },
+  {
+    "ticker": "BAH",
+    "company": "Booz Allen Hamilton",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "BALL",
+    "company": "Ball Corporation",
+    "sector": "Materials",
+    "sub_industry": "Metal, Glass & Plastic Containers",
+    "source": "unknown"
+  },
+  {
+    "ticker": "BAM",
+    "company": "Brookfield Asset Management",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "BAX",
+    "company": "Baxter International",
+    "sector": "Health Care",
+    "sub_industry": "Health Care Equipment",
+    "source": "unknown"
+  },
+  {
+    "ticker": "BBWI",
+    "company": "Bath & Body Works, Inc.",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "BBY",
+    "company": "Best Buy",
+    "sector": "Consumer Discretionary",
+    "sub_industry": "Computer & Electronics Retail",
+    "source": "unknown"
+  },
+  {
+    "ticker": "BC",
+    "company": "Brunswick Corporation",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "BDX",
+    "company": "Becton Dickinson",
+    "sector": "Health Care",
+    "sub_industry": "Health Care Equipment",
+    "source": "unknown"
+  },
+  {
+    "ticker": "BEN",
+    "company": "Franklin Resources",
+    "sector": "Financials",
+    "sub_industry": "Asset Management & Custody Banks",
+    "source": "unknown"
+  },
+  {
+    "ticker": "BEPC",
+    "company": "Brookfield Renewable Partners",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "BF-A",
+    "company": "Brown\u2013Forman (Class A)",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "BF-B",
+    "company": "Brown\u2013Forman",
+    "sector": "Consumer Staples",
+    "sub_industry": "Distillers & Vintners",
+    "source": "unknown"
+  },
+  {
+    "ticker": "BFAM",
+    "company": "Bright Horizons",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "BG",
+    "company": "Bunge Global",
+    "sector": "Consumer Staples",
+    "sub_industry": "Agricultural Products & Services",
+    "source": "unknown"
+  },
+  {
+    "ticker": "BHF",
+    "company": "Brighthouse Financial",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "BIIB",
+    "company": "Biogen",
+    "sector": "Health Care",
+    "sub_industry": "Biotechnology",
+    "source": "unknown"
+  },
+  {
+    "ticker": "BILL",
+    "company": "Bill.com",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "BIO",
+    "company": "Bio-Rad Laboratories",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "BIRK",
+    "company": "Birkenstock",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "BJ",
+    "company": "BJ's Wholesale Club",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "BK",
+    "company": "BNY Mellon",
+    "sector": "Financials",
+    "sub_industry": "Asset Management & Custody Banks",
+    "source": "unknown"
+  },
+  {
+    "ticker": "BKNG",
+    "company": "Booking Holdings",
+    "sector": "Consumer Discretionary",
+    "sub_industry": "Hotels, Resorts & Cruise Lines",
+    "source": "unknown"
+  },
+  {
+    "ticker": "BKR",
+    "company": "Baker Hughes",
+    "sector": "Energy",
+    "sub_industry": "Oil & Gas Equipment & Services",
+    "source": "unknown"
+  },
+  {
+    "ticker": "BLD",
+    "company": "TopBuild",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "BLDR",
+    "company": "Builders FirstSource",
+    "sector": "Industrials",
+    "sub_industry": "Building Products",
+    "source": "unknown"
+  },
+  {
+    "ticker": "BLK",
+    "company": "BlackRock",
+    "sector": "Financials",
+    "sub_industry": "Asset Management & Custody Banks",
+    "source": "unknown"
+  },
+  {
+    "ticker": "BMRN",
+    "company": "BioMarin Pharmaceutical",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "BMY",
+    "company": "Bristol Myers Squibb",
+    "sector": "Health Care",
+    "sub_industry": "Pharmaceuticals",
+    "source": "unknown"
+  },
+  {
+    "ticker": "BOKF",
+    "company": "BOK Financial Corporation",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "BPOP",
+    "company": "Popular, Inc.",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "BR",
+    "company": "Broadridge Financial Solutions",
+    "sector": "Industrials",
+    "sub_industry": "Data Processing & Outsourced Services",
+    "source": "unknown"
+  },
+  {
+    "ticker": "BRBR",
+    "company": "BellRing Brands",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "BRK-B",
+    "company": "Berkshire Hathaway",
+    "sector": "Financials",
+    "sub_industry": "Multi-Sector Holdings",
+    "source": "unknown"
+  },
+  {
+    "ticker": "BRKR",
+    "company": "Bruker",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "BRO",
+    "company": "Brown & Brown",
+    "sector": "Financials",
+    "sub_industry": "Insurance Brokers",
+    "source": "unknown"
+  },
+  {
+    "ticker": "BROS",
+    "company": "Dutch Bros. Coffee",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "BRX",
+    "company": "Brixmor Property Group",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "BSX",
+    "company": "Boston Scientific",
+    "sector": "Health Care",
+    "sub_industry": "Health Care Equipment",
+    "source": "unknown"
+  },
+  {
+    "ticker": "BSY",
+    "company": "Bentley Systems",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "BURL",
+    "company": "Burlington Stores",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "BWA",
+    "company": "BorgWarner",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "BWXT",
+    "company": "BWX Technologies",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "BX",
+    "company": "Blackstone Inc.",
+    "sector": "Financials",
+    "sub_industry": "Asset Management & Custody Banks",
+    "source": "unknown"
+  },
+  {
+    "ticker": "BXP",
+    "company": "BXP, Inc.",
+    "sector": "Real Estate",
+    "sub_industry": "Office REITs",
+    "source": "unknown"
+  },
+  {
+    "ticker": "BYD",
+    "company": "Boyd Gaming",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "C",
+    "company": "Citigroup",
+    "sector": "Financials",
+    "sub_industry": "Diversified Banks",
+    "source": "unknown"
+  },
+  {
+    "ticker": "CACC",
+    "company": "Credit Acceptance",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "CACI",
+    "company": "CACI",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "CAG",
+    "company": "Conagra Brands",
+    "sector": "Consumer Staples",
+    "sub_industry": "Packaged Foods & Meats",
+    "source": "unknown"
+  },
+  {
+    "ticker": "CAH",
+    "company": "Cardinal Health",
+    "sector": "Health Care",
+    "sub_industry": "Health Care Distributors",
+    "source": "unknown"
+  },
+  {
+    "ticker": "CAI",
+    "company": "Caris Life Sciences",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "CAR",
+    "company": "Avis Budget Group",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "CARR",
+    "company": "Carrier Global",
+    "sector": "Industrials",
+    "sub_industry": "Building Products",
+    "source": "unknown"
+  },
+  {
+    "ticker": "CART",
+    "company": "Maplebear Inc.",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "CASY",
+    "company": "Casey's",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "CAT",
+    "company": "Caterpillar Inc.",
+    "sector": "Industrials",
+    "sub_industry": "Construction Machinery & Heavy Transportation Equipment",
+    "source": "unknown"
+  },
+  {
+    "ticker": "CAVA",
+    "company": "Cava Group",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "CB",
+    "company": "Chubb Limited",
+    "sector": "Financials",
+    "sub_industry": "Property & Casualty Insurance",
+    "source": "unknown"
+  },
+  {
+    "ticker": "CBOE",
+    "company": "Cboe Global Markets",
+    "sector": "Financials",
+    "sub_industry": "Financial Exchanges & Data",
+    "source": "unknown"
+  },
+  {
+    "ticker": "CBRE",
+    "company": "CBRE Group",
+    "sector": "Real Estate",
+    "sub_industry": "Real Estate Services",
+    "source": "unknown"
+  },
+  {
+    "ticker": "CBSH",
+    "company": "Commerce Bancshares",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "CCC",
+    "company": "CCC Intelligent Solutions",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "CCI",
+    "company": "Crown Castle",
+    "sector": "Real Estate",
+    "sub_industry": "Telecom Tower REITs",
+    "source": "unknown"
+  },
+  {
+    "ticker": "CCK",
+    "company": "Crown Holdings",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "CCL",
+    "company": "Carnival",
+    "sector": "Consumer Discretionary",
+    "sub_industry": "Hotels, Resorts & Cruise Lines",
+    "source": "unknown"
+  },
+  {
+    "ticker": "CDNS",
+    "company": "Cadence Design Systems",
+    "sector": "Information Technology",
+    "sub_industry": "Application Software",
+    "source": "unknown"
+  },
+  {
+    "ticker": "CDW",
+    "company": "CDW Corporation",
+    "sector": "Information Technology",
+    "sub_industry": "Technology Distributors",
+    "source": "unknown"
+  },
+  {
+    "ticker": "CE",
+    "company": "Celanese",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "CEG",
+    "company": "Constellation Energy",
+    "sector": "Utilities",
+    "sub_industry": "Electric Utilities",
+    "source": "unknown"
+  },
+  {
+    "ticker": "CELH",
+    "company": "Celsius Holdings",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "CERT",
+    "company": "Certara, Inc.",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "CF",
+    "company": "CF Industries",
+    "sector": "Materials",
+    "sub_industry": "Fertilizers & Agricultural Chemicals",
+    "source": "unknown"
+  },
+  {
+    "ticker": "CFG",
+    "company": "Citizens Financial Group",
+    "sector": "Financials",
+    "sub_industry": "Regional Banks",
+    "source": "unknown"
+  },
+  {
+    "ticker": "CFLT",
+    "company": "Confluent, Inc.",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "CFR",
+    "company": "Frost Bank",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "CG",
+    "company": "Carlyle Group (The)",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "CGNX",
+    "company": "Cognex Corporation",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "CHD",
+    "company": "Church & Dwight",
+    "sector": "Consumer Staples",
+    "sub_industry": "Household Products",
+    "source": "unknown"
+  },
+  {
+    "ticker": "CHDN",
+    "company": "Churchill Downs Incorporated",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "CHE",
+    "company": "Chemed Corporation",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "CHH",
+    "company": "Choice Hotels",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "CHRD",
+    "company": "Chord Energy",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "CHRW",
+    "company": "C.H. Robinson",
+    "sector": "Industrials",
+    "sub_industry": "Air Freight & Logistics",
+    "source": "unknown"
+  },
+  {
+    "ticker": "CHTR",
+    "company": "Charter Communications",
+    "sector": "Communication Services",
+    "sub_industry": "Cable & Satellite",
+    "source": "unknown"
+  },
+  {
+    "ticker": "CHWY",
+    "company": "Chewy",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "CI",
+    "company": "Cigna",
+    "sector": "Health Care",
+    "sub_industry": "Health Care Services",
+    "source": "unknown"
+  },
+  {
+    "ticker": "CIEN",
+    "company": "Ciena",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "CINF",
+    "company": "Cincinnati Financial",
+    "sector": "Financials",
+    "sub_industry": "Property & Casualty Insurance",
+    "source": "unknown"
+  },
+  {
+    "ticker": "CIVI",
+    "company": "Civitas Resources",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "CL",
+    "company": "Colgate-Palmolive",
+    "sector": "Consumer Staples",
+    "sub_industry": "Household Products",
+    "source": "unknown"
+  },
+  {
+    "ticker": "CLF",
+    "company": "Cleveland-Cliffs",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "CLH",
+    "company": "Clean Harbors",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "CLVT",
+    "company": "Clarivate",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "CLX",
+    "company": "Clorox",
+    "sector": "Consumer Staples",
+    "sub_industry": "Household Products",
+    "source": "unknown"
+  },
+  {
+    "ticker": "CMA",
+    "company": "Comerica",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "CMCSA",
+    "company": "Comcast",
+    "sector": "Communication Services",
+    "sub_industry": "Cable & Satellite",
+    "source": "unknown"
+  },
+  {
+    "ticker": "CME",
+    "company": "CME Group",
+    "sector": "Financials",
+    "sub_industry": "Financial Exchanges & Data",
+    "source": "unknown"
+  },
+  {
+    "ticker": "CMG",
+    "company": "Chipotle Mexican Grill",
+    "sector": "Consumer Discretionary",
+    "sub_industry": "Restaurants",
+    "source": "unknown"
+  },
+  {
+    "ticker": "CMI",
+    "company": "Cummins",
+    "sector": "Industrials",
+    "sub_industry": "Construction Machinery & Heavy Transportation Equipment",
+    "source": "unknown"
+  },
+  {
+    "ticker": "CMS",
+    "company": "CMS Energy",
+    "sector": "Utilities",
+    "sub_industry": "Multi-Utilities",
+    "source": "unknown"
+  },
+  {
+    "ticker": "CNA",
+    "company": "CNA Financial",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "CNC",
+    "company": "Centene Corporation",
+    "sector": "Health Care",
+    "sub_industry": "Managed Health Care",
+    "source": "unknown"
+  },
+  {
+    "ticker": "CNH",
+    "company": "CNH Industrial",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "CNM",
+    "company": "Core & Main",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "CNP",
+    "company": "CenterPoint Energy",
+    "sector": "Utilities",
+    "sub_industry": "Multi-Utilities",
+    "source": "unknown"
+  },
+  {
+    "ticker": "CNXC",
+    "company": "Concentrix",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "COF",
+    "company": "Capital One",
+    "sector": "Financials",
+    "sub_industry": "Consumer Finance",
+    "source": "unknown"
+  },
+  {
+    "ticker": "COHR",
+    "company": "Coherent Corp.",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "COIN",
+    "company": "Coinbase",
+    "sector": "Financials",
+    "sub_industry": "Financial Exchanges & Data",
+    "source": "unknown"
+  },
+  {
+    "ticker": "COKE",
+    "company": "Coca-Cola Consolidated",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "COLB",
+    "company": "Columbia Banking System",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "COLD",
+    "company": "Americold",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "COLM",
+    "company": "Columbia Sportswear",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "COO",
+    "company": "Cooper Companies (The)",
+    "sector": "Health Care",
+    "sub_industry": "Health Care Supplies",
+    "source": "unknown"
+  },
+  {
+    "ticker": "COP",
+    "company": "ConocoPhillips",
+    "sector": "Energy",
+    "sub_industry": "Oil & Gas Exploration & Production",
+    "source": "unknown"
+  },
+  {
+    "ticker": "COR",
+    "company": "Cencora",
+    "sector": "Health Care",
+    "sub_industry": "Health Care Distributors",
+    "source": "unknown"
+  },
+  {
+    "ticker": "CORT",
+    "company": "Corcept Therapeutics",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "COST",
+    "company": "Costco",
+    "sector": "Consumer Staples",
+    "sub_industry": "Consumer Staples Merchandise Retail",
+    "source": "unknown"
+  },
+  {
+    "ticker": "COTY",
+    "company": "Coty",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "CPAY",
+    "company": "Corpay",
+    "sector": "Financials",
+    "sub_industry": "Transaction & Payment Processing Services",
+    "source": "unknown"
+  },
+  {
+    "ticker": "CPB",
+    "company": "Campbell's Company (The)",
+    "sector": "Consumer Staples",
+    "sub_industry": "Packaged Foods & Meats",
+    "source": "unknown"
+  },
+  {
+    "ticker": "CPNG",
+    "company": "Coupang",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "CPRT",
+    "company": "Copart",
+    "sector": "Industrials",
+    "sub_industry": "Diversified Support Services",
+    "source": "unknown"
+  },
+  {
+    "ticker": "CPT",
+    "company": "Camden Property Trust",
+    "sector": "Real Estate",
+    "sub_industry": "Multi-Family Residential REITs",
+    "source": "unknown"
+  },
+  {
+    "ticker": "CR",
+    "company": "Crane Co.",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "CRCL",
+    "company": "Circle Internet Group",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "CRH",
+    "company": "CRH plc",
+    "sector": "Materials",
+    "sub_industry": "Construction Materials",
+    "source": "unknown"
+  },
+  {
+    "ticker": "CRL",
+    "company": "Charles River Laboratories",
+    "sector": "Health Care",
+    "sub_industry": "Life Sciences Tools & Services",
+    "source": "unknown"
+  },
+  {
+    "ticker": "CRM",
+    "company": "Salesforce",
+    "sector": "Information Technology",
+    "sub_industry": "Application Software",
+    "source": "unknown"
+  },
+  {
+    "ticker": "CROX",
+    "company": "Crocs",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "CRS",
+    "company": "Carpenter Technology Corporation",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "CRUS",
+    "company": "Cirrus Logic",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "CRWD",
+    "company": "CrowdStrike",
+    "sector": "Information Technology",
+    "sub_industry": "Systems Software",
+    "source": "unknown"
+  },
+  {
+    "ticker": "CSCO",
+    "company": "Cisco",
+    "sector": "Information Technology",
+    "sub_industry": "Communications Equipment",
+    "source": "unknown"
+  },
+  {
+    "ticker": "CSGP",
+    "company": "CoStar Group",
+    "sector": "Real Estate",
+    "sub_industry": "Real Estate Services",
+    "source": "unknown"
+  },
+  {
+    "ticker": "CSL",
+    "company": "Carlisle Companies",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "CSX",
+    "company": "CSX Corporation",
+    "sector": "Industrials",
+    "sub_industry": "Rail Transportation",
+    "source": "unknown"
+  },
+  {
+    "ticker": "CTAS",
+    "company": "Cintas",
+    "sector": "Industrials",
+    "sub_industry": "Diversified Support Services",
+    "source": "unknown"
+  },
+  {
+    "ticker": "CTRA",
+    "company": "Coterra",
+    "sector": "Energy",
+    "sub_industry": "Oil & Gas Exploration & Production",
+    "source": "unknown"
+  },
+  {
+    "ticker": "CTSH",
+    "company": "Cognizant",
+    "sector": "Information Technology",
+    "sub_industry": "IT Consulting & Other Services",
+    "source": "unknown"
+  },
+  {
+    "ticker": "CTVA",
+    "company": "Corteva",
+    "sector": "Materials",
+    "sub_industry": "Fertilizers & Agricultural Chemicals",
+    "source": "unknown"
+  },
+  {
+    "ticker": "CUBE",
+    "company": "CubeSmart",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "CUZ",
+    "company": "Cousins Properties",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "CVNA",
+    "company": "Carvana",
+    "sector": "Consumer Discretionary",
+    "sub_industry": "Automotive Retail",
+    "source": "unknown"
+  },
+  {
+    "ticker": "CVS",
+    "company": "CVS Health",
+    "sector": "Health Care",
+    "sub_industry": "Health Care Services",
+    "source": "unknown"
+  },
+  {
+    "ticker": "CVX",
+    "company": "Chevron Corporation",
+    "sector": "Energy",
+    "sub_industry": "Integrated Oil & Gas",
+    "source": "unknown"
+  },
+  {
+    "ticker": "CW",
+    "company": "Curtiss-Wright",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "CWEN",
+    "company": "Clearway Energy (Class C)",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "CXT",
+    "company": "Crane NXT",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "CZR",
+    "company": "Caesars Entertainment",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "D",
+    "company": "Dominion Energy",
+    "sector": "Utilities",
+    "sub_industry": "Multi-Utilities",
+    "source": "unknown"
+  },
+  {
+    "ticker": "DAL",
+    "company": "Delta Air Lines",
+    "sector": "Industrials",
+    "sub_industry": "Passenger Airlines",
+    "source": "unknown"
+  },
+  {
+    "ticker": "DAR",
+    "company": "Darling Ingredients",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "DASH",
+    "company": "DoorDash",
+    "sector": "Consumer Discretionary",
+    "sub_industry": "Specialized Consumer Services",
+    "source": "unknown"
+  },
+  {
+    "ticker": "DAY",
+    "company": "Dayforce",
+    "sector": "Industrials",
+    "sub_industry": "Human Resource & Employment Services",
+    "source": "unknown"
+  },
+  {
+    "ticker": "DBX",
+    "company": "Dropbox",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "DCI",
+    "company": "Donaldson Company",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "DD",
+    "company": "DuPont",
+    "sector": "Materials",
+    "sub_industry": "Specialty Chemicals",
+    "source": "unknown"
+  },
+  {
+    "ticker": "DDOG",
+    "company": "Datadog",
+    "sector": "Information Technology",
+    "sub_industry": "Application Software",
+    "source": "unknown"
+  },
+  {
+    "ticker": "DDS",
+    "company": "Dillard's",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "DE",
+    "company": "Deere & Company",
+    "sector": "Industrials",
+    "sub_industry": "Agricultural & Farm Machinery",
+    "source": "unknown"
+  },
+  {
+    "ticker": "DECK",
+    "company": "Deckers Brands",
+    "sector": "Consumer Discretionary",
+    "sub_industry": "Footwear",
+    "source": "unknown"
+  },
+  {
+    "ticker": "DELL",
+    "company": "Dell Technologies",
+    "sector": "Information Technology",
+    "sub_industry": "Technology Hardware, Storage & Peripherals",
+    "source": "unknown"
+  },
+  {
+    "ticker": "DG",
+    "company": "Dollar General",
+    "sector": "Consumer Staples",
+    "sub_industry": "Consumer Staples Merchandise Retail",
+    "source": "unknown"
+  },
+  {
+    "ticker": "DGX",
+    "company": "Quest Diagnostics",
+    "sector": "Health Care",
+    "sub_industry": "Health Care Services",
+    "source": "unknown"
+  },
+  {
+    "ticker": "DHI",
+    "company": "D. R. Horton",
+    "sector": "Consumer Discretionary",
+    "sub_industry": "Homebuilding",
+    "source": "unknown"
+  },
+  {
+    "ticker": "DHR",
+    "company": "Danaher Corporation",
+    "sector": "Health Care",
+    "sub_industry": "Life Sciences Tools & Services",
+    "source": "unknown"
+  },
+  {
+    "ticker": "DINO",
+    "company": "HF Sinclair",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "DIS",
+    "company": "Walt Disney Company (The)",
+    "sector": "Communication Services",
+    "sub_industry": "Movies & Entertainment",
+    "source": "unknown"
+  },
+  {
+    "ticker": "DJT",
+    "company": "Trump Media & Technology Group",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "DKNG",
+    "company": "DraftKings",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "DKS",
+    "company": "Dick's Sporting Goods",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "DLB",
+    "company": "Dolby Laboratories",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "DLR",
+    "company": "Digital Realty",
+    "sector": "Real Estate",
+    "sub_industry": "Data Center REITs",
+    "source": "unknown"
+  },
+  {
+    "ticker": "DLTR",
+    "company": "Dollar Tree",
+    "sector": "Consumer Staples",
+    "sub_industry": "Consumer Staples Merchandise Retail",
+    "source": "unknown"
+  },
+  {
+    "ticker": "DOC",
+    "company": "Healthpeak Properties",
+    "sector": "Real Estate",
+    "sub_industry": "Health Care REITs",
+    "source": "unknown"
+  },
+  {
+    "ticker": "DOCS",
+    "company": "Doximity",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "DOCU",
+    "company": "DocuSign",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "DOV",
+    "company": "Dover Corporation",
+    "sector": "Industrials",
+    "sub_industry": "Industrial Machinery & Supplies & Components",
+    "source": "unknown"
+  },
+  {
+    "ticker": "DOW",
+    "company": "Dow Inc.",
+    "sector": "Materials",
+    "sub_industry": "Commodity Chemicals",
+    "source": "unknown"
+  },
+  {
+    "ticker": "DOX",
+    "company": "Amdocs",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "DPZ",
+    "company": "Domino's",
+    "sector": "Consumer Discretionary",
+    "sub_industry": "Restaurants",
+    "source": "unknown"
+  },
+  {
+    "ticker": "DRI",
+    "company": "Darden Restaurants",
+    "sector": "Consumer Discretionary",
+    "sub_industry": "Restaurants",
+    "source": "unknown"
+  },
+  {
+    "ticker": "DRS",
+    "company": "Leonardo DRS",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "DT",
+    "company": "Dynatrace",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "DTE",
+    "company": "DTE Energy",
+    "sector": "Utilities",
+    "sub_industry": "Multi-Utilities",
+    "source": "unknown"
+  },
+  {
+    "ticker": "DTM",
+    "company": "DT Midstream",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "DUK",
+    "company": "Duke Energy",
+    "sector": "Utilities",
+    "sub_industry": "Electric Utilities",
+    "source": "unknown"
+  },
+  {
+    "ticker": "DUOL",
+    "company": "Duolingo",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "DV",
+    "company": "DoubleVerify",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "DVA",
+    "company": "DaVita",
+    "sector": "Health Care",
+    "sub_industry": "Health Care Services",
+    "source": "unknown"
+  },
+  {
+    "ticker": "DVN",
+    "company": "Devon Energy",
+    "sector": "Energy",
+    "sub_industry": "Oil & Gas Exploration & Production",
+    "source": "unknown"
+  },
+  {
+    "ticker": "DXC",
+    "company": "DXC Technology",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "DXCM",
+    "company": "Dexcom",
+    "sector": "Health Care",
+    "sub_industry": "Health Care Equipment",
+    "source": "unknown"
+  },
+  {
+    "ticker": "EA",
+    "company": "Electronic Arts",
+    "sector": "Communication Services",
+    "sub_industry": "Interactive Home Entertainment",
+    "source": "unknown"
+  },
+  {
+    "ticker": "EBAY",
+    "company": "eBay Inc.",
+    "sector": "Consumer Discretionary",
+    "sub_industry": "Broadline Retail",
+    "source": "unknown"
+  },
+  {
+    "ticker": "ECG",
+    "company": "Everus Construction Group",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "ECL",
+    "company": "Ecolab",
+    "sector": "Materials",
+    "sub_industry": "Specialty Chemicals",
+    "source": "unknown"
+  },
+  {
+    "ticker": "ED",
+    "company": "Consolidated Edison",
+    "sector": "Utilities",
+    "sub_industry": "Multi-Utilities",
+    "source": "unknown"
+  },
+  {
+    "ticker": "EEFT",
+    "company": "Euronet Worldwide",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "EFX",
+    "company": "Equifax",
+    "sector": "Industrials",
+    "sub_industry": "Research & Consulting Services",
+    "source": "unknown"
+  },
+  {
+    "ticker": "EG",
+    "company": "Everest Group",
+    "sector": "Financials",
+    "sub_industry": "Reinsurance",
+    "source": "unknown"
+  },
+  {
+    "ticker": "EGP",
+    "company": "EastGroup Properties",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "EHC",
+    "company": "Encompass Health",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "EIX",
+    "company": "Edison International",
+    "sector": "Utilities",
+    "sub_industry": "Electric Utilities",
+    "source": "unknown"
+  },
+  {
+    "ticker": "EL",
+    "company": "Est\u00e9e Lauder Companies (The)",
+    "sector": "Consumer Staples",
+    "sub_industry": "Personal Care Products",
+    "source": "unknown"
+  },
+  {
+    "ticker": "ELAN",
+    "company": "Elanco",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "ELF",
+    "company": "e.l.f. Beauty",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "ELS",
+    "company": "Equity Lifestyle Properties",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "ELV",
+    "company": "Elevance Health",
+    "sector": "Health Care",
+    "sub_industry": "Managed Health Care",
+    "source": "unknown"
+  },
+  {
+    "ticker": "EME",
+    "company": "Emcor",
+    "sector": "Industrials",
+    "sub_industry": "Construction & Engineering",
+    "source": "unknown"
+  },
+  {
+    "ticker": "EMN",
+    "company": "Eastman Chemical Company",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "EMR",
+    "company": "Emerson Electric",
+    "sector": "Industrials",
+    "sub_industry": "Electrical Components & Equipment",
+    "source": "unknown"
+  },
+  {
+    "ticker": "ENPH",
+    "company": "Enphase Energy",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "ENTG",
+    "company": "Entegris",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "EOG",
+    "company": "EOG Resources",
+    "sector": "Energy",
+    "sub_industry": "Oil & Gas Exploration & Production",
+    "source": "unknown"
+  },
+  {
+    "ticker": "EPAM",
+    "company": "EPAM Systems",
+    "sector": "Information Technology",
+    "sub_industry": "IT Consulting & Other Services",
+    "source": "unknown"
+  },
+  {
+    "ticker": "EPR",
+    "company": "EPR Properties",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "EQH",
+    "company": "Equitable Holdings",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "EQIX",
+    "company": "Equinix",
+    "sector": "Real Estate",
+    "sub_industry": "Data Center REITs",
+    "source": "unknown"
+  },
+  {
+    "ticker": "EQR",
+    "company": "Equity Residential",
+    "sector": "Real Estate",
+    "sub_industry": "Multi-Family Residential REITs",
+    "source": "unknown"
+  },
+  {
+    "ticker": "EQT",
+    "company": "EQT Corporation",
+    "sector": "Energy",
+    "sub_industry": "Oil & Gas Exploration & Production",
+    "source": "unknown"
+  },
+  {
+    "ticker": "ERIE",
+    "company": "Erie Indemnity",
+    "sector": "Financials",
+    "sub_industry": "Insurance Brokers",
+    "source": "unknown"
+  },
+  {
+    "ticker": "ES",
+    "company": "Eversource Energy",
+    "sector": "Utilities",
+    "sub_industry": "Electric Utilities",
+    "source": "unknown"
+  },
+  {
+    "ticker": "ESAB",
+    "company": "ESAB",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "ESI",
+    "company": "Element Solutions",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "ESS",
+    "company": "Essex Property Trust",
+    "sector": "Real Estate",
+    "sub_industry": "Multi-Family Residential REITs",
+    "source": "unknown"
+  },
+  {
+    "ticker": "ESTC",
+    "company": "Elastic NV",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "ETN",
+    "company": "Eaton Corporation",
+    "sector": "Industrials",
+    "sub_industry": "Electrical Components & Equipment",
+    "source": "unknown"
+  },
+  {
+    "ticker": "ETR",
+    "company": "Entergy",
+    "sector": "Utilities",
+    "sub_industry": "Electric Utilities",
+    "source": "unknown"
+  },
+  {
+    "ticker": "ETSY",
+    "company": "Etsy",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "EVR",
+    "company": "Evercore",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "EVRG",
+    "company": "Evergy",
+    "sector": "Utilities",
+    "sub_industry": "Electric Utilities",
+    "source": "unknown"
+  },
+  {
+    "ticker": "EW",
+    "company": "Edwards Lifesciences",
+    "sector": "Health Care",
+    "sub_industry": "Health Care Equipment",
+    "source": "unknown"
+  },
+  {
+    "ticker": "EWBC",
+    "company": "East West Bancorp",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "EXAS",
+    "company": "Exact Sciences",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "EXC",
+    "company": "Exelon",
+    "sector": "Utilities",
+    "sub_industry": "Electric Utilities",
+    "source": "unknown"
+  },
+  {
+    "ticker": "EXE",
+    "company": "Expand Energy",
+    "sector": "Energy",
+    "sub_industry": "Oil & Gas Exploration & Production",
+    "source": "unknown"
+  },
+  {
+    "ticker": "EXEL",
+    "company": "Exelixis",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "EXLS",
+    "company": "EXL Service",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "EXP",
+    "company": "Eagle Materials",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "EXPD",
+    "company": "Expeditors International",
+    "sector": "Industrials",
+    "sub_industry": "Air Freight & Logistics",
+    "source": "unknown"
+  },
+  {
+    "ticker": "EXPE",
+    "company": "Expedia Group",
+    "sector": "Consumer Discretionary",
+    "sub_industry": "Hotels, Resorts & Cruise Lines",
+    "source": "unknown"
+  },
+  {
+    "ticker": "EXR",
+    "company": "Extra Space Storage",
+    "sector": "Real Estate",
+    "sub_industry": "Self-Storage REITs",
+    "source": "unknown"
+  },
+  {
+    "ticker": "F",
+    "company": "Ford Motor Company",
+    "sector": "Consumer Discretionary",
+    "sub_industry": "Automobile Manufacturers",
+    "source": "unknown"
+  },
+  {
+    "ticker": "FAF",
+    "company": "First American Financial Corporation",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "FANG",
+    "company": "Diamondback Energy",
+    "sector": "Energy",
+    "sub_industry": "Oil & Gas Exploration & Production",
+    "source": "unknown"
+  },
+  {
+    "ticker": "FAST",
+    "company": "Fastenal",
+    "sector": "Industrials",
+    "sub_industry": "Trading Companies & Distributors",
+    "source": "unknown"
+  },
+  {
+    "ticker": "FBIN",
+    "company": "Fortune Brands Innovations",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "FCN",
+    "company": "FTI Consulting",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "FCNCA",
+    "company": "First Citizens BancShares",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "FCX",
+    "company": "Freeport-McMoRan",
+    "sector": "Materials",
+    "sub_industry": "Copper",
+    "source": "unknown"
+  },
+  {
+    "ticker": "FDS",
+    "company": "FactSet",
+    "sector": "Financials",
+    "sub_industry": "Financial Exchanges & Data",
+    "source": "unknown"
+  },
+  {
+    "ticker": "FDX",
+    "company": "FedEx",
+    "sector": "Industrials",
+    "sub_industry": "Air Freight & Logistics",
+    "source": "unknown"
+  },
+  {
+    "ticker": "FE",
+    "company": "FirstEnergy",
+    "sector": "Utilities",
+    "sub_industry": "Electric Utilities",
+    "source": "unknown"
+  },
+  {
+    "ticker": "FERG",
+    "company": "Ferguson Enterprises",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "FFIV",
+    "company": "F5, Inc.",
+    "sector": "Information Technology",
+    "sub_industry": "Communications Equipment",
+    "source": "unknown"
+  },
+  {
+    "ticker": "FHB",
+    "company": "First Hawaiian, Inc.",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "FHN",
+    "company": "First Horizon Corporation",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "FICO",
+    "company": "Fair Isaac",
+    "sector": "Information Technology",
+    "sub_industry": "Application Software",
+    "source": "unknown"
+  },
+  {
+    "ticker": "FIS",
+    "company": "Fidelity National Information Services",
+    "sector": "Financials",
+    "sub_industry": "Transaction & Payment Processing Services",
+    "source": "unknown"
+  },
+  {
+    "ticker": "FISV",
+    "company": "Fiserv",
+    "sector": "Financials",
+    "sub_industry": "Transaction & Payment Processing Services",
+    "source": "unknown"
+  },
+  {
+    "ticker": "FITB",
+    "company": "Fifth Third Bancorp",
+    "sector": "Financials",
+    "sub_industry": "Regional Banks",
+    "source": "unknown"
+  },
+  {
+    "ticker": "FIVE",
+    "company": "Five Below",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "FIX",
+    "company": "Comfort Systems USA",
+    "sector": "Industrials",
+    "sub_industry": "Construction & Engineering",
+    "source": "unknown"
+  },
+  {
+    "ticker": "FLEX",
+    "company": "Flex Ltd.",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "FLO",
+    "company": "Flowers Foods",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "FLS",
+    "company": "Flowserve",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "FLUT",
+    "company": "Flutter Entertainment",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "FMC",
+    "company": "FMC Corporation",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "FNB",
+    "company": "FNB Corporation",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "FND",
+    "company": "Floor & Decor",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "FNF",
+    "company": "Fidelity National Financial",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "FOUR",
+    "company": "Shift4",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "FOX",
+    "company": "Fox Corporation (Class B)",
+    "sector": "Communication Services",
+    "sub_industry": "Broadcasting",
+    "source": "unknown"
+  },
+  {
+    "ticker": "FOXA",
+    "company": "Fox Corporation (Class A)",
+    "sector": "Communication Services",
+    "sub_industry": "Broadcasting",
+    "source": "unknown"
+  },
+  {
+    "ticker": "FR",
+    "company": "First Industrial Realty Trust",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "FRHC",
+    "company": "Freedom Holding",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "FRPT",
+    "company": "Freshpet",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "FRT",
+    "company": "Federal Realty Investment Trust",
+    "sector": "Real Estate",
+    "sub_industry": "Retail REITs",
+    "source": "unknown"
+  },
+  {
+    "ticker": "FSLR",
+    "company": "First Solar",
+    "sector": "Information Technology",
+    "sub_industry": "Semiconductors",
+    "source": "unknown"
+  },
+  {
+    "ticker": "FTAI",
+    "company": "FTAI Aviation",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "FTI",
+    "company": "TechnipFMC",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "FTNT",
+    "company": "Fortinet",
+    "sector": "Information Technology",
+    "sub_industry": "Systems Software",
+    "source": "unknown"
+  },
+  {
+    "ticker": "FTV",
+    "company": "Fortive",
+    "sector": "Industrials",
+    "sub_industry": "Industrial Machinery & Supplies & Components",
+    "source": "unknown"
+  },
+  {
+    "ticker": "FWONA",
+    "company": "Liberty Formula 1 (Series A)",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "FWONK",
+    "company": "Liberty Formula 1 (Series C)",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "FYBR",
+    "company": "Frontier Communications",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "G",
+    "company": "Genpact",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "GAP",
+    "company": "Gap Inc.",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "GD",
+    "company": "General Dynamics",
+    "sector": "Industrials",
+    "sub_industry": "Aerospace & Defense",
+    "source": "unknown"
+  },
+  {
+    "ticker": "GDDY",
+    "company": "GoDaddy",
+    "sector": "Information Technology",
+    "sub_industry": "Internet Services & Infrastructure",
+    "source": "unknown"
+  },
+  {
+    "ticker": "GE",
+    "company": "GE Aerospace",
+    "sector": "Industrials",
+    "sub_industry": "Aerospace & Defense",
+    "source": "unknown"
+  },
+  {
+    "ticker": "GEHC",
+    "company": "GE HealthCare",
+    "sector": "Health Care",
+    "sub_industry": "Health Care Equipment",
+    "source": "unknown"
+  },
+  {
+    "ticker": "GEN",
+    "company": "Gen Digital",
+    "sector": "Information Technology",
+    "sub_industry": "Systems Software",
+    "source": "unknown"
+  },
+  {
+    "ticker": "GENI",
+    "company": "Genius Sports",
+    "sector": "Technology",
+    "sub_industry": "Sports Data",
+    "source": "manual"
+  },
+  {
+    "ticker": "GEV",
+    "company": "GE Vernova",
+    "sector": "Industrials",
+    "sub_industry": "Heavy Electrical Equipment",
+    "source": "unknown"
+  },
+  {
+    "ticker": "GFS",
+    "company": "GlobalFoundries",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "GGG",
+    "company": "Graco Inc.",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "GILD",
+    "company": "Gilead Sciences",
+    "sector": "Health Care",
+    "sub_industry": "Biotechnology",
+    "source": "unknown"
+  },
+  {
+    "ticker": "GIS",
+    "company": "General Mills",
+    "sector": "Consumer Staples",
+    "sub_industry": "Packaged Foods & Meats",
+    "source": "unknown"
+  },
+  {
+    "ticker": "GL",
+    "company": "Globe Life",
+    "sector": "Financials",
+    "sub_industry": "Life & Health Insurance",
+    "source": "unknown"
+  },
+  {
+    "ticker": "GLIBA",
+    "company": "GCI Liberty (Series A)",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "GLIBK",
+    "company": "GCI Liberty (Series C)",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "GLOB",
+    "company": "Globant",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "GLPI",
+    "company": "Gaming and Leisure Properties",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "GLW",
+    "company": "Corning Inc.",
+    "sector": "Information Technology",
+    "sub_industry": "Electronic Components",
+    "source": "unknown"
+  },
+  {
+    "ticker": "GM",
+    "company": "General Motors",
+    "sector": "Consumer Discretionary",
+    "sub_industry": "Automobile Manufacturers",
+    "source": "unknown"
+  },
+  {
+    "ticker": "GME",
+    "company": "GameStop",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "GMED",
+    "company": "Globus Medical",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "GNRC",
+    "company": "Generac",
+    "sector": "Industrials",
+    "sub_industry": "Electrical Components & Equipment",
+    "source": "unknown"
+  },
+  {
+    "ticker": "GNTX",
+    "company": "Gentex",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "GOOG",
+    "company": "Alphabet Inc. (Class C)",
+    "sector": "Communication Services",
+    "sub_industry": "Interactive Media & Services",
+    "source": "unknown"
+  },
+  {
+    "ticker": "GOOGL",
+    "company": "Alphabet Inc. (Class A)",
+    "sector": "Communication Services",
+    "sub_industry": "Interactive Media & Services",
+    "source": "unknown"
+  },
+  {
+    "ticker": "GPC",
+    "company": "Genuine Parts Company",
+    "sector": "Consumer Discretionary",
+    "sub_industry": "Distributors",
+    "source": "unknown"
+  },
+  {
+    "ticker": "GPK",
+    "company": "Graphic Packaging",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "GPN",
+    "company": "Global Payments",
+    "sector": "Financials",
+    "sub_industry": "Transaction & Payment Processing Services",
+    "source": "unknown"
+  },
+  {
+    "ticker": "GRAB",
+    "company": "Grab Holdings",
+    "sector": "Technology",
+    "sub_industry": "Ride-sharing",
+    "source": "manual"
+  },
+  {
+    "ticker": "GRMN",
+    "company": "Garmin",
+    "sector": "Consumer Discretionary",
+    "sub_industry": "Consumer Electronics",
+    "source": "unknown"
+  },
+  {
+    "ticker": "GS",
+    "company": "Goldman Sachs",
+    "sector": "Financials",
+    "sub_industry": "Investment Banking & Brokerage",
+    "source": "unknown"
+  },
+  {
+    "ticker": "GTES",
+    "company": "Gates Corporation",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "GTLB",
+    "company": "GitLab",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "GTM",
+    "company": "ZoomInfo",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "GWRE",
+    "company": "Guidewire Software",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "GWW",
+    "company": "W. W. Grainger",
+    "sector": "Industrials",
+    "sub_industry": "Industrial Machinery & Supplies & Components",
+    "source": "unknown"
+  },
+  {
+    "ticker": "GXO",
+    "company": "GXO Logistics",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "H",
+    "company": "Hyatt Hotels",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "HAL",
+    "company": "Halliburton",
+    "sector": "Energy",
+    "sub_industry": "Oil & Gas Equipment & Services",
+    "source": "unknown"
+  },
+  {
+    "ticker": "HALO",
+    "company": "Halozyme",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "HAS",
+    "company": "Hasbro",
+    "sector": "Consumer Discretionary",
+    "sub_industry": "Leisure Products",
+    "source": "unknown"
+  },
+  {
+    "ticker": "HAYW",
+    "company": "Hayward Holdings",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "HBAN",
+    "company": "Huntington Bancshares",
+    "sector": "Financials",
+    "sub_industry": "Regional Banks",
+    "source": "unknown"
+  },
+  {
+    "ticker": "HCA",
+    "company": "HCA Healthcare",
+    "sector": "Health Care",
+    "sub_industry": "Health Care Facilities",
+    "source": "unknown"
+  },
+  {
+    "ticker": "HD",
+    "company": "Home Depot (The)",
+    "sector": "Consumer Discretionary",
+    "sub_industry": "Home Improvement Retail",
+    "source": "unknown"
+  },
+  {
+    "ticker": "HEI",
+    "company": "HEICO (Common)",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "HEI-A",
+    "company": "HEICO (Class A)",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "HHH",
+    "company": "Howard Hughes Holdings",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "HIG",
+    "company": "Hartford (The)",
+    "sector": "Financials",
+    "sub_industry": "Property & Casualty Insurance",
+    "source": "unknown"
+  },
+  {
+    "ticker": "HII",
+    "company": "Huntington Ingalls Industries",
+    "sector": "Industrials",
+    "sub_industry": "Aerospace & Defense",
+    "source": "unknown"
+  },
+  {
+    "ticker": "HIW",
+    "company": "Highwoods Properties",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "HLI",
+    "company": "Houlihan Lokey",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "HLNE",
+    "company": "Hamilton Lane",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "HLT",
+    "company": "Hilton Worldwide",
+    "sector": "Consumer Discretionary",
+    "sub_industry": "Hotels, Resorts & Cruise Lines",
+    "source": "unknown"
+  },
+  {
+    "ticker": "HOG",
+    "company": "Harley-Davidson",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "HOLX",
+    "company": "Hologic",
+    "sector": "Health Care",
+    "sub_industry": "Health Care Equipment",
+    "source": "unknown"
+  },
+  {
+    "ticker": "HON",
+    "company": "Honeywell",
+    "sector": "Industrials",
+    "sub_industry": "Industrial Conglomerates",
+    "source": "unknown"
+  },
+  {
+    "ticker": "HOOD",
+    "company": "Robinhood Markets",
+    "sector": "Financials",
+    "sub_industry": "Investment Banking & Brokerage",
+    "source": "unknown"
+  },
+  {
+    "ticker": "HPE",
+    "company": "Hewlett Packard Enterprise",
+    "sector": "Information Technology",
+    "sub_industry": "Technology Hardware, Storage & Peripherals",
+    "source": "unknown"
+  },
+  {
+    "ticker": "HPQ",
+    "company": "HP Inc.",
+    "sector": "Information Technology",
+    "sub_industry": "Technology Hardware, Storage & Peripherals",
+    "source": "unknown"
+  },
+  {
+    "ticker": "HR",
+    "company": "Healthcare Realty Trust",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "HRB",
+    "company": "H&R Block",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "HRL",
+    "company": "Hormel Foods",
+    "sector": "Consumer Staples",
+    "sub_industry": "Packaged Foods & Meats",
+    "source": "unknown"
+  },
+  {
+    "ticker": "HSIC",
+    "company": "Henry Schein",
+    "sector": "Health Care",
+    "sub_industry": "Health Care Distributors",
+    "source": "unknown"
+  },
+  {
+    "ticker": "HST",
+    "company": "Host Hotels & Resorts",
+    "sector": "Real Estate",
+    "sub_industry": "Hotel & Resort REITs",
+    "source": "unknown"
+  },
+  {
+    "ticker": "HSY",
+    "company": "Hershey Company (The)",
+    "sector": "Consumer Staples",
+    "sub_industry": "Packaged Foods & Meats",
+    "source": "unknown"
+  },
+  {
+    "ticker": "HUBB",
+    "company": "Hubbell Incorporated",
+    "sector": "Industrials",
+    "sub_industry": "Industrial Machinery & Supplies & Components",
+    "source": "unknown"
+  },
+  {
+    "ticker": "HUBS",
+    "company": "HubSpot",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "HUM",
+    "company": "Humana",
+    "sector": "Health Care",
+    "sub_industry": "Managed Health Care",
+    "source": "unknown"
+  },
+  {
+    "ticker": "HUN",
+    "company": "Huntsman Corporation",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "HWM",
+    "company": "Howmet Aerospace",
+    "sector": "Industrials",
+    "sub_industry": "Aerospace & Defense",
+    "source": "unknown"
+  },
+  {
+    "ticker": "HXL",
+    "company": "Hexcel",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "IAC",
+    "company": "IAC Inc.",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "IBKR",
+    "company": "Interactive Brokers",
+    "sector": "Financials",
+    "sub_industry": "Investment Banking & Brokerage",
+    "source": "unknown"
+  },
+  {
+    "ticker": "IBM",
+    "company": "IBM",
+    "sector": "Information Technology",
+    "sub_industry": "IT Consulting & Other Services",
+    "source": "unknown"
+  },
+  {
+    "ticker": "ICE",
+    "company": "Intercontinental Exchange",
+    "sector": "Financials",
+    "sub_industry": "Financial Exchanges & Data",
+    "source": "unknown"
+  },
+  {
+    "ticker": "IDA",
+    "company": "Idacorp",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "IDXX",
+    "company": "Idexx Laboratories",
+    "sector": "Health Care",
+    "sub_industry": "Health Care Equipment",
+    "source": "unknown"
+  },
+  {
+    "ticker": "IEX",
+    "company": "IDEX Corporation",
+    "sector": "Industrials",
+    "sub_industry": "Industrial Machinery & Supplies & Components",
+    "source": "unknown"
+  },
+  {
+    "ticker": "IFF",
+    "company": "International Flavors & Fragrances",
+    "sector": "Materials",
+    "sub_industry": "Specialty Chemicals",
+    "source": "unknown"
+  },
+  {
+    "ticker": "ILMN",
+    "company": "Illumina, Inc.",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "INCY",
+    "company": "Incyte",
+    "sector": "Health Care",
+    "sub_industry": "Biotechnology",
+    "source": "unknown"
+  },
+  {
+    "ticker": "INGM",
+    "company": "Ingram Micro",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "INGR",
+    "company": "Ingredion",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "INSM",
+    "company": "Insmed",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "INSP",
+    "company": "Inspire Medical Systems",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "INTC",
+    "company": "Intel",
+    "sector": "Information Technology",
+    "sub_industry": "Semiconductors",
+    "source": "unknown"
+  },
+  {
+    "ticker": "INTU",
+    "company": "Intuit",
+    "sector": "Information Technology",
+    "sub_industry": "Application Software",
+    "source": "unknown"
+  },
+  {
+    "ticker": "INVH",
+    "company": "Invitation Homes",
+    "sector": "Real Estate",
+    "sub_industry": "Single-Family Residential REITs",
+    "source": "unknown"
+  },
+  {
+    "ticker": "IONS",
+    "company": "Ionis Pharmaceuticals",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "IOT",
+    "company": "Samsara",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "IP",
+    "company": "International Paper",
+    "sector": "Materials",
+    "sub_industry": "Paper & Plastic Packaging Products & Materials",
+    "source": "unknown"
+  },
+  {
+    "ticker": "IPGP",
+    "company": "IPG Photonics",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "IQV",
+    "company": "IQVIA",
+    "sector": "Health Care",
+    "sub_industry": "Life Sciences Tools & Services",
+    "source": "unknown"
+  },
+  {
+    "ticker": "IR",
+    "company": "Ingersoll Rand",
+    "sector": "Industrials",
+    "sub_industry": "Industrial Machinery & Supplies & Components",
+    "source": "unknown"
+  },
+  {
+    "ticker": "IRDM",
+    "company": "Iridium Communications",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "IRM",
+    "company": "Iron Mountain",
+    "sector": "Real Estate",
+    "sub_industry": "Other Specialized REITs",
+    "source": "unknown"
+  },
+  {
+    "ticker": "ISRG",
+    "company": "Intuitive Surgical",
+    "sector": "Health Care",
+    "sub_industry": "Health Care Equipment",
+    "source": "unknown"
+  },
+  {
+    "ticker": "IT",
+    "company": "Gartner",
+    "sector": "Information Technology",
+    "sub_industry": "IT Consulting & Other Services",
+    "source": "unknown"
+  },
+  {
+    "ticker": "ITT",
+    "company": "ITT Inc.",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "ITW",
+    "company": "Illinois Tool Works",
+    "sector": "Industrials",
+    "sub_industry": "Industrial Machinery & Supplies & Components",
+    "source": "unknown"
+  },
+  {
+    "ticker": "IVZ",
+    "company": "Invesco",
+    "sector": "Financials",
+    "sub_industry": "Asset Management & Custody Banks",
+    "source": "unknown"
+  },
+  {
+    "ticker": "J",
+    "company": "Jacobs Solutions",
+    "sector": "Industrials",
+    "sub_industry": "Construction & Engineering",
+    "source": "unknown"
+  },
+  {
+    "ticker": "JAZZ",
+    "company": "Jazz Pharmaceuticals",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "JBHT",
+    "company": "J.B. Hunt",
+    "sector": "Industrials",
+    "sub_industry": "Cargo Ground Transportation",
+    "source": "unknown"
+  },
+  {
+    "ticker": "JBL",
+    "company": "Jabil",
+    "sector": "Information Technology",
+    "sub_industry": "Electronic Manufacturing Services",
+    "source": "unknown"
+  },
+  {
+    "ticker": "JCI",
+    "company": "Johnson Controls",
+    "sector": "Industrials",
+    "sub_industry": "Building Products",
+    "source": "unknown"
+  },
+  {
+    "ticker": "JEF",
+    "company": "Jefferies Financial Group",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "JHG",
+    "company": "Janus Henderson",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "JHX",
+    "company": "James Hardie Industries",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "JKHY",
+    "company": "Jack Henry & Associates",
+    "sector": "Financials",
+    "sub_industry": "Transaction & Payment Processing Services",
+    "source": "unknown"
+  },
+  {
+    "ticker": "JLL",
+    "company": "Jones Lang LaSalle",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "JNJ",
+    "company": "Johnson & Johnson",
+    "sector": "Health Care",
+    "sub_industry": "Pharmaceuticals",
+    "source": "unknown"
+  },
+  {
+    "ticker": "JPM",
+    "company": "JPMorgan Chase",
+    "sector": "Financials",
+    "sub_industry": "Diversified Banks",
+    "source": "unknown"
+  },
+  {
+    "ticker": "KBR",
+    "company": "KBR, Inc.",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "KD",
+    "company": "Kyndryl",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "KDP",
+    "company": "Keurig Dr Pepper",
+    "sector": "Consumer Staples",
+    "sub_industry": "Soft Drinks & Non-alcoholic Beverages",
+    "source": "unknown"
+  },
+  {
+    "ticker": "KEX",
+    "company": "Kirby Corporation",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "KEY",
+    "company": "KeyCorp",
+    "sector": "Financials",
+    "sub_industry": "Regional Banks",
+    "source": "unknown"
+  },
+  {
+    "ticker": "KEYS",
+    "company": "Keysight Technologies",
+    "sector": "Information Technology",
+    "sub_industry": "Electronic Equipment & Instruments",
+    "source": "unknown"
+  },
+  {
+    "ticker": "KHC",
+    "company": "Kraft Heinz",
+    "sector": "Consumer Staples",
+    "sub_industry": "Packaged Foods & Meats",
+    "source": "unknown"
+  },
+  {
+    "ticker": "KIM",
+    "company": "Kimco Realty",
+    "sector": "Real Estate",
+    "sub_industry": "Retail REITs",
+    "source": "unknown"
+  },
+  {
+    "ticker": "KKR",
+    "company": "KKR & Co.",
+    "sector": "Financials",
+    "sub_industry": "Asset Management & Custody Banks",
+    "source": "unknown"
+  },
+  {
+    "ticker": "KLAC",
+    "company": "KLA Corporation",
+    "sector": "Information Technology",
+    "sub_industry": "Semiconductor Materials & Equipment",
+    "source": "unknown"
+  },
+  {
+    "ticker": "KMB",
+    "company": "Kimberly-Clark",
+    "sector": "Consumer Staples",
+    "sub_industry": "Household Products",
+    "source": "unknown"
+  },
+  {
+    "ticker": "KMI",
+    "company": "Kinder Morgan",
+    "sector": "Energy",
+    "sub_industry": "Oil & Gas Storage & Transportation",
+    "source": "unknown"
+  },
+  {
+    "ticker": "KMPR",
+    "company": "Kemper Corporation",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "KMX",
+    "company": "CarMax",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "KNSL",
+    "company": "Kinsale Capital Group",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "KNX",
+    "company": "Knight-Swift",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "KO",
+    "company": "Coca-Cola Company (The)",
+    "sector": "Consumer Staples",
+    "sub_industry": "Soft Drinks & Non-alcoholic Beverages",
+    "source": "unknown"
+  },
+  {
+    "ticker": "KR",
+    "company": "Kroger",
+    "sector": "Consumer Staples",
+    "sub_industry": "Food Retail",
+    "source": "unknown"
+  },
+  {
+    "ticker": "KRC",
+    "company": "Kilroy Realty",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "KRMN",
+    "company": "Karman Holdings",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "KVUE",
+    "company": "Kenvue",
+    "sector": "Consumer Staples",
+    "sub_industry": "Personal Care Products",
+    "source": "unknown"
+  },
+  {
+    "ticker": "L",
+    "company": "Loews Corporation",
+    "sector": "Financials",
+    "sub_industry": "Multi-line Insurance",
+    "source": "unknown"
+  },
+  {
+    "ticker": "LAD",
+    "company": "Lithia Motors",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "LAMR",
+    "company": "Lamar Advertising",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "LAZ",
+    "company": "Lazard",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "LBRDA",
+    "company": "Liberty Broadband (Series A)",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "LBRDK",
+    "company": "Liberty Broadband (Series C)",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "LBTYA",
+    "company": "Liberty Global (Series A)",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "LBTYK",
+    "company": "Liberty Global (Series C)",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "LCID",
+    "company": "Lucid Motors",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "LDOS",
+    "company": "Leidos",
+    "sector": "Industrials",
+    "sub_industry": "Diversified Support Services",
+    "source": "unknown"
+  },
+  {
+    "ticker": "LEA",
+    "company": "Lear Corporation",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "LECO",
+    "company": "Lincoln Electric",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "LEN",
+    "company": "Lennar",
+    "sector": "Consumer Discretionary",
+    "sub_industry": "Homebuilding",
+    "source": "unknown"
+  },
+  {
+    "ticker": "LEN-B",
+    "company": "Lennar (Class B)",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "LFUS",
+    "company": "Littelfuse",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "LH",
+    "company": "Labcorp",
+    "sector": "Health Care",
+    "sub_industry": "Health Care Services",
+    "source": "unknown"
+  },
+  {
+    "ticker": "LHX",
+    "company": "L3Harris",
+    "sector": "Industrials",
+    "sub_industry": "Aerospace & Defense",
+    "source": "unknown"
+  },
+  {
+    "ticker": "LII",
+    "company": "Lennox International",
+    "sector": "Industrials",
+    "sub_industry": "Building Products",
+    "source": "unknown"
+  },
+  {
+    "ticker": "LIN",
+    "company": "Linde plc",
+    "sector": "Materials",
+    "sub_industry": "Industrial Gases",
+    "source": "unknown"
+  },
+  {
+    "ticker": "LINE",
+    "company": "Lineage, Inc.",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "LITE",
+    "company": "Lumentum",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "LKQ",
+    "company": "LKQ Corporation",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "LLY",
+    "company": "Lilly (Eli)",
+    "sector": "Health Care",
+    "sub_industry": "Pharmaceuticals",
+    "source": "unknown"
+  },
+  {
+    "ticker": "LLYVA",
+    "company": "Liberty Live (Series A)",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "LLYVK",
+    "company": "Liberty Live (Series C)",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "LMT",
+    "company": "Lockheed Martin",
+    "sector": "Industrials",
+    "sub_industry": "Aerospace & Defense",
+    "source": "unknown"
+  },
+  {
+    "ticker": "LNC",
+    "company": "Lincoln Financial",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "LNG",
+    "company": "Cheniere Energy",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "LNT",
+    "company": "Alliant Energy",
+    "sector": "Utilities",
+    "sub_industry": "Electric Utilities",
+    "source": "unknown"
+  },
+  {
+    "ticker": "LOAR",
+    "company": "Loar Holdings",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "LOPE",
+    "company": "Grand Canyon Education",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "LOW",
+    "company": "Lowe's",
+    "sector": "Consumer Discretionary",
+    "sub_industry": "Home Improvement Retail",
+    "source": "unknown"
+  },
+  {
+    "ticker": "LPLA",
+    "company": "LPL Financial",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "LPX",
+    "company": "Louisiana-Pacific",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "LRCX",
+    "company": "Lam Research",
+    "sector": "Information Technology",
+    "sub_industry": "Semiconductor Materials & Equipment",
+    "source": "unknown"
+  },
+  {
+    "ticker": "LSCC",
+    "company": "Lattice Semiconductor",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "LSTR",
+    "company": "Landstar",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "LULU",
+    "company": "Lululemon Athletica",
+    "sector": "Consumer Discretionary",
+    "sub_industry": "Apparel, Accessories & Luxury Goods",
+    "source": "unknown"
+  },
+  {
+    "ticker": "LUV",
+    "company": "Southwest Airlines",
+    "sector": "Industrials",
+    "sub_industry": "Passenger Airlines",
+    "source": "unknown"
+  },
+  {
+    "ticker": "LVS",
+    "company": "Las Vegas Sands",
+    "sector": "Consumer Discretionary",
+    "sub_industry": "Casinos & Gaming",
+    "source": "unknown"
+  },
+  {
+    "ticker": "LW",
+    "company": "Lamb Weston",
+    "sector": "Consumer Staples",
+    "sub_industry": "Packaged Foods & Meats",
+    "source": "unknown"
+  },
+  {
+    "ticker": "LYB",
+    "company": "LyondellBasell",
+    "sector": "Materials",
+    "sub_industry": "Specialty Chemicals",
+    "source": "unknown"
+  },
+  {
+    "ticker": "LYFT",
+    "company": "Lyft",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "LYV",
+    "company": "Live Nation Entertainment",
+    "sector": "Communication Services",
+    "sub_industry": "Movies & Entertainment",
+    "source": "unknown"
+  },
+  {
+    "ticker": "M",
+    "company": "Macy's, Inc.",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "MA",
+    "company": "Mastercard",
+    "sector": "Financials",
+    "sub_industry": "Transaction & Payment Processing Services",
+    "source": "unknown"
+  },
+  {
+    "ticker": "MAA",
+    "company": "Mid-America Apartment Communities",
+    "sector": "Real Estate",
+    "sub_industry": "Multi-Family Residential REITs",
+    "source": "unknown"
+  },
+  {
+    "ticker": "MAN",
+    "company": "ManpowerGroup",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "MANH",
+    "company": "Manhattan Associates",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "MAR",
+    "company": "Marriott International",
+    "sector": "Consumer Discretionary",
+    "sub_industry": "Hotels, Resorts & Cruise Lines",
+    "source": "unknown"
+  },
+  {
+    "ticker": "MAS",
+    "company": "Masco",
+    "sector": "Industrials",
+    "sub_industry": "Building Products",
+    "source": "unknown"
+  },
+  {
+    "ticker": "MASI",
+    "company": "Masimo",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "MAT",
+    "company": "Mattel",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "MCD",
+    "company": "McDonald's",
+    "sector": "Consumer Discretionary",
+    "sub_industry": "Restaurants",
+    "source": "unknown"
+  },
+  {
+    "ticker": "MCHP",
+    "company": "Microchip Technology",
+    "sector": "Information Technology",
+    "sub_industry": "Semiconductors",
+    "source": "unknown"
+  },
+  {
+    "ticker": "MCK",
+    "company": "McKesson Corporation",
+    "sector": "Health Care",
+    "sub_industry": "Health Care Distributors",
+    "source": "unknown"
+  },
+  {
+    "ticker": "MCO",
+    "company": "Moody's Corporation",
+    "sector": "Financials",
+    "sub_industry": "Financial Exchanges & Data",
+    "source": "unknown"
+  },
+  {
+    "ticker": "MDB",
+    "company": "MongoDB Inc.",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "MDLZ",
+    "company": "Mondelez International",
+    "sector": "Consumer Staples",
+    "sub_industry": "Packaged Foods & Meats",
+    "source": "unknown"
+  },
+  {
+    "ticker": "MDT",
+    "company": "Medtronic",
+    "sector": "Health Care",
+    "sub_industry": "Health Care Equipment",
+    "source": "unknown"
+  },
+  {
+    "ticker": "MDU",
+    "company": "MDU Resources",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "MEDP",
+    "company": "Medpace",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "MET",
+    "company": "MetLife",
+    "sector": "Financials",
+    "sub_industry": "Life & Health Insurance",
+    "source": "unknown"
+  },
+  {
+    "ticker": "META",
+    "company": "Meta Platforms",
+    "sector": "Communication Services",
+    "sub_industry": "Interactive Media & Services",
+    "source": "unknown"
+  },
+  {
+    "ticker": "MGM",
+    "company": "MGM Resorts",
+    "sector": "Consumer Discretionary",
+    "sub_industry": "Casinos & Gaming",
+    "source": "unknown"
+  },
+  {
+    "ticker": "MHK",
+    "company": "Mohawk Industries",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "MIDD",
+    "company": "Middleby",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "MKC",
+    "company": "McCormick & Company",
+    "sector": "Consumer Staples",
+    "sub_industry": "Packaged Foods & Meats",
+    "source": "unknown"
+  },
+  {
+    "ticker": "MKL",
+    "company": "Markel",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "MKSI",
+    "company": "MKS Instruments",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "MKTX",
+    "company": "MarketAxess",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "MLI",
+    "company": "Mueller Industries",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "MLM",
+    "company": "Martin Marietta Materials",
+    "sector": "Materials",
+    "sub_industry": "Construction Materials",
+    "source": "unknown"
+  },
+  {
+    "ticker": "MMC",
+    "company": "Marsh McLennan",
+    "sector": "Financials",
+    "sub_industry": "Insurance Brokers",
+    "source": "unknown"
+  },
+  {
+    "ticker": "MMM",
+    "company": "3M",
+    "sector": "Industrials",
+    "sub_industry": "Industrial Conglomerates",
+    "source": "unknown"
+  },
+  {
+    "ticker": "MNST",
+    "company": "Monster Beverage",
+    "sector": "Consumer Staples",
+    "sub_industry": "Soft Drinks & Non-alcoholic Beverages",
+    "source": "unknown"
+  },
+  {
+    "ticker": "MO",
+    "company": "Altria",
+    "sector": "Consumer Staples",
+    "sub_industry": "Tobacco",
+    "source": "unknown"
+  },
+  {
+    "ticker": "MOH",
+    "company": "Molina Healthcare",
+    "sector": "Health Care",
+    "sub_industry": "Managed Health Care",
+    "source": "unknown"
+  },
+  {
+    "ticker": "MORN",
+    "company": "Morningstar, Inc.",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "MOS",
+    "company": "Mosaic Company (The)",
+    "sector": "Materials",
+    "sub_industry": "Fertilizers & Agricultural Chemicals",
+    "source": "unknown"
+  },
+  {
+    "ticker": "MP",
+    "company": "MP Materials",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "MPC",
+    "company": "Marathon Petroleum",
+    "sector": "Energy",
+    "sub_industry": "Oil & Gas Refining & Marketing",
+    "source": "unknown"
+  },
+  {
+    "ticker": "MPW",
+    "company": "Medical Properties Trust",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "MPWR",
+    "company": "Monolithic Power Systems",
+    "sector": "Information Technology",
+    "sub_industry": "Semiconductors",
+    "source": "unknown"
+  },
+  {
+    "ticker": "MRK",
+    "company": "Merck & Co.",
+    "sector": "Health Care",
+    "sub_industry": "Pharmaceuticals",
+    "source": "unknown"
+  },
+  {
+    "ticker": "MRNA",
+    "company": "Moderna",
+    "sector": "Health Care",
+    "sub_industry": "Biotechnology",
+    "source": "unknown"
+  },
+  {
+    "ticker": "MRP",
+    "company": "Millrose Properties",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "MRVL",
+    "company": "Marvell Technology",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "MS",
+    "company": "Morgan Stanley",
+    "sector": "Financials",
+    "sub_industry": "Investment Banking & Brokerage",
+    "source": "unknown"
+  },
+  {
+    "ticker": "MSA",
+    "company": "MSA Safety",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "MSCI",
+    "company": "MSCI Inc.",
+    "sector": "Financials",
+    "sub_industry": "Financial Exchanges & Data",
+    "source": "unknown"
+  },
+  {
+    "ticker": "MSFT",
+    "company": "Microsoft",
+    "sector": "Information Technology",
+    "sub_industry": "Systems Software",
+    "source": "unknown"
+  },
+  {
+    "ticker": "MSGS",
+    "company": "Madison Square Garden Sports",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "MSI",
+    "company": "Motorola Solutions",
+    "sector": "Information Technology",
+    "sub_industry": "Communications Equipment",
+    "source": "unknown"
+  },
+  {
+    "ticker": "MSM",
+    "company": "MSC Industrial Direct",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "MSTR",
+    "company": "MicroStrategy",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "MTB",
+    "company": "M&T Bank",
+    "sector": "Financials",
+    "sub_industry": "Regional Banks",
+    "source": "unknown"
+  },
+  {
+    "ticker": "MTCH",
+    "company": "Match Group",
+    "sector": "Communication Services",
+    "sub_industry": "Interactive Media & Services",
+    "source": "unknown"
+  },
+  {
+    "ticker": "MTD",
+    "company": "Mettler Toledo",
+    "sector": "Health Care",
+    "sub_industry": "Life Sciences Tools & Services",
+    "source": "unknown"
+  },
+  {
+    "ticker": "MTDR",
+    "company": "Matador Resources",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "MTG",
+    "company": "MGIC Investment Corporation",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "MTN",
+    "company": "Vail Resorts",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "MTSI",
+    "company": "MACOM Technology Solutions",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "MTZ",
+    "company": "MasTec",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "MU",
+    "company": "Micron Technology",
+    "sector": "Information Technology",
+    "sub_industry": "Semiconductors",
+    "source": "unknown"
+  },
+  {
+    "ticker": "MUSA",
+    "company": "Murphy USA",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "NBIX",
+    "company": "Neurocrine Biosciences",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "NCLH",
+    "company": "Norwegian Cruise Line Holdings",
+    "sector": "Consumer Discretionary",
+    "sub_industry": "Hotels, Resorts & Cruise Lines",
+    "source": "unknown"
+  },
+  {
+    "ticker": "NCNO",
+    "company": "nCino",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "NDAQ",
+    "company": "Nasdaq, Inc.",
+    "sector": "Financials",
+    "sub_industry": "Financial Exchanges & Data",
+    "source": "unknown"
+  },
+  {
+    "ticker": "NDSN",
+    "company": "Nordson Corporation",
+    "sector": "Industrials",
+    "sub_industry": "Industrial Machinery & Supplies & Components",
+    "source": "unknown"
+  },
+  {
+    "ticker": "NEE",
+    "company": "NextEra Energy",
+    "sector": "Utilities",
+    "sub_industry": "Multi-Utilities",
+    "source": "unknown"
+  },
+  {
+    "ticker": "NEM",
+    "company": "Newmont",
+    "sector": "Materials",
+    "sub_industry": "Gold",
+    "source": "unknown"
+  },
+  {
+    "ticker": "NET",
+    "company": "Cloudflare",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "NEU",
+    "company": "NewMarket",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "NFG",
+    "company": "National Fuel Gas",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "NFLX",
+    "company": "Netflix",
+    "sector": "Communication Services",
+    "sub_industry": "Movies & Entertainment",
+    "source": "unknown"
+  },
+  {
+    "ticker": "NI",
+    "company": "NiSource",
+    "sector": "Utilities",
+    "sub_industry": "Multi-Utilities",
+    "source": "unknown"
+  },
+  {
+    "ticker": "NIQ",
+    "company": "NIQ Global Intelligence",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "NKE",
+    "company": "Nike, Inc.",
+    "sector": "Consumer Discretionary",
+    "sub_industry": "Apparel, Accessories & Luxury Goods",
+    "source": "unknown"
+  },
+  {
+    "ticker": "NLY",
+    "company": "Annaly Capital Management",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "NNN",
+    "company": "NNN Reit",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "NOC",
+    "company": "Northrop Grumman",
+    "sector": "Industrials",
+    "sub_industry": "Aerospace & Defense",
+    "source": "unknown"
+  },
+  {
+    "ticker": "NOV",
+    "company": "NOV Inc.",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "NOW",
+    "company": "ServiceNow",
+    "sector": "Information Technology",
+    "sub_industry": "Systems Software",
+    "source": "unknown"
+  },
+  {
+    "ticker": "NRG",
+    "company": "NRG Energy",
+    "sector": "Utilities",
+    "sub_industry": "Independent Power Producers & Energy Traders",
+    "source": "unknown"
+  },
+  {
+    "ticker": "NSA",
+    "company": "National Storage Affiliates",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "NSC",
+    "company": "Norfolk Southern",
+    "sector": "Industrials",
+    "sub_industry": "Rail Transportation",
+    "source": "unknown"
+  },
+  {
+    "ticker": "NTAP",
+    "company": "NetApp",
+    "sector": "Information Technology",
+    "sub_industry": "Technology Hardware, Storage & Peripherals",
+    "source": "unknown"
+  },
+  {
+    "ticker": "NTNX",
+    "company": "Nutanix",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "NTRA",
+    "company": "Natera",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "NTRS",
+    "company": "Northern Trust",
+    "sector": "Financials",
+    "sub_industry": "Asset Management & Custody Banks",
+    "source": "unknown"
+  },
+  {
+    "ticker": "NU",
+    "company": "Nubank",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "NUE",
+    "company": "Nucor",
+    "sector": "Materials",
+    "sub_industry": "Steel",
+    "source": "unknown"
+  },
+  {
+    "ticker": "NVDA",
+    "company": "Nvidia",
+    "sector": "Information Technology",
+    "sub_industry": "Semiconductors",
+    "source": "unknown"
+  },
+  {
+    "ticker": "NVR",
+    "company": "NVR, Inc.",
+    "sector": "Consumer Discretionary",
+    "sub_industry": "Homebuilding",
+    "source": "unknown"
+  },
+  {
+    "ticker": "NVST",
+    "company": "Envista",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "NVT",
+    "company": "nVent Electric",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "NWL",
+    "company": "Newell Brands",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "NWS",
+    "company": "News Corp (Class B)",
+    "sector": "Communication Services",
+    "sub_industry": "Publishing",
+    "source": "unknown"
+  },
+  {
+    "ticker": "NWSA",
+    "company": "News Corp (Class A)",
+    "sector": "Communication Services",
+    "sub_industry": "Publishing",
+    "source": "unknown"
+  },
+  {
+    "ticker": "NXPI",
+    "company": "NXP Semiconductors",
+    "sector": "Information Technology",
+    "sub_industry": "Semiconductors",
+    "source": "unknown"
+  },
+  {
+    "ticker": "NXST",
+    "company": "Nexstar Media Group",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "NYT",
+    "company": "New York Times Company",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "O",
+    "company": "Realty Income",
+    "sector": "Real Estate",
+    "sub_industry": "Retail REITs",
+    "source": "unknown"
+  },
+  {
+    "ticker": "OC",
+    "company": "Owens Corning",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "ODFL",
+    "company": "Old Dominion",
+    "sector": "Industrials",
+    "sub_industry": "Cargo Ground Transportation",
+    "source": "unknown"
+  },
+  {
+    "ticker": "OGE",
+    "company": "OGE Energy",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "OGN",
+    "company": "Organon & Co.",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "OHI",
+    "company": "Omega Healthcare Investors",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "OKE",
+    "company": "Oneok",
+    "sector": "Energy",
+    "sub_industry": "Oil & Gas Storage & Transportation",
+    "source": "unknown"
+  },
+  {
+    "ticker": "OKTA",
+    "company": "Okta, Inc.",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "OLED",
+    "company": "Universal Display Corporation",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "OLLI",
+    "company": "Ollie's Bargain Outlet",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "OLN",
+    "company": "Olin Corporation",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "OMC",
+    "company": "Omnicom Group",
+    "sector": "Communication Services",
+    "sub_industry": "Advertising",
+    "source": "unknown"
+  },
+  {
+    "ticker": "OMF",
+    "company": "OneMain Financial",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "ON",
+    "company": "ON Semiconductor",
+    "sector": "Information Technology",
+    "sub_industry": "Semiconductors",
+    "source": "unknown"
+  },
+  {
+    "ticker": "ONON",
+    "company": "On Holding AG",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "ONTO",
+    "company": "Onto Innovation",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "ORCL",
+    "company": "Oracle Corporation",
+    "sector": "Information Technology",
+    "sub_industry": "Application Software",
+    "source": "unknown"
+  },
+  {
+    "ticker": "ORI",
+    "company": "Old Republic International",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "ORLY",
+    "company": "O\u2019Reilly Automotive",
+    "sector": "Consumer Discretionary",
+    "sub_industry": "Automotive Retail",
+    "source": "unknown"
+  },
+  {
+    "ticker": "OSK",
+    "company": "Oshkosh Corporation",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "OTIS",
+    "company": "Otis Worldwide",
+    "sector": "Industrials",
+    "sub_industry": "Industrial Machinery & Supplies & Components",
+    "source": "unknown"
+  },
+  {
+    "ticker": "OVV",
+    "company": "Ovintiv",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "OWL",
+    "company": "Blue Owl Capital",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "OXY",
+    "company": "Occidental Petroleum",
+    "sector": "Energy",
+    "sub_industry": "Oil & Gas Exploration & Production",
+    "source": "unknown"
+  },
+  {
+    "ticker": "OZK",
+    "company": "Bank OZK",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "PAG",
+    "company": "Penske Automotive Group",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "PANW",
+    "company": "Palo Alto Networks",
+    "sector": "Information Technology",
+    "sub_industry": "Systems Software",
+    "source": "unknown"
+  },
+  {
+    "ticker": "PATH",
+    "company": "UiPath",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "PAYC",
+    "company": "Paycom",
+    "sector": "Industrials",
+    "sub_industry": "Human Resource & Employment Services",
+    "source": "unknown"
+  },
+  {
+    "ticker": "PAYX",
+    "company": "Paychex",
+    "sector": "Industrials",
+    "sub_industry": "Human Resource & Employment Services",
+    "source": "unknown"
+  },
+  {
+    "ticker": "PB",
+    "company": "Prosperity Bancshares",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "PCAR",
+    "company": "Paccar",
+    "sector": "Industrials",
+    "sub_industry": "Construction Machinery & Heavy Transportation Equipment",
+    "source": "unknown"
+  },
+  {
+    "ticker": "PCG",
+    "company": "PG&E Corporation",
+    "sector": "Utilities",
+    "sub_industry": "Multi-Utilities",
+    "source": "unknown"
+  },
+  {
+    "ticker": "PCOR",
+    "company": "Procore",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "PCTY",
+    "company": "Paylocity",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "PEG",
+    "company": "Public Service Enterprise Group",
+    "sector": "Utilities",
+    "sub_industry": "Electric Utilities",
+    "source": "unknown"
+  },
+  {
+    "ticker": "PEGA",
+    "company": "Pegasystems",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "PEN",
+    "company": "Penumbra, Inc.",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "PENN",
+    "company": "Penn Entertainment",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "PEP",
+    "company": "PepsiCo",
+    "sector": "Consumer Staples",
+    "sub_industry": "Soft Drinks & Non-alcoholic Beverages",
+    "source": "unknown"
+  },
+  {
+    "ticker": "PFE",
+    "company": "Pfizer",
+    "sector": "Health Care",
+    "sub_industry": "Pharmaceuticals",
+    "source": "unknown"
+  },
+  {
+    "ticker": "PFG",
+    "company": "Principal Financial Group",
+    "sector": "Financials",
+    "sub_industry": "Life & Health Insurance",
+    "source": "unknown"
+  },
+  {
+    "ticker": "PFGC",
+    "company": "Performance Food Group",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "PG",
+    "company": "Procter & Gamble",
+    "sector": "Consumer Staples",
+    "sub_industry": "Personal Care Products",
+    "source": "unknown"
+  },
+  {
+    "ticker": "PGR",
+    "company": "Progressive Corporation",
+    "sector": "Financials",
+    "sub_industry": "Property & Casualty Insurance",
+    "source": "unknown"
+  },
+  {
+    "ticker": "PH",
+    "company": "Parker Hannifin",
+    "sector": "Industrials",
+    "sub_industry": "Industrial Machinery & Supplies & Components",
+    "source": "unknown"
+  },
+  {
+    "ticker": "PHM",
+    "company": "PulteGroup",
+    "sector": "Consumer Discretionary",
+    "sub_industry": "Homebuilding",
+    "source": "unknown"
+  },
+  {
+    "ticker": "PINS",
+    "company": "Pinterest",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "PK",
+    "company": "Park Hotels & Resorts",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "PKG",
+    "company": "Packaging Corporation of America",
+    "sector": "Materials",
+    "sub_industry": "Paper & Plastic Packaging Products & Materials",
+    "source": "unknown"
+  },
+  {
+    "ticker": "PLD",
+    "company": "Prologis",
+    "sector": "Real Estate",
+    "sub_industry": "Industrial REITs",
+    "source": "unknown"
+  },
+  {
+    "ticker": "PLNT",
+    "company": "Planet Fitness",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "PLTR",
+    "company": "Palantir Technologies",
+    "sector": "Information Technology",
+    "sub_industry": "Application Software",
+    "source": "unknown"
+  },
+  {
+    "ticker": "PM",
+    "company": "Philip Morris International",
+    "sector": "Consumer Staples",
+    "sub_industry": "Tobacco",
+    "source": "unknown"
+  },
+  {
+    "ticker": "PNC",
+    "company": "PNC Financial Services",
+    "sector": "Financials",
+    "sub_industry": "Diversified Banks",
+    "source": "unknown"
+  },
+  {
+    "ticker": "PNFP",
+    "company": "Pinnacle Financial Partners",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "PNR",
+    "company": "Pentair",
+    "sector": "Industrials",
+    "sub_industry": "Industrial Machinery & Supplies & Components",
+    "source": "unknown"
+  },
+  {
+    "ticker": "PNW",
+    "company": "Pinnacle West Capital",
+    "sector": "Utilities",
+    "sub_industry": "Multi-Utilities",
+    "source": "unknown"
+  },
+  {
+    "ticker": "PODD",
+    "company": "Insulet Corporation",
+    "sector": "Health Care",
+    "sub_industry": "Health Care Equipment",
+    "source": "unknown"
+  },
+  {
+    "ticker": "POOL",
+    "company": "Pool Corporation",
+    "sector": "Consumer Discretionary",
+    "sub_industry": "Distributors",
+    "source": "unknown"
+  },
+  {
+    "ticker": "POST",
+    "company": "Post Holdings",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "PPC",
+    "company": "Pilgrim's Pride",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "PPG",
+    "company": "PPG Industries",
+    "sector": "Materials",
+    "sub_industry": "Specialty Chemicals",
+    "source": "unknown"
+  },
+  {
+    "ticker": "PPL",
+    "company": "PPL Corporation",
+    "sector": "Utilities",
+    "sub_industry": "Electric Utilities",
+    "source": "unknown"
+  },
+  {
+    "ticker": "PR",
+    "company": "Permian Resources",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "PRGO",
+    "company": "Perrigo",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "PRI",
+    "company": "Primerica",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "PRMB",
+    "company": "Primo Brands",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "PRU",
+    "company": "Prudential Financial",
+    "sector": "Financials",
+    "sub_industry": "Life & Health Insurance",
+    "source": "unknown"
+  },
+  {
+    "ticker": "PSA",
+    "company": "Public Storage",
+    "sector": "Real Estate",
+    "sub_industry": "Self-Storage REITs",
+    "source": "unknown"
+  },
+  {
+    "ticker": "PSKY",
+    "company": "Paramount Skydance Corporation",
+    "sector": "Communication Services",
+    "sub_industry": "Movies & Entertainment",
+    "source": "unknown"
+  },
+  {
+    "ticker": "PSN",
+    "company": "Parsons Corporation",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "PSTG",
+    "company": "Pure Storage",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "PSX",
+    "company": "Phillips 66",
+    "sector": "Energy",
+    "sub_industry": "Oil & Gas Refining & Marketing",
+    "source": "unknown"
+  },
+  {
+    "ticker": "PTC",
+    "company": "PTC Inc.",
+    "sector": "Information Technology",
+    "sub_industry": "Application Software",
+    "source": "unknown"
+  },
+  {
+    "ticker": "PVH",
+    "company": "PVH Corp.",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "PWR",
+    "company": "Quanta Services",
+    "sector": "Industrials",
+    "sub_industry": "Construction & Engineering",
+    "source": "unknown"
+  },
+  {
+    "ticker": "PYPL",
+    "company": "PayPal",
+    "sector": "Financials",
+    "sub_industry": "Transaction & Payment Processing Services",
+    "source": "unknown"
+  },
+  {
+    "ticker": "Q",
+    "company": "Qnity Electronics",
+    "sector": "Information Technology",
+    "sub_industry": "Semiconductor Materials & Equipment",
+    "source": "unknown"
+  },
+  {
+    "ticker": "QCOM",
+    "company": "Qualcomm",
+    "sector": "Information Technology",
+    "sub_industry": "Semiconductors",
+    "source": "unknown"
+  },
+  {
+    "ticker": "QGEN",
+    "company": "Qiagen",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "QRVO",
+    "company": "Qorvo",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "QS",
+    "company": "QuantumScape",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "QSR",
+    "company": "Restaurant Brands International",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "QXO",
+    "company": "QXO, Inc.",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "R",
+    "company": "Ryder",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "RAL",
+    "company": "Ralliant",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "RARE",
+    "company": "Ultragenyx",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "RBA",
+    "company": "RB Global",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "RBC",
+    "company": "RBC Bearings",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "RBLX",
+    "company": "Roblox Corporation",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "RBRK",
+    "company": "Rubrik",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "RCL",
+    "company": "Royal Caribbean Group",
+    "sector": "Consumer Discretionary",
+    "sub_industry": "Hotels, Resorts & Cruise Lines",
+    "source": "unknown"
+  },
+  {
+    "ticker": "RDDT",
+    "company": "Reddit",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "REG",
+    "company": "Regency Centers",
+    "sector": "Real Estate",
+    "sub_industry": "Retail REITs",
+    "source": "unknown"
+  },
+  {
+    "ticker": "REGN",
+    "company": "Regeneron Pharmaceuticals",
+    "sector": "Health Care",
+    "sub_industry": "Biotechnology",
+    "source": "unknown"
+  },
+  {
+    "ticker": "REXR",
+    "company": "Rexford Industrial",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "REYN",
+    "company": "Reynolds Consumer Products",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "RF",
+    "company": "Regions Financial Corporation",
+    "sector": "Financials",
+    "sub_industry": "Regional Banks",
+    "source": "unknown"
+  },
+  {
+    "ticker": "RGA",
+    "company": "Reinsurance Group of America",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "RGEN",
+    "company": "Repligen",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "RGLD",
+    "company": "Royal Gold",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "RH",
+    "company": "RH",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "RHI",
+    "company": "Robert Half",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "RITM",
+    "company": "Rithm Capital",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "RIVN",
+    "company": "Rivian",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "RJF",
+    "company": "Raymond James Financial",
+    "sector": "Financials",
+    "sub_industry": "Investment Banking & Brokerage",
+    "source": "unknown"
+  },
+  {
+    "ticker": "RKLB",
+    "company": "Rocket Lab",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "RKT",
+    "company": "Rocket Companies",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "RL",
+    "company": "Ralph Lauren Corporation",
+    "sector": "Consumer Discretionary",
+    "sub_industry": "Apparel, Accessories & Luxury Goods",
+    "source": "unknown"
+  },
+  {
+    "ticker": "RLI",
+    "company": "RLI Corp.",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "RMD",
+    "company": "ResMed",
+    "sector": "Health Care",
+    "sub_industry": "Health Care Equipment",
+    "source": "unknown"
+  },
+  {
+    "ticker": "RNG",
+    "company": "RingCentral",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "RNR",
+    "company": "RenaissanceRe",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "ROAD",
+    "company": "Construction Partners",
+    "sector": "Industrials",
+    "sub_industry": "Construction",
+    "source": "manual"
+  },
+  {
+    "ticker": "ROIV",
+    "company": "Roivant Sciences",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "ROK",
+    "company": "Rockwell Automation",
+    "sector": "Industrials",
+    "sub_industry": "Electrical Components & Equipment",
+    "source": "unknown"
+  },
+  {
+    "ticker": "ROKU",
+    "company": "Roku, Inc.",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "ROL",
+    "company": "Rollins, Inc.",
+    "sector": "Industrials",
+    "sub_industry": "Environmental & Facilities Services",
+    "source": "unknown"
+  },
+  {
+    "ticker": "ROP",
+    "company": "Roper Technologies",
+    "sector": "Information Technology",
+    "sub_industry": "Electronic Equipment & Instruments",
+    "source": "unknown"
+  },
+  {
+    "ticker": "ROST",
+    "company": "Ross Stores",
+    "sector": "Consumer Discretionary",
+    "sub_industry": "Apparel Retail",
+    "source": "unknown"
+  },
+  {
+    "ticker": "RPM",
+    "company": "RPM International",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "RPRX",
+    "company": "Royalty Pharma",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "RRC",
+    "company": "Range Resources",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "RRX",
+    "company": "Regal Rexnord",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "RS",
+    "company": "Reliance, Inc.",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "RSG",
+    "company": "Republic Services",
+    "sector": "Industrials",
+    "sub_industry": "Environmental & Facilities Services",
+    "source": "unknown"
+  },
+  {
+    "ticker": "RTX",
+    "company": "RTX Corporation",
+    "sector": "Industrials",
+    "sub_industry": "Aerospace & Defense",
+    "source": "unknown"
+  },
+  {
+    "ticker": "RVMD",
+    "company": "Revolution Medicines",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "RVTY",
+    "company": "Revvity",
+    "sector": "Health Care",
+    "sub_industry": "Health Care Equipment",
+    "source": "unknown"
+  },
+  {
+    "ticker": "RYAN",
+    "company": "Ryan Specialty",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "RYN",
+    "company": "Rayonier",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "S",
+    "company": "SentinelOne",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "SAIA",
+    "company": "Saia",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "SAIC",
+    "company": "SAIC",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "SAIL",
+    "company": "SailPoint",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "SAM",
+    "company": "Boston Beer Company",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "SARO",
+    "company": "StandardAero",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "SBAC",
+    "company": "SBA Communications",
+    "sector": "Real Estate",
+    "sub_industry": "Telecom Tower REITs",
+    "source": "unknown"
+  },
+  {
+    "ticker": "SBUX",
+    "company": "Starbucks",
+    "sector": "Consumer Discretionary",
+    "sub_industry": "Restaurants",
+    "source": "unknown"
+  },
+  {
+    "ticker": "SCCO",
+    "company": "Southern Copper",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "SCHW",
+    "company": "Charles Schwab Corporation",
+    "sector": "Financials",
+    "sub_industry": "Investment Banking & Brokerage",
+    "source": "unknown"
+  },
+  {
+    "ticker": "SCI",
+    "company": "Service Corporation International",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "SEB",
+    "company": "Seaboard Corporation",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "SEE",
+    "company": "Sealed Air",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "SEIC",
+    "company": "SEI Investments Company",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "SF",
+    "company": "Stifel",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "SFD",
+    "company": "Smithfield Foods",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "SFM",
+    "company": "Sprouts Farmers Market",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "SGI",
+    "company": "Somnigroup International",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "SHC",
+    "company": "Sotera Health",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "SHW",
+    "company": "Sherwin-Williams",
+    "sector": "Materials",
+    "sub_industry": "Specialty Chemicals",
+    "source": "unknown"
+  },
+  {
+    "ticker": "SIRI",
+    "company": "Sirius XM",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "SITE",
+    "company": "SiteOne Landscape Supply",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "SJM",
+    "company": "J.M. Smucker Company (The)",
+    "sector": "Consumer Staples",
+    "sub_industry": "Packaged Foods & Meats",
+    "source": "unknown"
+  },
+  {
+    "ticker": "SLB",
+    "company": "Schlumberger",
+    "sector": "Energy",
+    "sub_industry": "Oil & Gas Equipment & Services",
+    "source": "unknown"
+  },
+  {
+    "ticker": "SLGN",
+    "company": "Silgan Holdings",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "SLM",
+    "company": "Sallie Mae",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "SMCI",
+    "company": "Supermicro",
+    "sector": "Information Technology",
+    "sub_industry": "Technology Hardware, Storage & Peripherals",
+    "source": "unknown"
+  },
+  {
+    "ticker": "SMG",
+    "company": "Scotts Miracle-Gro Company",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "SMMT",
+    "company": "Summit Therapeutics",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "SN",
+    "company": "SharkNinja",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "SNA",
+    "company": "Snap-on",
+    "sector": "Industrials",
+    "sub_industry": "Industrial Machinery & Supplies & Components",
+    "source": "unknown"
+  },
+  {
+    "ticker": "SNDK",
+    "company": "Sandisk",
+    "sector": "Information Technology",
+    "sub_industry": "Technology Hardware, Storage & Peripherals",
+    "source": "unknown"
+  },
+  {
+    "ticker": "SNDR",
+    "company": "Schneider National",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "SNOW",
+    "company": "Snowflake Inc.",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "SNPS",
+    "company": "Synopsys",
+    "sector": "Information Technology",
+    "sub_industry": "Application Software",
+    "source": "unknown"
+  },
+  {
+    "ticker": "SNV",
+    "company": "Synovus",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "SNX",
+    "company": "TD Synnex",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "SO",
+    "company": "Southern Company",
+    "sector": "Utilities",
+    "sub_industry": "Electric Utilities",
+    "source": "unknown"
+  },
+  {
+    "ticker": "SOFI",
+    "company": "SoFi",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "SOLS",
+    "company": "Solstice Advanced Materials",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "SOLV",
+    "company": "Solventum",
+    "sector": "Health Care",
+    "sub_industry": "Health Care Technology",
+    "source": "unknown"
+  },
+  {
+    "ticker": "SON",
+    "company": "Sonoco",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "SPG",
+    "company": "Simon Property Group",
+    "sector": "Real Estate",
+    "sub_industry": "Retail REITs",
+    "source": "unknown"
+  },
+  {
+    "ticker": "SPGI",
+    "company": "S&P Global",
+    "sector": "Financials",
+    "sub_industry": "Financial Exchanges & Data",
+    "source": "unknown"
+  },
+  {
+    "ticker": "SPOT",
+    "company": "Spotify",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "SPR",
+    "company": "Spirit AeroSystems",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "SRE",
+    "company": "Sempra",
+    "sector": "Utilities",
+    "sub_industry": "Multi-Utilities",
+    "source": "unknown"
+  },
+  {
+    "ticker": "SRPT",
+    "company": "Sarepta Therapeutics",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "SSB",
+    "company": "SouthState Corporation",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "SSD",
+    "company": "Simpson Manufacturing Company",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "SSNC",
+    "company": "SS&C Technologies",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "ST",
+    "company": "Sensata Technologies",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "STAG",
+    "company": "STAG Industrial",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "STE",
+    "company": "Steris",
+    "sector": "Health Care",
+    "sub_industry": "Health Care Equipment",
+    "source": "unknown"
+  },
+  {
+    "ticker": "STLD",
+    "company": "Steel Dynamics",
+    "sector": "Materials",
+    "sub_industry": "Steel",
+    "source": "unknown"
+  },
+  {
+    "ticker": "STT",
+    "company": "State Street Corporation",
+    "sector": "Financials",
+    "sub_industry": "Asset Management & Custody Banks",
+    "source": "unknown"
+  },
+  {
+    "ticker": "STWD",
+    "company": "Starwood Property Trust",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "STX",
+    "company": "Seagate Technology",
+    "sector": "Information Technology",
+    "sub_industry": "Technology Hardware, Storage & Peripherals",
+    "source": "unknown"
+  },
+  {
+    "ticker": "STZ",
+    "company": "Constellation Brands",
+    "sector": "Consumer Staples",
+    "sub_industry": "Distillers & Vintners",
+    "source": "unknown"
+  },
+  {
+    "ticker": "SUI",
+    "company": "Sun Communities",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "SW",
+    "company": "Smurfit Westrock",
+    "sector": "Materials",
+    "sub_industry": "Paper & Plastic Packaging Products & Materials",
+    "source": "unknown"
+  },
+  {
+    "ticker": "SWK",
+    "company": "Stanley Black & Decker",
+    "sector": "Industrials",
+    "sub_industry": "Industrial Machinery & Supplies & Components",
+    "source": "unknown"
+  },
+  {
+    "ticker": "SWKS",
+    "company": "Skyworks Solutions",
+    "sector": "Information Technology",
+    "sub_industry": "Semiconductors",
+    "source": "unknown"
+  },
+  {
+    "ticker": "SYF",
+    "company": "Synchrony Financial",
+    "sector": "Financials",
+    "sub_industry": "Consumer Finance",
+    "source": "unknown"
+  },
+  {
+    "ticker": "SYK",
+    "company": "Stryker Corporation",
+    "sector": "Health Care",
+    "sub_industry": "Health Care Equipment",
+    "source": "unknown"
+  },
+  {
+    "ticker": "SYY",
+    "company": "Sysco",
+    "sector": "Consumer Staples",
+    "sub_industry": "Food Distributors",
+    "source": "unknown"
+  },
+  {
+    "ticker": "T",
+    "company": "AT&T",
+    "sector": "Communication Services",
+    "sub_industry": "Integrated Telecommunication Services",
+    "source": "unknown"
+  },
+  {
+    "ticker": "TAP",
+    "company": "Molson Coors Beverage Company",
+    "sector": "Consumer Staples",
+    "sub_industry": "Brewers",
+    "source": "unknown"
+  },
+  {
+    "ticker": "TDC",
+    "company": "Teradata",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "TDG",
+    "company": "TransDigm Group",
+    "sector": "Industrials",
+    "sub_industry": "Aerospace & Defense",
+    "source": "unknown"
+  },
+  {
+    "ticker": "TDY",
+    "company": "Teledyne Technologies",
+    "sector": "Information Technology",
+    "sub_industry": "Electronic Equipment & Instruments",
+    "source": "unknown"
+  },
+  {
+    "ticker": "TEAM",
+    "company": "Atlassian",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "TECH",
+    "company": "Bio-Techne",
+    "sector": "Health Care",
+    "sub_industry": "Life Sciences Tools & Services",
+    "source": "unknown"
+  },
+  {
+    "ticker": "TEL",
+    "company": "TE Connectivity",
+    "sector": "Information Technology",
+    "sub_industry": "Electronic Manufacturing Services",
+    "source": "unknown"
+  },
+  {
+    "ticker": "TEM",
+    "company": "Tempus AI",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "TER",
+    "company": "Teradyne",
+    "sector": "Information Technology",
+    "sub_industry": "Semiconductor Materials & Equipment",
+    "source": "unknown"
+  },
+  {
+    "ticker": "TFC",
+    "company": "Truist Financial",
+    "sector": "Financials",
+    "sub_industry": "Diversified Banks",
+    "source": "unknown"
+  },
+  {
+    "ticker": "TFSL",
+    "company": "Third Federal S&L",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "TFX",
+    "company": "Teleflex",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "TGT",
+    "company": "Target Corporation",
+    "sector": "Consumer Staples",
+    "sub_industry": "Consumer Staples Merchandise Retail",
+    "source": "unknown"
+  },
+  {
+    "ticker": "THC",
+    "company": "Tenet Healthcare",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "THG",
+    "company": "Hanover Insurance",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "THO",
+    "company": "Thor Industries",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "TIGO",
+    "company": "Millicom",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "TJX",
+    "company": "TJX Companies",
+    "sector": "Consumer Discretionary",
+    "sub_industry": "Apparel Retail",
+    "source": "unknown"
+  },
+  {
+    "ticker": "TKO",
+    "company": "TKO Group Holdings",
+    "sector": "Communication Services",
+    "sub_industry": "Movies & Entertainment",
+    "source": "unknown"
+  },
+  {
+    "ticker": "TKR",
+    "company": "Timken Company",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "TLN",
+    "company": "Talen Energy",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "TMO",
+    "company": "Thermo Fisher Scientific",
+    "sector": "Health Care",
+    "sub_industry": "Life Sciences Tools & Services",
+    "source": "unknown"
+  },
+  {
+    "ticker": "TMUS",
+    "company": "T-Mobile US",
+    "sector": "Communication Services",
+    "sub_industry": "Wireless Telecommunication Services",
+    "source": "unknown"
+  },
+  {
+    "ticker": "TNL",
+    "company": "Travel + Leisure Co.",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "TOL",
+    "company": "Toll Brothers",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "TOST",
+    "company": "Toast, Inc.",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "TPG",
+    "company": "TPG Inc.",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "TPL",
+    "company": "Texas Pacific Land Corporation",
+    "sector": "Energy",
+    "sub_industry": "Oil & Gas Exploration & Production",
+    "source": "unknown"
+  },
+  {
+    "ticker": "TPR",
+    "company": "Tapestry, Inc.",
+    "sector": "Consumer Discretionary",
+    "sub_industry": "Apparel, Accessories & Luxury Goods",
+    "source": "unknown"
+  },
+  {
+    "ticker": "TREX",
+    "company": "Trex Company, Inc.",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "TRGP",
+    "company": "Targa Resources",
+    "sector": "Energy",
+    "sub_industry": "Oil & Gas Storage & Transportation",
+    "source": "unknown"
+  },
+  {
+    "ticker": "TRMB",
+    "company": "Trimble Inc.",
+    "sector": "Information Technology",
+    "sub_industry": "Electronic Equipment & Instruments",
+    "source": "unknown"
+  },
+  {
+    "ticker": "TROW",
+    "company": "T. Rowe Price",
+    "sector": "Financials",
+    "sub_industry": "Asset Management & Custody Banks",
+    "source": "unknown"
+  },
+  {
+    "ticker": "TRU",
+    "company": "TransUnion",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "TRV",
+    "company": "Travelers Companies (The)",
+    "sector": "Financials",
+    "sub_industry": "Property & Casualty Insurance",
+    "source": "unknown"
+  },
+  {
+    "ticker": "TSCO",
+    "company": "Tractor Supply",
+    "sector": "Consumer Discretionary",
+    "sub_industry": "Other Specialty Retail",
+    "source": "unknown"
+  },
+  {
+    "ticker": "TSLA",
+    "company": "Tesla, Inc.",
+    "sector": "Consumer Discretionary",
+    "sub_industry": "Automobile Manufacturers",
+    "source": "unknown"
+  },
+  {
+    "ticker": "TSN",
+    "company": "Tyson Foods",
+    "sector": "Consumer Staples",
+    "sub_industry": "Packaged Foods & Meats",
+    "source": "unknown"
+  },
+  {
+    "ticker": "TT",
+    "company": "Trane Technologies",
+    "sector": "Industrials",
+    "sub_industry": "Building Products",
+    "source": "unknown"
+  },
+  {
+    "ticker": "TTC",
+    "company": "Toro Company (The)",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "TTD",
+    "company": "Trade Desk (The)",
+    "sector": "Communication Services",
+    "sub_industry": "Advertising",
+    "source": "unknown"
+  },
+  {
+    "ticker": "TTEK",
+    "company": "Tetra Tech",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "TTWO",
+    "company": "Take-Two Interactive",
+    "sector": "Communication Services",
+    "sub_industry": "Interactive Home Entertainment",
+    "source": "unknown"
+  },
+  {
+    "ticker": "TW",
+    "company": "Tradeweb",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "TWLO",
+    "company": "Twilio",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "TXN",
+    "company": "Texas Instruments",
+    "sector": "Information Technology",
+    "sub_industry": "Semiconductors",
+    "source": "unknown"
+  },
+  {
+    "ticker": "TXRH",
+    "company": "Texas Roadhouse",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "TXT",
+    "company": "Textron",
+    "sector": "Industrials",
+    "sub_industry": "Aerospace & Defense",
+    "source": "unknown"
+  },
+  {
+    "ticker": "TYL",
+    "company": "Tyler Technologies",
+    "sector": "Information Technology",
+    "sub_industry": "Application Software",
+    "source": "unknown"
+  },
+  {
+    "ticker": "U",
+    "company": "Unity Technologies",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "UA",
+    "company": "Under Armour (Class C)",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "UAA",
+    "company": "Under Armour (Class A)",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "UAL",
+    "company": "United Airlines Holdings",
+    "sector": "Industrials",
+    "sub_industry": "Passenger Airlines",
+    "source": "unknown"
+  },
+  {
+    "ticker": "UBER",
+    "company": "Uber",
+    "sector": "Industrials",
+    "sub_industry": "Passenger Ground Transportation",
+    "source": "unknown"
+  },
+  {
+    "ticker": "UDR",
+    "company": "UDR, Inc.",
+    "sector": "Real Estate",
+    "sub_industry": "Multi-Family Residential REITs",
+    "source": "unknown"
+  },
+  {
+    "ticker": "UGI",
+    "company": "UGI Corporation",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "UHAL",
+    "company": "U-Haul",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "UHS",
+    "company": "Universal Health Services",
+    "sector": "Health Care",
+    "sub_industry": "Health Care Facilities",
+    "source": "unknown"
+  },
+  {
+    "ticker": "UI",
+    "company": "Ubiquiti",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "ULTA",
+    "company": "Ulta Beauty",
+    "sector": "Consumer Discretionary",
+    "sub_industry": "Other Specialty Retail",
+    "source": "unknown"
+  },
+  {
+    "ticker": "UNH",
+    "company": "UnitedHealth Group",
+    "sector": "Health Care",
+    "sub_industry": "Managed Health Care",
+    "source": "unknown"
+  },
+  {
+    "ticker": "UNM",
+    "company": "Unum",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "UNP",
+    "company": "Union Pacific Corporation",
+    "sector": "Industrials",
+    "sub_industry": "Rail Transportation",
+    "source": "unknown"
+  },
+  {
+    "ticker": "UPS",
+    "company": "United Parcel Service",
+    "sector": "Industrials",
+    "sub_industry": "Air Freight & Logistics",
+    "source": "unknown"
+  },
+  {
+    "ticker": "URI",
+    "company": "United Rentals",
+    "sector": "Industrials",
+    "sub_industry": "Trading Companies & Distributors",
+    "source": "unknown"
+  },
+  {
+    "ticker": "USB",
+    "company": "U.S. Bancorp",
+    "sector": "Financials",
+    "sub_industry": "Diversified Banks",
+    "source": "unknown"
+  },
+  {
+    "ticker": "USFD",
+    "company": "US Foods",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "UTHR",
+    "company": "United Therapeutics",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "UWMC",
+    "company": "United Wholesale Mortgage",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "V",
+    "company": "Visa Inc.",
+    "sector": "Financials",
+    "sub_industry": "Transaction & Payment Processing Services",
+    "source": "unknown"
+  },
+  {
+    "ticker": "VEEV",
+    "company": "Veeva Systems",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "VFC",
+    "company": "VF Corporation",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "VICI",
+    "company": "Vici Properties",
+    "sector": "Real Estate",
+    "sub_industry": "Hotel & Resort REITs",
+    "source": "unknown"
+  },
+  {
+    "ticker": "VIK",
+    "company": "Viking Holdings",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "VIRT",
+    "company": "Virtu Financial",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "VKTX",
+    "company": "Viking Therapeutics",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "VLO",
+    "company": "Valero Energy",
+    "sector": "Energy",
+    "sub_industry": "Oil & Gas Refining & Marketing",
+    "source": "unknown"
+  },
+  {
+    "ticker": "VLTO",
+    "company": "Veralto",
+    "sector": "Industrials",
+    "sub_industry": "Environmental & Facilities Services",
+    "source": "unknown"
+  },
+  {
+    "ticker": "VMC",
+    "company": "Vulcan Materials Company",
+    "sector": "Materials",
+    "sub_industry": "Construction Materials",
+    "source": "unknown"
+  },
+  {
+    "ticker": "VMI",
+    "company": "Valmont Industries",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "VNO",
+    "company": "Vornado Realty Trust",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "VNOM",
+    "company": "Viper Energy",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "VNT",
+    "company": "Vontier",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "VOYA",
+    "company": "Voya Financial",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "VRSK",
+    "company": "Verisk Analytics",
+    "sector": "Industrials",
+    "sub_industry": "Research & Consulting Services",
+    "source": "unknown"
+  },
+  {
+    "ticker": "VRSN",
+    "company": "Verisign",
+    "sector": "Information Technology",
+    "sub_industry": "Internet Services & Infrastructure",
+    "source": "unknown"
+  },
+  {
+    "ticker": "VRT",
+    "company": "Vertiv",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "VRTX",
+    "company": "Vertex Pharmaceuticals",
+    "sector": "Health Care",
+    "sub_industry": "Biotechnology",
+    "source": "unknown"
+  },
+  {
+    "ticker": "VST",
+    "company": "Vistra Corp.",
+    "sector": "Utilities",
+    "sub_industry": "Electric Utilities",
+    "source": "unknown"
+  },
+  {
+    "ticker": "VTR",
+    "company": "Ventas",
+    "sector": "Real Estate",
+    "sub_industry": "Health Care REITs",
+    "source": "unknown"
+  },
+  {
+    "ticker": "VTRS",
+    "company": "Viatris",
+    "sector": "Health Care",
+    "sub_industry": "Pharmaceuticals",
+    "source": "unknown"
+  },
+  {
+    "ticker": "VVV",
+    "company": "Valvoline",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "VZ",
+    "company": "Verizon",
+    "sector": "Communication Services",
+    "sub_industry": "Integrated Telecommunication Services",
+    "source": "unknown"
+  },
+  {
+    "ticker": "W",
+    "company": "Wayfair",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "WAB",
+    "company": "Wabtec",
+    "sector": "Industrials",
+    "sub_industry": "Construction Machinery & Heavy Transportation Equipment",
+    "source": "unknown"
+  },
+  {
+    "ticker": "WAL",
+    "company": "Western Alliance Bancorporation",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "WAT",
+    "company": "Waters Corporation",
+    "sector": "Health Care",
+    "sub_industry": "Life Sciences Tools & Services",
+    "source": "unknown"
+  },
+  {
+    "ticker": "WBD",
+    "company": "Warner Bros. Discovery",
+    "sector": "Communication Services",
+    "sub_industry": "Broadcasting",
+    "source": "unknown"
+  },
+  {
+    "ticker": "WBS",
+    "company": "Webster Bank",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "WCC",
+    "company": "Wesco International",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "WDAY",
+    "company": "Workday, Inc.",
+    "sector": "Information Technology",
+    "sub_industry": "Application Software",
+    "source": "unknown"
+  },
+  {
+    "ticker": "WDC",
+    "company": "Western Digital",
+    "sector": "Information Technology",
+    "sub_industry": "Technology Hardware, Storage & Peripherals",
+    "source": "unknown"
+  },
+  {
+    "ticker": "WEC",
+    "company": "WEC Energy Group",
+    "sector": "Utilities",
+    "sub_industry": "Electric Utilities",
+    "source": "unknown"
+  },
+  {
+    "ticker": "WELL",
+    "company": "Welltower",
+    "sector": "Real Estate",
+    "sub_industry": "Health Care REITs",
+    "source": "unknown"
+  },
+  {
+    "ticker": "WEN",
+    "company": "Wendy's Company (The)",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "WEX",
+    "company": "WEX Inc.",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "WFC",
+    "company": "Wells Fargo",
+    "sector": "Financials",
+    "sub_industry": "Diversified Banks",
+    "source": "unknown"
+  },
+  {
+    "ticker": "WFRD",
+    "company": "Weatherford International",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "WH",
+    "company": "Wyndham Hotels & Resorts",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "WHR",
+    "company": "Whirlpool Corporation",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "WING",
+    "company": "Wingstop",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "WLK",
+    "company": "Westlake Corporation",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "WM",
+    "company": "Waste Management",
+    "sector": "Industrials",
+    "sub_industry": "Environmental & Facilities Services",
+    "source": "unknown"
+  },
+  {
+    "ticker": "WMB",
+    "company": "Williams Companies",
+    "sector": "Energy",
+    "sub_industry": "Oil & Gas Storage & Transportation",
+    "source": "unknown"
+  },
+  {
+    "ticker": "WMS",
+    "company": "Advanced Drainage Systems",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "WMT",
+    "company": "Walmart",
+    "sector": "Consumer Staples",
+    "sub_industry": "Consumer Staples Merchandise Retail",
+    "source": "unknown"
+  },
+  {
+    "ticker": "WPC",
+    "company": "W. P. Carey",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "WRB",
+    "company": "W. R. Berkley Corporation",
+    "sector": "Financials",
+    "sub_industry": "Property & Casualty Insurance",
+    "source": "unknown"
+  },
+  {
+    "ticker": "WSC",
+    "company": "WillScot Mobile Mini",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "WSM",
+    "company": "Williams-Sonoma, Inc.",
+    "sector": "Consumer Discretionary",
+    "sub_industry": "Homefurnishing Retail",
+    "source": "unknown"
+  },
+  {
+    "ticker": "WSO",
+    "company": "Watsco",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "WST",
+    "company": "West Pharmaceutical Services",
+    "sector": "Health Care",
+    "sub_industry": "Health Care Supplies",
+    "source": "unknown"
+  },
+  {
+    "ticker": "WTFC",
+    "company": "Wintrust Financial",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "WTM",
+    "company": "White Mountains Insurance Group",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "WTRG",
+    "company": "Essential Utilities",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "WTW",
+    "company": "Willis Towers Watson",
+    "sector": "Financials",
+    "sub_industry": "Insurance Brokers",
+    "source": "unknown"
+  },
+  {
+    "ticker": "WU",
+    "company": "Western Union",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "WWD",
+    "company": "Woodward, Inc.",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "WWW",
+    "company": "Wolverine World Wide",
+    "sector": "Consumer Discretionary",
+    "sub_industry": "Footwear",
+    "source": "manual"
+  },
+  {
+    "ticker": "WY",
+    "company": "Weyerhaeuser",
+    "sector": "Real Estate",
+    "sub_industry": "Timber REITs",
+    "source": "unknown"
+  },
+  {
+    "ticker": "WYNN",
+    "company": "Wynn Resorts",
+    "sector": "Consumer Discretionary",
+    "sub_industry": "Casinos & Gaming",
+    "source": "unknown"
+  },
+  {
+    "ticker": "XEL",
+    "company": "Xcel Energy",
+    "sector": "Utilities",
+    "sub_industry": "Multi-Utilities",
+    "source": "unknown"
+  },
+  {
+    "ticker": "XOM",
+    "company": "ExxonMobil",
+    "sector": "Energy",
+    "sub_industry": "Integrated Oil & Gas",
+    "source": "unknown"
+  },
+  {
+    "ticker": "XP",
+    "company": "XP Inc.",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "XPO",
+    "company": "XPO, Inc.",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "XRAY",
+    "company": "Dentsply Sirona",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "XYL",
+    "company": "Xylem Inc.",
+    "sector": "Industrials",
+    "sub_industry": "Industrial Machinery & Supplies & Components",
+    "source": "unknown"
+  },
+  {
+    "ticker": "XYZ",
+    "company": "Block, Inc.",
+    "sector": "Financials",
+    "sub_industry": "Transaction & Payment Processing Services",
+    "source": "unknown"
+  },
+  {
+    "ticker": "YETI",
+    "company": "Yeti Holdings",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "YUM",
+    "company": "Yum! Brands",
+    "sector": "Consumer Discretionary",
+    "sub_industry": "Restaurants",
+    "source": "unknown"
+  },
+  {
+    "ticker": "Z",
+    "company": "Zillow (Class C)",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "ZBH",
+    "company": "Zimmer Biomet",
+    "sector": "Health Care",
+    "sub_industry": "Health Care Equipment",
+    "source": "unknown"
+  },
+  {
+    "ticker": "ZBRA",
+    "company": "Zebra Technologies",
+    "sector": "Information Technology",
+    "sub_industry": "Electronic Equipment & Instruments",
+    "source": "unknown"
+  },
+  {
+    "ticker": "ZG",
+    "company": "Zillow (Class A)",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "ZION",
+    "company": "Zions Bancorporation",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "ZM",
+    "company": "Zoom Communications",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "ZS",
+    "company": "Zscaler",
+    "sector": "",
+    "sub_industry": "",
+    "source": "russell_1000"
+  },
+  {
+    "ticker": "ZTS",
+    "company": "Zoetis",
+    "sector": "Health Care",
+    "sub_industry": "Pharmaceuticals",
+    "source": "unknown"
+  }
+]

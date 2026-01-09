@@ -95,15 +95,22 @@ struct StockWithOwnersRow: View {
     var emoji: String = LocalLLMService.placeholder
     var onTap: (() -> Void)?
     
+    // Check if we have a real emoji (not placeholder)
+    private var hasEmoji: Bool {
+        emoji != LocalLLMService.placeholder && !emoji.isEmpty
+    }
+    
     var body: some View {
         Button(action: { onTap?() }) {
             VStack(alignment: .leading, spacing: 10) {
                 // Stock Info
                 HStack {
-                    // Emoji
-                    Text(emoji)
-                        .font(.system(size: 22))
-                        .frame(width: 32)
+                    // Only show emoji if we have one (not placeholder)
+                    if hasEmoji {
+                        Text(emoji)
+                            .font(.system(size: 22))
+                            .frame(width: 32)
+                    }
                     
                     VStack(alignment: .leading, spacing: 4) {
                         HStack(spacing: 6) {
@@ -169,19 +176,12 @@ struct StockWithOwnersRow: View {
     }
     
     private func stockName(for symbol: String) -> String {
-        let names: [String: String] = [
-            "AAPL": "Apple Inc.",
-            "GOOGL": "Alphabet Inc.",
-            "MSFT": "Microsoft Corp.",
-            "TSLA": "Tesla Inc.",
-            "NVDA": "NVIDIA Corp.",
-            "AMZN": "Amazon.com Inc.",
-            "META": "Meta Platforms Inc.",
-            "NFLX": "Netflix Inc.",
-            "AMD": "AMD Inc.",
-            "DIS": "Walt Disney Co."
-        ]
-        return names[symbol] ?? symbol
+        // Use AI data service for company names
+        if let companyName = StockDataService.shared.getCompanyName(ticker: symbol) {
+            return companyName
+        }
+        // Fallback for stocks not in our database
+        return symbol
     }
 }
 
@@ -191,6 +191,19 @@ struct StockDetailView: View {
     @Environment(\.dismiss) var dismiss
     
     let stockWithOwners: StockWithOwners
+    
+    // Stock fact card data
+    private var stockFact: StockFact? {
+        let fact = StockDataService.shared.getFact(ticker: stockWithOwners.stock.symbol)
+        print("📊 Getting fact for \(stockWithOwners.stock.symbol): \(fact != nil ? "Found" : "Not found")")
+        print("📊 Service loaded: \(StockDataService.shared.isLoaded), count: \(StockDataService.shared.stockCount)")
+        return fact
+    }
+    
+    // Similar stocks from AI embeddings
+    private var similarStocks: [(ticker: String, score: Double, fact: StockFact?)] {
+        StockDataService.shared.findSimilar(to: stockWithOwners.stock.symbol, limit: 5)
+    }
     
     var body: some View {
         NavigationStack {
@@ -221,6 +234,129 @@ struct StockDetailView: View {
                                 .foregroundColor(Color(white: 0.2)),
                             alignment: .bottom
                         )
+                        
+                        // AI Fact Card Section
+                        // Debug: Show if data loaded
+                        Text("Data: \(StockDataService.shared.isLoaded ? "✅ \(StockDataService.shared.stockCount)" : "❌ Not loaded")")
+                            .font(.system(size: 10))
+                            .foregroundColor(.yellow)
+                            .padding(.horizontal)
+                        
+                        if let fact = stockFact, !fact.summary.isEmpty {
+                            VStack(alignment: .leading, spacing: 12) {
+                                HStack {
+                                    Text("🤖")
+                                        .font(.system(size: 16))
+                                    Text("AI FACT CARD")
+                                        .font(.system(size: 12, weight: .bold))
+                                        .tracking(3)
+                                        .foregroundColor(Color(white: 0.5))
+                                }
+                                .padding(.horizontal)
+                                
+                                VStack(alignment: .leading, spacing: 8) {
+                                    Text(fact.company)
+                                        .font(.system(size: 16, weight: .black))
+                                        .foregroundColor(.white)
+                                    
+                                    Text(fact.summary)
+                                        .font(.system(size: 13, weight: .medium))
+                                        .foregroundColor(Color(white: 0.7))
+                                        .lineSpacing(4)
+                                    
+                                    // Tags
+                                    if let tags = fact.tags, !tags.isEmpty {
+                                        HStack(spacing: 8) {
+                                            ForEach(tags.prefix(4), id: \.self) { tag in
+                                                Text(tag.uppercased())
+                                                    .font(.system(size: 9, weight: .bold))
+                                                    .tracking(1)
+                                                    .padding(.horizontal, 8)
+                                                    .padding(.vertical, 4)
+                                                    .background(Color(white: 0.15))
+                                                    .foregroundColor(Color(white: 0.6))
+                                                    .cornerRadius(4)
+                                            }
+                                        }
+                                        .padding(.top, 4)
+                                    }
+                                    
+                                    // Sector badge
+                                    HStack {
+                                        Text(fact.sector.uppercased())
+                                            .font(.system(size: 10, weight: .bold))
+                                            .tracking(2)
+                                            .padding(.horizontal, 10)
+                                            .padding(.vertical, 6)
+                                            .background(Color.white.opacity(0.1))
+                                            .foregroundColor(.white)
+                                            .cornerRadius(4)
+                                    }
+                                    .padding(.top, 4)
+                                }
+                                .padding()
+                                .background(Color(white: 0.08))
+                                .cornerRadius(12)
+                                .padding(.horizontal)
+                            }
+                        }
+                        
+                        // Similar Stocks Section (AI-powered) - TAPPABLE
+                        if !similarStocks.isEmpty {
+                            VStack(alignment: .leading, spacing: 12) {
+                                HStack {
+                                    Text("✨")
+                                        .font(.system(size: 16))
+                                    Text("SIMILAR STOCKS")
+                                        .font(.system(size: 12, weight: .bold))
+                                        .tracking(3)
+                                        .foregroundColor(Color(white: 0.5))
+                                    Spacer()
+                                    Text("AI")
+                                        .font(.system(size: 9, weight: .black))
+                                        .padding(.horizontal, 6)
+                                        .padding(.vertical, 2)
+                                        .background(Color.white.opacity(0.2))
+                                        .foregroundColor(.white)
+                                        .cornerRadius(4)
+                                }
+                                .padding(.horizontal)
+                                
+                                ForEach(similarStocks, id: \.ticker) { item in
+                                    NavigationLink(destination: SimilarStockDetailView(ticker: item.ticker)) {
+                                        HStack {
+                                            VStack(alignment: .leading, spacing: 2) {
+                                                Text(item.ticker)
+                                                    .font(.system(size: 14, weight: .black))
+                                                    .foregroundColor(.white)
+                                                if let fact = item.fact {
+                                                    Text(fact.company)
+                                                        .font(.system(size: 10, weight: .medium))
+                                                        .foregroundColor(Color(white: 0.5))
+                                                        .lineLimit(1)
+                                                }
+                                            }
+                                            
+                                            Spacer()
+                                            
+                                            // Similarity score
+                                            Text("\(Int(item.score * 100))%")
+                                                .font(.system(size: 12, weight: .bold))
+                                                .foregroundColor(Color(white: 0.4))
+                                            
+                                            Image(systemName: "chevron.right")
+                                                .font(.system(size: 12, weight: .bold))
+                                                .foregroundColor(Color(white: 0.3))
+                                        }
+                                        .padding(.horizontal)
+                                        .padding(.vertical, 10)
+                                        .background(Color(white: 0.08))
+                                        .cornerRadius(8)
+                                        .padding(.horizontal)
+                                    }
+                                }
+                            }
+                        }
                         
                         // Owners Section
                         VStack(alignment: .leading, spacing: 16) {
@@ -283,6 +419,223 @@ struct StockDetailView: View {
             prices: appState.priceService.prices
         )
         return allocations.first { $0.symbol == stockWithOwners.stock.symbol }?.percent
+    }
+}
+
+// MARK: - Similar Stock Detail View (for exploring from recommendations)
+struct SimilarStockDetailView: View {
+    @EnvironmentObject var appState: AppState
+    @Environment(\.dismiss) var dismiss
+    @State private var isAdding = false
+    @State private var showAddedConfirmation = false
+    
+    let ticker: String
+    
+    private var stockFact: StockFact? {
+        StockDataService.shared.getFact(ticker: ticker)
+    }
+    
+    private var similarStocks: [(ticker: String, score: Double, fact: StockFact?)] {
+        StockDataService.shared.findSimilar(to: ticker, limit: 5)
+    }
+    
+    // Check if stock is already in portfolio
+    private var isInPortfolio: Bool {
+        appState.currentUserPortfolio?.holdings.contains(where: { $0.symbol == ticker }) ?? false
+    }
+    
+    var body: some View {
+        ZStack {
+            Color.black.ignoresSafeArea()
+            
+            ScrollView {
+                VStack(spacing: 24) {
+                    // Header
+                    VStack(spacing: 8) {
+                        Text(ticker)
+                            .font(.system(size: 48, weight: .black))
+                            .foregroundColor(.white)
+                        
+                        if let fact = stockFact {
+                            Text(fact.company)
+                                .font(.system(size: 14, weight: .medium))
+                                .foregroundColor(Color(white: 0.5))
+                        }
+                    }
+                    .padding(.top, 20)
+                    
+                    // ADD TO PORTFOLIO Button
+                    Button(action: addToPortfolio) {
+                        HStack(spacing: 10) {
+                            if isAdding {
+                                ProgressView()
+                                    .progressViewStyle(CircularProgressViewStyle(tint: .black))
+                                    .scaleEffect(0.8)
+                            } else if showAddedConfirmation {
+                                Image(systemName: "checkmark")
+                                    .font(.system(size: 16, weight: .bold))
+                                Text("ADDED!")
+                                    .font(.system(size: 14, weight: .black))
+                                    .tracking(2)
+                            } else if isInPortfolio {
+                                Image(systemName: "checkmark.circle.fill")
+                                    .font(.system(size: 16, weight: .bold))
+                                Text("IN PORTFOLIO")
+                                    .font(.system(size: 14, weight: .black))
+                                    .tracking(2)
+                            } else {
+                                Image(systemName: "plus")
+                                    .font(.system(size: 16, weight: .bold))
+                                Text("ADD TO PORTFOLIO")
+                                    .font(.system(size: 14, weight: .black))
+                                    .tracking(2)
+                            }
+                        }
+                        .foregroundColor(isInPortfolio || showAddedConfirmation ? .black : .black)
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 16)
+                        .background(isInPortfolio || showAddedConfirmation ? Color.green : Color.white)
+                        .cornerRadius(12)
+                        .padding(.horizontal)
+                    }
+                    .disabled(isAdding || isInPortfolio)
+                    .opacity(isInPortfolio ? 0.7 : 1.0)
+                    
+                    // AI Fact Card
+                    if let fact = stockFact, !fact.summary.isEmpty {
+                        VStack(alignment: .leading, spacing: 12) {
+                            HStack {
+                                Text("🤖")
+                                    .font(.system(size: 16))
+                                Text("AI FACT CARD")
+                                    .font(.system(size: 12, weight: .bold))
+                                    .tracking(3)
+                                    .foregroundColor(Color(white: 0.5))
+                            }
+                            .padding(.horizontal)
+                            
+                            VStack(alignment: .leading, spacing: 8) {
+                                Text(fact.summary)
+                                    .font(.system(size: 13, weight: .medium))
+                                    .foregroundColor(Color(white: 0.7))
+                                    .lineSpacing(4)
+                                
+                                // Tags
+                                if let tags = fact.tags, !tags.isEmpty {
+                                    HStack(spacing: 8) {
+                                        ForEach(tags.prefix(4), id: \.self) { tag in
+                                            Text(tag.uppercased())
+                                                .font(.system(size: 9, weight: .bold))
+                                                .tracking(1)
+                                                .padding(.horizontal, 8)
+                                                .padding(.vertical, 4)
+                                                .background(Color(white: 0.15))
+                                                .foregroundColor(Color(white: 0.6))
+                                                .cornerRadius(4)
+                                        }
+                                    }
+                                    .padding(.top, 4)
+                                }
+                                
+                                // Sector badge
+                                if !fact.sector.isEmpty {
+                                    Text(fact.sector.uppercased())
+                                        .font(.system(size: 10, weight: .bold))
+                                        .tracking(2)
+                                        .padding(.horizontal, 10)
+                                        .padding(.vertical, 6)
+                                        .background(Color.white.opacity(0.1))
+                                        .foregroundColor(.white)
+                                        .cornerRadius(4)
+                                        .padding(.top, 4)
+                                }
+                            }
+                            .padding()
+                            .background(Color(white: 0.08))
+                            .cornerRadius(12)
+                            .padding(.horizontal)
+                        }
+                    }
+                    
+                    // Similar Stocks (recursive exploration!)
+                    if !similarStocks.isEmpty {
+                        VStack(alignment: .leading, spacing: 12) {
+                            HStack {
+                                Text("✨")
+                                    .font(.system(size: 16))
+                                Text("SIMILAR STOCKS")
+                                    .font(.system(size: 12, weight: .bold))
+                                    .tracking(3)
+                                    .foregroundColor(Color(white: 0.5))
+                                Spacer()
+                                Text("AI")
+                                    .font(.system(size: 9, weight: .black))
+                                    .padding(.horizontal, 6)
+                                    .padding(.vertical, 2)
+                                    .background(Color.white.opacity(0.2))
+                                    .foregroundColor(.white)
+                                    .cornerRadius(4)
+                            }
+                            .padding(.horizontal)
+                            
+                            ForEach(similarStocks, id: \.ticker) { item in
+                                NavigationLink(destination: SimilarStockDetailView(ticker: item.ticker)) {
+                                    HStack {
+                                        VStack(alignment: .leading, spacing: 2) {
+                                            Text(item.ticker)
+                                                .font(.system(size: 14, weight: .black))
+                                                .foregroundColor(.white)
+                                            if let fact = item.fact {
+                                                Text(fact.company)
+                                                    .font(.system(size: 10, weight: .medium))
+                                                    .foregroundColor(Color(white: 0.5))
+                                                    .lineLimit(1)
+                                            }
+                                        }
+                                        
+                                        Spacer()
+                                        
+                                        Text("\(Int(item.score * 100))%")
+                                            .font(.system(size: 12, weight: .bold))
+                                            .foregroundColor(Color(white: 0.4))
+                                        
+                                        Image(systemName: "chevron.right")
+                                            .font(.system(size: 12, weight: .bold))
+                                            .foregroundColor(Color(white: 0.3))
+                                    }
+                                    .padding(.horizontal)
+                                    .padding(.vertical, 10)
+                                    .background(Color(white: 0.08))
+                                    .cornerRadius(8)
+                                    .padding(.horizontal)
+                                }
+                            }
+                        }
+                    }
+                    
+                    Spacer(minLength: 40)
+                }
+            }
+        }
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbarBackground(.black, for: .navigationBar)
+        .toolbarBackground(.visible, for: .navigationBar)
+    }
+    
+    private func addToPortfolio() {
+        isAdding = true
+        Task {
+            await appState.addStock(symbol: ticker)
+            await MainActor.run {
+                isAdding = false
+                showAddedConfirmation = true
+                
+                // Reset confirmation after 2 seconds
+                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                    showAddedConfirmation = false
+                }
+            }
+        }
     }
 }
 

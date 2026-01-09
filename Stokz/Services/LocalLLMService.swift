@@ -7,16 +7,21 @@ import SwiftUI
 class LocalLLMService: ObservableObject {
     static let shared = LocalLLMService()
     
-    // MARK: - Model Config (for future LLM integration)
-    private let modelURL = URL(string: "https://huggingface.co/Qwen/Qwen2-0.5B-Instruct-GGUF/resolve/main/qwen2-0_5b-instruct-q4_k_m.gguf")!
-    private let modelFileName = "qwen2-0.5b-instruct-q4_k_m.gguf"
-    private let modelSize: Int64 = 397_000_000
+    // MARK: - Model Config - TinyLlama 1.1B Chat (recommended by llama.cpp)
+    private let modelURL = URL(string: "https://huggingface.co/TheBloke/TinyLlama-1.1B-Chat-v1.0-GGUF/resolve/main/tinyllama-1.1b-chat-v1.0.Q8_0.gguf?download=true")!
+    private let modelFileName = "tinyllama-1.1b-chat-v1.0.Q8_0.gguf"
+    private let modelSize: Int64 = 1_100_000_000  // ~1.1GB
+    
+    // MARK: - LLM Context
+    private var llamaContext: LlamaContext?
+    @Published var isLoadingModel = false
     
     // MARK: - State
     @Published var isModelDownloaded = false
     @Published var isDownloading = false
     @Published var downloadProgress: Double = 0
     @Published var lastError: String?
+    @Published var statusMessage: String = "Initializing..."
     
     // MARK: - Emoji Caches (Persistent - survives refreshes)
     private var stockSearchCache: [String: String] = [:]
@@ -45,7 +50,46 @@ class LocalLLMService: ObservableObject {
         Logger.shared.info("LLM init", category: .llm)
         checkModelExists()
         loadCachesFromDisk()
+        migrateStyleCache()  // Clear old style entries so they regenerate with LLM
         Logger.shared.info("Cache: s\(stockSearchCache.count) t\(stocksTabCache.count) p\(portfolioCache.count) l\(leaderboardCache.count)", category: .llm)
+        
+        // Update status
+        if isModelDownloaded {
+            statusMessage = "Model ready"
+        } else {
+            statusMessage = "Model not downloaded"
+        }
+    }
+    
+    /// Clear ALL style caches to force regeneration with LLM
+    private func migrateStyleCache() {
+        // ALWAYS clear all style entries to force LLM regeneration (v10)
+        let styleKeys = leaderboardCache.keys.filter { $0.hasPrefix("style") }
+        Logger.shared.info("Clearing ALL \(styleKeys.count) style cache entries for LLM regeneration", category: .llm)
+        for key in styleKeys {
+            leaderboardCache.removeValue(forKey: key)
+        }
+        if !styleKeys.isEmpty {
+            saveCachesToDisk()
+        }
+    }
+    
+    // MARK: - Auto Setup (call on app launch)
+    
+    /// Automatically download and load model - call this on app startup
+    func autoSetup() async {
+        Logger.shared.info("autoSetup called - downloaded:\(isModelDownloaded) downloading:\(isDownloading)", category: .llm)
+        if !isModelDownloaded && !isDownloading {
+            Logger.shared.info("Starting automatic model download...", category: .llm)
+            statusMessage = "Downloading AI model..."
+            await downloadModel()
+        }
+        
+        if isModelDownloaded && llamaContext == nil && !isLoadingModel {
+            Logger.shared.info("Starting automatic model load...", category: .llm)
+            statusMessage = "Loading AI model..."
+            await loadModel()
+        }
     }
     
     // MARK: - Model Management
@@ -55,11 +99,12 @@ class LocalLLMService: ObservableObject {
         Logger.shared.debug("Model: \(isModelDownloaded ? "ready" : "none")", category: .llm)
     }
     
-    func downloadModel() async {
+    private func downloadModel() async {
         guard !isDownloading else { return }
         isDownloading = true
         downloadProgress = 0
         lastError = nil
+        statusMessage = "Downloading AI model..."
         
         Logger.shared.info("Download starting", category: .llm)
         
@@ -77,9 +122,16 @@ class LocalLLMService: ObservableObject {
             }
             try FileManager.default.moveItem(at: tempURL, to: modelPath)
             isModelDownloaded = true
+            statusMessage = "Download complete, loading..."
             Logger.shared.success("Download complete", category: .llm)
+            
+            // Auto-load after download
+            isDownloading = false
+            await loadModel()
+            return
         } catch {
             lastError = error.localizedDescription
+            statusMessage = "Download failed"
             Logger.shared.error("Download: \(error.localizedDescription.prefix(40))", category: .llm)
         }
         
@@ -118,10 +170,41 @@ class LocalLLMService: ObservableObject {
         Logger.shared.info("Model deleted", category: .llm)
         try? FileManager.default.removeItem(at: modelPath)
         isModelDownloaded = false
+        llamaContext = nil  // Release the context
     }
     
     var modelSizeString: String {
         ByteCountFormatter.string(fromByteCount: modelSize, countStyle: .file)
+    }
+    
+    // MARK: - Model Loading
+    
+    /// Load the LLM model into memory for inference
+    func loadModel() async {
+        guard isModelDownloaded, llamaContext == nil, !isLoadingModel else { return }
+        isLoadingModel = true
+        statusMessage = "Loading AI model..."
+        Logger.shared.info("Loading LLM model...", category: .llm)
+        
+        do {
+            llamaContext = try await LlamaContext.create(modelPath: modelPath.path)
+            statusMessage = "AI ready ✓"
+            Logger.shared.success("LLM model loaded!", category: .llm)
+            
+            // Notify that model is ready - views can refresh
+            objectWillChange.send()
+        } catch {
+            Logger.shared.error("Failed to load LLM: \(error.localizedDescription)", category: .llm)
+            lastError = "Model load failed: \(error.localizedDescription)"
+            statusMessage = "Load failed"
+        }
+        
+        isLoadingModel = false
+    }
+    
+    /// Check if the model is loaded and ready for inference
+    var isModelLoaded: Bool {
+        llamaContext != nil
     }
     
     // MARK: - Stock Search Emoji
@@ -302,7 +385,140 @@ class LocalLLMService: ObservableObject {
         return wsbScale[position]
     }
     
-        // MARK: - Cache Management
+    // MARK: - Investment Style Generator
+    
+    /// Generate a witty one-liner about a player's investment style based on their holdings
+    func getInvestmentStyle(userId: String, holdings: [String]) async -> String {
+        // If model not ready, return pending indicator (don't cache this)
+        guard isModelLoaded else {
+            return "..."  // Shows pending while model loads
+        }
+        
+        guard !holdings.isEmpty else {
+            return "Just getting started"
+        }
+        
+        // Include sorted holdings in cache key so style refreshes when portfolio changes
+        let holdingsKey = holdings.sorted().joined(separator: ",")
+        let key = "style12_\(userId)_\(holdingsKey.hashValue)"  // v12 - improved explicit prompt with sector themes
+        if let cached = leaderboardCache[key] {
+            Logger.shared.debug("Style cache hit for \(userId): \(cached)", category: .llm)
+            return cached
+        }
+        
+        // Clear old style entries for this user (different holdings)
+        leaderboardCache = leaderboardCache.filter { !$0.key.hasPrefix("style") || !$0.key.contains(userId) }
+        
+        // Generate with LLM
+        let style = await generateStyleWithLLM(context: llamaContext!, tickers: holdings)
+        
+        Logger.shared.info("Generated style for \(userId): \(style)", category: .llm)
+        leaderboardCache[key] = style
+        saveCachesToDisk()
+        return style
+    }
+    
+    /// Generate investment style using actual LLM inference
+    private func generateStyleWithLLM(context: LlamaContext, tickers: [String]) async -> String {
+        // Figure out what sectors dominate their portfolio
+        var sectorCounts: [String: Int] = [:]
+        var companyNames: [String] = []
+        
+        for ticker in tickers.prefix(6) {
+            if let fact = StockDataService.shared.getFact(ticker: ticker) {
+                companyNames.append(fact.company)
+                sectorCounts[fact.sector, default: 0] += 1
+            }
+        }
+        
+        // Find dominant sector
+        let topSector = sectorCounts.max(by: { $0.value < $1.value })?.key ?? "mixed"
+        let sectorNote = sectorCounts.count == 1 ? "all \(topSector)" : "mostly \(topSector)"
+        
+        let stockList = companyNames.prefix(4).joined(separator: ", ")
+        
+        // Very explicit few-shot prompt
+        let prompt = """
+Complete the investor nickname. Be creative and fun. 3-5 words max.
+
+Stocks: Tesla, Rivian, Lucid Motors | Theme: all electric vehicles
+Nickname: EV dreamer forever
+
+Stocks: Nvidia, AMD, Intel | Theme: all semiconductors  
+Nickname: Silicon chip junkie
+
+Stocks: Apple, Microsoft, Google | Theme: all big tech
+Nickname: Big tech believer
+
+Stocks: Coca-Cola, PepsiCo, McDonald's | Theme: all consumer brands
+Nickname: Consumer goods fan
+
+Stocks: \(stockList) | Theme: \(sectorNote)
+Nickname: 
+"""
+        
+        Logger.shared.debug("LLM prompt: \(prompt.prefix(200))...", category: .llm)
+        
+        do {
+            let result = try await context.complete(prompt: prompt, maxTokens: 20)
+            Logger.shared.debug("LLM raw output: '\(result)'", category: .llm)
+            
+            // Clean up the result
+            var cleaned = result
+                .replacingOccurrences(of: "</s>", with: "")
+                .replacingOccurrences(of: "<|", with: "")
+                .trimmingCharacters(in: .whitespacesAndNewlines)
+            
+            // Take first line only
+            if let firstLine = cleaned.split(separator: "\n").first {
+                cleaned = String(firstLine).trimmingCharacters(in: .whitespacesAndNewlines)
+            }
+            
+            // Remove quotes if present
+            cleaned = cleaned.trimmingCharacters(in: CharacterSet(charactersIn: "\"'"))
+            
+            // If still too long, try to extract a shorter phrase
+            if cleaned.count > 40 {
+                // Try to get first phrase before comma, period, or "who"
+                let separators = [",", ".", " who ", " that ", " is ", " - "]
+                for sep in separators {
+                    if let range = cleaned.lowercased().range(of: sep) {
+                        let shortened = String(cleaned[..<range.lowerBound]).trimmingCharacters(in: .whitespacesAndNewlines)
+                        if shortened.count >= 5 && shortened.count <= 40 {
+                            cleaned = shortened
+                            break
+                        }
+                    }
+                }
+            }
+            
+            // Capitalize first letter
+            if !cleaned.isEmpty {
+                cleaned = cleaned.prefix(1).uppercased() + cleaned.dropFirst()
+            }
+            
+            // Validate length - should be reasonable
+            if cleaned.count >= 3 && cleaned.count <= 45 {
+                Logger.shared.info("LLM generated style: \(cleaned)", category: .llm)
+                return cleaned
+            } else {
+                Logger.shared.warning("LLM output too short/long (\(cleaned.count) chars): '\(cleaned)'", category: .llm)
+                return "..."  // Will retry next time
+            }
+        } catch {
+            Logger.shared.error("LLM inference failed: \(error.localizedDescription)", category: .llm)
+            return "..."  // Will retry next time
+        }
+    }
+    
+    // MARK: - Emoji Generators
+    
+    private func pickRandom(_ options: [String]) -> String {
+        options.randomElement() ?? options[0]
+    }
+
+
+    // MARK: - Cache Management
     
     func clearAllCaches() {
         Logger.shared.info("Clear all caches", category: .llm)

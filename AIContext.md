@@ -1,47 +1,41 @@
 # AI Context - Stokz
 
-## MUST DO
-- **Always add logging** when debugging issues
-- **Always tail logs after deployment** to verify changes
-- **Always debug with logs** - don't guess, check the output
+## Dev Workflow (Build + Deploy + Logs)
 
-## Build & Deploy
-
+**One command to build, install, and launch with live console:**
 ```bash
-# Build + Install (one command)
 cd /Users/charlesburns/Stokz && \
-xcodebuild -scheme Stokz -destination 'id=00008150-001E08190A38401C' -configuration Debug -quiet && \
+xcodebuild -scheme Stokz -sdk iphoneos -configuration Debug build -quiet && \
 xcrun devicectl device install app --device 00008150-001E08190A38401C \
-  /Users/charlesburns/Library/Developer/Xcode/DerivedData/Stokz-bazhfupqpoomaxbihkzdvidadyrf/Build/Products/Debug-iphoneos/Stokz.app
+  /Users/charlesburns/Library/Developer/Xcode/DerivedData/Stokz-bazhfupqpoomaxbihkzdvidadyrf/Build/Products/Debug-iphoneos/Stokz.app && \
+xcrun devicectl device process launch --device 00008150-001E08190A38401C \
+  --terminate-existing --console com.stokz.app 2>&1 | tee /tmp/stokz_log.txt
 ```
 
-## Logs
+This kills any running app, launches fresh, and streams all `print()` output to terminal AND `/tmp/stokz_log.txt`.
 
+**Check logs after user tests:**
 ```bash
-# Stream live
-log stream --predicate 'process == "Stokz"' --info --debug
-
-# Recent logs
-log show --predicate 'process == "Stokz"' --last 2m --info --debug
+cat /tmp/stokz_log.txt | tail -100
 ```
+
+## Key IDs
+- **Bundle**: `com.stokz.app`
+- **Device**: `00008150-001E08190A38401C`
+- **Team**: `MSW9JQ3H2Q`
+- **App Store**: `6757373916`
 
 ## Fastlane (TestFlight)
-
 ```bash
 fastlane beta  # Build + upload to TestFlight
 ```
 
-Then commit build number bump and push.
+## AI Stock Data Pipeline
 
-## Key IDs
-
-- **Bundle**: `com.stokz.app`
-- **Team**: `MSW9JQ3H2Q`
-- **App Store**: `6757373916`
-- **Device**: `00008150-001E08190A38401C`
-
-## TestFlight Compliance
+Data: `Stokz/stock_data_bundle.json` (~1005 stocks, 788KB)
 
 ```bash
-open "https://appstoreconnect.apple.com/apps/6757373916/testflight/ios"
+cd /Users/charlesburns/Stokz/pipeline
+/Users/charlesburns/Stokz/.venv/bin/python run_russell3000_pipeline.py
+# Options: --skip-wiki, --skip-facts
 ```

@@ -12,6 +12,8 @@ struct AddStockView: View {
     @State private var isSearching = false
     @State private var selectedStock: StockSearchResult?
     @State private var isAdding = false
+    @State private var showDetailSheet = false
+    @State private var detailTicker: String?
     
     // Popular stocks for quick selection
     private let popularStocks = [
@@ -89,12 +91,39 @@ struct AddStockView: View {
                     await performSearch(query: newValue)
                 }
             }
+            .sheet(isPresented: $showDetailSheet) {
+                if let ticker = detailTicker {
+                    NavigationStack {
+                        StockDiscoveryView(ticker: ticker, showAddButton: true, onAdd: { addedTicker in
+                            Task {
+                                await appState.addStock(symbol: addedTicker)
+                                showDetailSheet = false
+                                dismiss()
+                            }
+                        })
+                        .environmentObject(appState)
+                        .toolbar {
+                            ToolbarItem(placement: .navigationBarTrailing) {
+                                Button("DONE") {
+                                    showDetailSheet = false
+                                }
+                                .font(.system(size: 14, weight: .bold))
+                                .foregroundColor(.white)
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
     
     @ViewBuilder
     private func stockRow(symbol: String, name: String, isResult: Bool) -> some View {
-        Button(action: { addStock(symbol) }) {
+        Button(action: { 
+            // Show detail sheet instead of adding directly
+            detailTicker = symbol
+            showDetailSheet = true
+        }) {
             HStack {
                 VStack(alignment: .leading, spacing: 4) {
                     Text(symbol)
@@ -119,15 +148,15 @@ struct AddStockView: View {
                     ProgressView()
                         .tint(.white)
                 } else {
-                    Image(systemName: "plus")
-                        .font(.system(size: 18, weight: .bold))
-                        .foregroundColor(.white)
+                    Image(systemName: "chevron.right")
+                        .font(.system(size: 14, weight: .bold))
+                        .foregroundColor(Color(white: 0.4))
                 }
             }
             .padding(.horizontal)
             .padding(.vertical, 14)
         }
-        .disabled(isAdding || isAlreadyOwned(symbol))
+        .disabled(isAdding)
         
         Rectangle()
             .frame(height: 1)

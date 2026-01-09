@@ -168,7 +168,7 @@ struct Transaction: Identifiable, Codable {
 }
 
 // MARK: - Leaderboard Entry
-struct LeaderboardEntry: Identifiable {
+struct LeaderboardEntry: Identifiable, Equatable {
     let id: String
     let user: User
     let netWorth: Double
@@ -177,6 +177,10 @@ struct LeaderboardEntry: Identifiable {
     
     var isPositive: Bool {
         profitLossPercent >= 0
+    }
+    
+    static func == (lhs: LeaderboardEntry, rhs: LeaderboardEntry) -> Bool {
+        lhs.id == rhs.id && lhs.rank == rhs.rank && lhs.netWorth == rhs.netWorth
     }
 }
 

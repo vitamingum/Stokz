@@ -31,6 +31,11 @@ class AppState: ObservableObject {
         logInfo("🚀 App initialization starting", category: .app)
         isLoading = true
         
+        // Pre-load stock data bundle (this parses the 770KB JSON once at startup)
+        // Accessing the singleton triggers lazy init - do this early to avoid UI lag later
+        let _ = StockDataService.shared
+        logInfo("📦 Stock data service initialized: \(StockDataService.shared.stockCount) stocks", category: .app)
+        
         // Load saved credentials
         logDebug("Loading saved credentials", category: .app)
         authService.loadCredentials()
@@ -61,6 +66,45 @@ class AppState: ObservableObject {
         
         // Start price update timer
         startPriceUpdates()
+        
+        // Auto setup LLM in background (download if needed, then load)
+        Task {
+            await LocalLLMService.shared.autoSetup()
+        }
+    }
+    
+    // MARK: - Handle Return to Foreground
+    /// Called when app returns from background - refreshes stale data and validates session
+    func handleReturnToForeground() async {
+        print("🔄 [App] handleReturnToForeground - checking session and refreshing data")
+        
+        guard authService.isAuthenticated else {
+            print("🔄 [App] Not authenticated, skipping refresh")
+            return
+        }
+        
+        // 1. Validate/refresh the auth token (may have expired while in background)
+        do {
+            print("🔄 [App] Refreshing access token...")
+            try await authService.refreshAccessToken()
+            print("🔄 [App] Token refresh successful")
+        } catch {
+            print("🔄 [App] ❌ Token refresh failed: \(error.localizedDescription)")
+            // Token is invalid/expired - sign out and let user re-auth
+            logWarning("Session expired while in background, signing out", category: .auth)
+            authService.signOut()
+            return
+        }
+        
+        // 2. Reload all data (portfolios, prices, etc.)
+        print("🔄 [App] Reloading all data...")
+        await loadAllData()
+        
+        // 3. Restart timers (iOS may have invalidated them)
+        print("🔄 [App] Restarting price update timers")
+        startPriceUpdates()
+        
+        print("🔄 [App] ✅ Foreground refresh complete")
     }
     
     // MARK: - Load All Data
@@ -78,6 +122,10 @@ class AppState: ObservableObject {
             await priceService.refreshAllPrices(for: symbols)
             
             updateDerivedState()
+            
+            // Record snapshots for all users (throttled to once per hour)
+            await recordSnapshotsForAllUsers()
+            
             logSuccess("All data loaded successfully", category: .app)
         } catch GoogleSheetsError.notAuthenticated {
             // 403 error - token doesn't have proper scopes, force re-auth
@@ -492,6 +540,35 @@ class AppState: ObservableObject {
         } catch {
             logError("Failed to record snapshot: \(error.localizedDescription)", category: .app)
         }
+    }
+    
+    // MARK: - Record Snapshots for All Users
+    /// Records net worth snapshots for all users (throttled to once per hour)
+    private var lastSnapshotTime: Date?
+    
+    func recordSnapshotsForAllUsers() async {
+        // Throttle: Only record once per hour
+        if let lastTime = lastSnapshotTime, Date().timeIntervalSince(lastTime) < 3600 {
+            logDebug("Skipping snapshot recording - last recorded \(Int(Date().timeIntervalSince(lastTime)))s ago", category: .app)
+            return
+        }
+        
+        logInfo("📸 Recording net worth snapshots for all users", category: .app)
+        
+        for user in sheetsService.users {
+            do {
+                try await sheetsService.recordNetWorthSnapshot(
+                    userId: user.id,
+                    prices: priceService.prices
+                )
+                logDebug("📸 Recorded snapshot for \(user.displayName)", category: .app)
+            } catch {
+                logError("Failed to record snapshot for \(user.displayName): \(error.localizedDescription)", category: .app)
+            }
+        }
+        
+        lastSnapshotTime = Date()
+        logSuccess("📸 All snapshots recorded", category: .app)
     }
     
     // MARK: - Get User's Net Worth

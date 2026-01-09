@@ -10,6 +10,7 @@
 		A1000001 /* StokzApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000001 /* StokzApp.swift */; };
 		A1000002 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000002 /* ContentView.swift */; };
 		A1000003 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A2000003 /* Assets.xcassets */; };
+		A1000027 /* stock_data_bundle.json in Resources */ = {isa = PBXBuildFile; fileRef = A2000027 /* stock_data_bundle.json */; };
 		A1000004 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000004 /* Models.swift */; };
 		A1000005 /* PortfolioManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000005 /* PortfolioManager.swift */; };
 		A1000006 /* GoogleSheetsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000006 /* GoogleSheetsService.swift */; };
@@ -30,8 +31,27 @@
 		A1000021 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000022 /* Logger.swift */; };
 		A1000025 /* LocalLLMService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000025 /* LocalLLMService.swift */; };
 		A1000026 /* AIContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000026 /* AIContext.swift */; };
+		A1000028 /* StockDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000028 /* StockDataService.swift */; };
 		A1000024 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000024 /* SettingsView.swift */; };
+		A1000029 /* StockDiscoveryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000029 /* StockDiscoveryView.swift */; };
+		A1000030 /* LlamaContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000030 /* LlamaContext.swift */; };
+		A1000031 /* llama.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = A2000031 /* llama.xcframework */; };
+		A1000032 /* llama.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A2000031 /* llama.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		A3000004 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				A1000032 /* llama.xcframework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		A2000000 /* Stokz.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Stokz.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -60,6 +80,11 @@
 		A2000025 /* LocalLLMService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalLLMService.swift; sourceTree = "<group>"; };
 		A2000026 /* AIContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIContext.swift; sourceTree = "<group>"; };
 		A2000024 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		A2000027 /* stock_data_bundle.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = stock_data_bundle.json; sourceTree = "<group>"; };
+		A2000028 /* StockDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StockDataService.swift; sourceTree = "<group>"; };
+		A2000029 /* StockDiscoveryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StockDiscoveryView.swift; sourceTree = "<group>"; };
+		A2000030 /* LlamaContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LlamaContext.swift; sourceTree = "<group>"; };
+		A2000031 /* llama.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = llama.xcframework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -67,6 +92,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A1000031 /* llama.xcframework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -77,8 +103,18 @@
 			isa = PBXGroup;
 			children = (
 				A4000001 /* Stokz */,
+				A4000007 /* Frameworks */,
 				A4000002 /* Products */,
 			);
+			sourceTree = "<group>";
+		};
+		A4000007 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				A2000031 /* llama.xcframework */,
+			);
+			name = Frameworks;
+			path = Frameworks;
 			sourceTree = "<group>";
 		};
 		A4000001 /* Stokz */ = {
@@ -94,6 +130,7 @@
 				A2000020 /* Extensions.swift */,
 				A2000003 /* Assets.xcassets */,
 				A2000021 /* Info.plist */,
+				A2000027 /* stock_data_bundle.json */,
 			);
 			path = Stokz;
 			sourceTree = "<group>";
@@ -124,6 +161,8 @@
 				A2000022 /* Logger.swift */,
 				A2000025 /* LocalLLMService.swift */,
 				A2000026 /* AIContext.swift */,
+				A2000028 /* StockDataService.swift */,
+				A2000030 /* LlamaContext.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -140,6 +179,7 @@
 				A2000017 /* AdjustAllocationView.swift */,
 				A2000018 /* UserPortfolioView.swift */,
 				A2000024 /* SettingsView.swift */,
+				A2000029 /* StockDiscoveryView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -163,6 +203,7 @@
 				A3000002 /* Sources */,
 				A3000001 /* Frameworks */,
 				A3000003 /* Resources */,
+				A3000004 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -212,6 +253,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A1000003 /* Assets.xcassets in Resources */,
+				A1000027 /* stock_data_bundle.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -244,7 +286,10 @@
 				A1000021 /* Logger.swift in Sources */,
 				A1000025 /* LocalLLMService.swift in Sources */,
 				A1000026 /* AIContext.swift in Sources */,
+				A1000028 /* StockDataService.swift in Sources */,
 				A1000024 /* SettingsView.swift in Sources */,
+				A1000029 /* StockDiscoveryView.swift in Sources */,
+				A1000030 /* LlamaContext.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -376,7 +421,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 13;
+				CURRENT_PROJECT_VERSION = 14;
 				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = MSW9JQ3H2Q;
 				ENABLE_PREVIEWS = YES;
@@ -406,7 +451,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 13;
+				CURRENT_PROJECT_VERSION = 14;
 				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = MSW9JQ3H2Q;
 				ENABLE_PREVIEWS = YES;

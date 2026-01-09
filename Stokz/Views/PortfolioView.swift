@@ -1,5 +1,11 @@
 import SwiftUI
 
+// Simple wrapper for sheet(item:) pattern
+struct DiscoveryItem: Identifiable {
+    let id = UUID()
+    let ticker: String
+}
+
 /// PortfolioView shows the user's portfolio with stocks, allocations, and live prices
 /// LIQUID DEATH STYLE - Bold Black & White
 struct PortfolioView: View {
@@ -8,6 +14,7 @@ struct PortfolioView: View {
     @State private var showAddStock = false
     @State private var selectedStock: String?
     @State private var showAdjustAllocation = false
+    @State private var discoveryItem: DiscoveryItem?
     
     var body: some View {
         NavigationStack {
@@ -69,6 +76,25 @@ struct PortfolioView: View {
                 if let symbol = selectedStock {
                     AdjustAllocationView(symbol: symbol)
                 }
+            }
+            .sheet(item: $discoveryItem) { item in
+                let _ = print("🔮 [Portfolio] Sheet opening for ticker: \(item.ticker)")
+                NavigationStack {
+                    StockDiscoveryView(ticker: item.ticker, showAddButton: false)
+                        .environmentObject(appState)
+                        .toolbar {
+                            ToolbarItem(placement: .navigationBarTrailing) {
+                                Button("DONE") {
+                                    discoveryItem = nil
+                                }
+                                .font(.system(size: 14, weight: .bold))
+                                .foregroundColor(.white)
+                            }
+                        }
+                }
+                .scrollContentBackground(.hidden)
+                .background(Color.black)
+                .preferredColorScheme(.dark)
             }
             .refreshable {
                 await appState.loadAllData()
@@ -148,41 +174,53 @@ struct PortfolioView: View {
                 
                 VStack(spacing: 0) {
                     HStack(spacing: 8) {
-                        // Emoji (LEFT) - always shows based on ranking
-                        Text(emoji)
-                            .font(.system(size: 22))
-                            .frame(width: 32)
-                        
-                        // Stock info (CENTER)
-                        VStack(alignment: .leading, spacing: 2) {
-                            HStack(spacing: 6) {
-                                Text(allocation.symbol)
-                                    .font(.system(size: 16, weight: .black))
-                                    .tracking(1)
-                                    .foregroundColor(.white)
+                        // Tappable area for discovery (emoji + stock info)
+                        Button(action: {
+                            print("🔮 [Portfolio] Tapped stock: \(allocation.symbol)")
+                            discoveryItem = DiscoveryItem(ticker: allocation.symbol)
+                            print("🔮 [Portfolio] Set discoveryItem for \(allocation.symbol)")
+                        }) {
+                            HStack(spacing: 8) {
+                                // Emoji (LEFT) - only show if we have a real emoji
+                                if emoji != LocalLLMService.placeholder && !emoji.isEmpty {
+                                    Text(emoji)
+                                        .font(.system(size: 22))
+                                        .frame(width: 32)
+                                }
                                 
-                                // Daily change
-                                if let stock = stock {
-                                    Text("\(stock.priceChangePercent >= 0 ? "+" : "")\(String(format: "%.1f", stock.priceChangePercent))%")
-                                        .font(.system(size: 11, weight: .bold))
-                                        .foregroundColor(stock.priceChangePercent >= 0 ? .green : .red)
+                                // Stock info (CENTER)
+                                VStack(alignment: .leading, spacing: 2) {
+                                    HStack(spacing: 6) {
+                                        Text(allocation.symbol)
+                                            .font(.system(size: 16, weight: .black))
+                                            .tracking(1)
+                                            .foregroundColor(.white)
+                                        
+                                        // Daily change
+                                        if let stock = stock {
+                                            Text("\(stock.priceChangePercent >= 0 ? "+" : "")\(String(format: "%.1f", stock.priceChangePercent))%")
+                                                .font(.system(size: 11, weight: .bold))
+                                                .foregroundColor(stock.priceChangePercent >= 0 ? .green : .red)
+                                        }
+                                    }
+                                    
+                                    if let stock = stock, let holding = holding {
+                                        // Show: shares @ current price (entry: $X)
+                                        Text("\(String(format: "%.2f", holding.shares)) @ \(stock.currentPrice.asCurrency)")
+                                            .font(.system(size: 11, weight: .bold))
+                                            .foregroundColor(Color(white: 0.6))
+                                        Text("entry: \(holding.entryPrice.asCurrency)")
+                                            .font(.system(size: 10, weight: .medium))
+                                            .foregroundColor(Color(white: 0.4))
+                                    } else if let stock = stock {
+                                        Text(stock.currentPrice.asCurrency)
+                                            .font(.system(size: 12, weight: .bold))
+                                            .foregroundColor(Color(white: 0.6))
+                                    }
                                 }
                             }
-                            
-                            if let stock = stock, let holding = holding {
-                                // Show: shares @ current price (entry: $X)
-                                Text("\(String(format: "%.2f", holding.shares)) @ \(stock.currentPrice.asCurrency)")
-                                    .font(.system(size: 11, weight: .bold))
-                                    .foregroundColor(Color(white: 0.6))
-                                Text("entry: \(holding.entryPrice.asCurrency)")
-                                    .font(.system(size: 10, weight: .medium))
-                                    .foregroundColor(Color(white: 0.4))
-                            } else if let stock = stock {
-                                Text(stock.currentPrice.asCurrency)
-                                    .font(.system(size: 12, weight: .bold))
-                                    .foregroundColor(Color(white: 0.6))
-                            }
                         }
+                        .buttonStyle(PlainButtonStyle())
                         
                         Spacer()
                         

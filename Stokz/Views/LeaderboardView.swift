@@ -6,6 +6,7 @@ struct LeaderboardView: View {
     @EnvironmentObject var appState: AppState
     @StateObject private var llmService = LocalLLMService.shared
     @State private var selectedUser: User?
+    @State private var investmentStyles: [String: String] = [:] // userId -> style
     
     var body: some View {
         NavigationStack {
@@ -38,6 +39,37 @@ struct LeaderboardView: View {
             }
             .refreshable {
                 await appState.loadAllData()
+            }
+            .task {
+                await loadInvestmentStyles()
+            }
+            .onChange(of: appState.leaderboard) { _, _ in
+                // Clear cached styles so they regenerate with new portfolio data
+                investmentStyles.removeAll()
+                Task { await loadInvestmentStyles() }
+            }
+            .onChange(of: llmService.isModelLoaded) { _, isLoaded in
+                // Reload styles when model becomes ready
+                if isLoaded {
+                    investmentStyles.removeAll()
+                    Task { await loadInvestmentStyles() }
+                }
+            }
+        }
+    }
+    
+    // MARK: - Load Investment Styles
+    private func loadInvestmentStyles() async {
+        for entry in appState.leaderboard {
+            // Get user's holdings
+            if let portfolio = GoogleSheetsService.shared.portfolios[entry.user.id] {
+                let holdings = portfolio.holdings.map { $0.symbol }
+                if !holdings.isEmpty {
+                    let style = await llmService.getInvestmentStyle(userId: entry.user.id, holdings: holdings)
+                    await MainActor.run {
+                        investmentStyles[entry.user.id] = style
+                    }
+                }
             }
         }
     }
@@ -144,10 +176,12 @@ struct LeaderboardView: View {
                     totalPlayers: appState.leaderboard.count,
                     profitLossPercent: entry.profitLossPercent
                 )
+                let style = investmentStyles[entry.user.id] ?? ""
                 VStack(spacing: 0) {
                     LeaderboardRow(
                         entry: entry,
                         emoji: emoji,
+                        investmentStyle: style,
                         onTap: {
                             selectedUser = entry.user
                         }
@@ -170,8 +204,10 @@ struct LeaderboardView: View {
 
 // MARK: - Leaderboard Row (Liquid Death Style)
 struct LeaderboardRow: View {
+    @EnvironmentObject var appState: AppState
     let entry: LeaderboardEntry
     var emoji: String = ""
+    var investmentStyle: String = ""
     var onTap: (() -> Void)?
     
     var body: some View {
@@ -191,8 +227,8 @@ struct LeaderboardRow: View {
                 // Avatar
                 UserAvatarView(user: entry.user, size: 40)
                 
-                // Name, Emoji, and Performance
-                VStack(alignment: .leading, spacing: 4) {
+                // Name, Emoji, Style, and Performance
+                VStack(alignment: .leading, spacing: 3) {
                     HStack(spacing: 6) {
                         Text(entry.user.displayName.uppercased())
                             .font(.system(size: 14, weight: .bold))
@@ -201,6 +237,15 @@ struct LeaderboardRow: View {
                         
                         Text(emoji.isEmpty ? "" : emoji)
                             .font(.system(size: 18))
+                    }
+                    
+                    // Investment style tagline - own line, no truncation
+                    if !investmentStyle.isEmpty {
+                        Text(investmentStyle)
+                            .font(.system(size: 11, weight: .medium))
+                            .italic()
+                            .foregroundColor(Color(white: 0.5))
+                            .fixedSize(horizontal: false, vertical: true)
                     }
                     
                     HStack(spacing: 4) {

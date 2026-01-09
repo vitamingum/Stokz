@@ -273,12 +273,7 @@ struct PortfolioView: View {
         
         return VStack(spacing: 0) {
             HStack(spacing: 8) {
-                // Cash Emoji (LEFT)
-                Text("💵")
-                    .font(.system(size: 22))
-                    .frame(width: 32)
-                
-                // Cash info (CENTER)
+                // Cash info (LEFT aligned)
                 VStack(alignment: .leading, spacing: 2) {
                     Text("CASH")
                         .font(.system(size: 16, weight: .black))

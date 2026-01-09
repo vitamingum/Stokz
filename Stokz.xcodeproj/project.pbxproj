@@ -32,6 +32,8 @@
 		A1000028 /* StockDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000028 /* StockDataService.swift */; };
 		A1000024 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000024 /* SettingsView.swift */; };
 		A1000029 /* StockDiscoveryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000029 /* StockDiscoveryView.swift */; };
+		A1000030 /* GeminiService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000030 /* GeminiService.swift */; };
+		A1000031 /* Secrets.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000031 /* Secrets.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -75,6 +77,8 @@
 		A2000027 /* stock_data_bundle.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = stock_data_bundle.json; sourceTree = "<group>"; };
 		A2000028 /* StockDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StockDataService.swift; sourceTree = "<group>"; };
 		A2000029 /* StockDiscoveryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StockDiscoveryView.swift; sourceTree = "<group>"; };
+		A2000030 /* GeminiService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeminiService.swift; sourceTree = "<group>"; };
+		A2000031 /* Secrets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Secrets.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -148,6 +152,8 @@
 				A2000008 /* AuthenticationService.swift */,
 				A2000022 /* Logger.swift */,
 				A2000028 /* StockDataService.swift */,
+				A2000030 /* GeminiService.swift */,
+				A2000031 /* Secrets.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -272,6 +278,8 @@
 				A1000028 /* StockDataService.swift in Sources */,
 				A1000024 /* SettingsView.swift in Sources */,
 				A1000029 /* StockDiscoveryView.swift in Sources */,
+				A1000030 /* GeminiService.swift in Sources */,
+				A1000031 /* Secrets.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

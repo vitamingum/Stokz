@@ -155,6 +155,9 @@ struct LeaderboardRow: View {
     let entry: LeaderboardEntry
     var onTap: (() -> Void)?
     
+    @State private var investmentStyle: String?
+    @State private var isLoadingStyle = false
+    
     var body: some View {
         Button(action: { onTap?() }) {
             HStack(spacing: 12) {
@@ -178,6 +181,20 @@ struct LeaderboardRow: View {
                         .font(.system(size: 14, weight: .bold))
                         .tracking(1)
                         .foregroundColor(.white)
+                    
+                    // Investment style tagline from Gemini
+                    if let style = investmentStyle {
+                        Text(style)
+                            .font(.system(size: 10, weight: .medium))
+                            .italic()
+                            .foregroundColor(Color(white: 0.5))
+                            .lineLimit(2)
+                            .fixedSize(horizontal: false, vertical: true)
+                    } else if isLoadingStyle {
+                        Text("...")
+                            .font(.system(size: 10, weight: .medium))
+                            .foregroundColor(Color(white: 0.3))
+                    }
                     
                     HStack(spacing: 4) {
                         Image(systemName: entry.isPositive ? "arrow.up.right" : "arrow.down.right")
@@ -205,6 +222,37 @@ struct LeaderboardRow: View {
             .padding(.vertical, 12)
         }
         .buttonStyle(PlainButtonStyle())
+        .onAppear {
+            loadInvestmentStyle()
+        }
+    }
+    
+    private func loadInvestmentStyle() {
+        print("🤖 [Gemini] loadInvestmentStyle called for user: \(entry.user.displayName)")
+        
+        // Get user's holdings from the sheets service
+        guard let portfolio = appState.sheetsService.portfolios[entry.user.id] else {
+            print("🤖 [Gemini] No portfolio found for user \(entry.user.id)")
+            return
+        }
+        
+        guard !portfolio.holdings.isEmpty else {
+            print("🤖 [Gemini] Portfolio empty for user \(entry.user.displayName)")
+            return
+        }
+        
+        let holdings = portfolio.holdings.map { $0.symbol }
+        print("🤖 [Gemini] Found \(holdings.count) holdings: \(holdings.joined(separator: ", "))")
+        
+        isLoadingStyle = true
+        Task {
+            let style = await GeminiService.shared.getInvestmentStyle(holdings: holdings)
+            await MainActor.run {
+                self.investmentStyle = style
+                self.isLoadingStyle = false
+                print("🤖 [Gemini] Style set: \(style ?? "nil")")
+            }
+        }
     }
     
     private var rankColor: Color {

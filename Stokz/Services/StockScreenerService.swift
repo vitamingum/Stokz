@@ -120,8 +120,8 @@ class StockScreenerService: ObservableObject {
     func screenForBot(thesis: String, maxPicks: Int = 10) async throws -> [StockPick] {
         print("🤖 [Screener] Bot screening for thesis: \(thesis.prefix(50))...")
         
-        // Step 1: Generate criteria from thesis
-        let criteria = try await generateCriteria(prompt: thesis)
+        // Step 1: Generate criteria from thesis with proper pick count
+        let criteria = ScreeningCriteria(batchPrompt: thesis, resultCount: maxPicks)
         
         // Step 2: Get all stocks
         let allStocks = getAllStocks()
@@ -131,12 +131,64 @@ class StockScreenerService: ObservableObject {
         let scored = try await batchEvaluate(stocks: allStocks, criteria: criteria)
         print("🤖 [Screener] Got \(scored.count) scored stocks")
         
+        // If no scored stocks, return empty
+        guard !scored.isEmpty else {
+            print("⚠️ [Screener] No scored stocks from batch evaluation")
+            return []
+        }
+        
         // Step 4: Final analysis on top candidates
         let topN = Array(scored.prefix(topCandidates))
-        let picks = try await finalAnalysis(candidates: topN, originalPrompt: thesis, criteria: criteria)
+        let picks = try await finalAnalysisBotMode(candidates: topN, thesis: thesis, pickCount: maxPicks)
         
         print("🤖 [Screener] Bot screen complete: \(picks.count) picks")
+        
+        // If final analysis failed but we have scored stocks, return top scorers directly
+        if picks.isEmpty && !scored.isEmpty {
+            print("⚠️ [Screener] Final analysis returned 0 picks, using top scorers as fallback")
+            return scored.prefix(maxPicks).map { scored in
+                StockPick(
+                    ticker: scored.ticker,
+                    score: scored.score * 10, // Convert 0-10 to 0-100
+                    thesis: scored.reason,
+                    company: StockDataService.shared.getFact(ticker: scored.ticker)?.company ?? scored.ticker
+                )
+            }
+        }
+        
         return Array(picks.prefix(maxPicks))
+    }
+    
+    /// Dedicated final analysis for bot mode - more aggressive about returning picks
+    private func finalAnalysisBotMode(candidates: [ScoredStock], thesis: String, pickCount: Int) async throws -> [StockPick] {
+        // Take more candidates to give LLM options
+        let topCandidates = candidates.prefix(min(25, candidates.count))
+        
+        let candidateList = topCandidates.map { scored in
+            "\(scored.ticker) (score: \(scored.score)): \(scored.reason)"
+        }.joined(separator: "\n")
+        
+        let prompt = """
+        Investment thesis: "\(thesis)"
+        
+        Top candidates from screening:
+        \(candidateList)
+        
+        Select EXACTLY \(pickCount) stocks that best match this investment thesis.
+        You MUST return \(pickCount) stocks - pick the best available even if they're not perfect matches.
+        
+        Return ONLY a JSON array in this exact format, no other text:
+        [{"ticker": "AAPL", "score": 85, "thesis": "Brief 10-word reason"}, ...]
+        """
+        
+        let response = try await AIService.shared.chat(
+            system: "You are a portfolio builder. Return EXACTLY \(pickCount) stocks as a JSON array. No markdown, no explanation, just the JSON array.",
+            user: prompt
+        )
+        
+        print("🤖 [Screener] Bot final analysis response: \(response.prefix(300))")
+        
+        return parsePicks(response)
     }
     
     // MARK: - Detail Thesis Generation

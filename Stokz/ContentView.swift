@@ -110,7 +110,7 @@ struct LoginView: View {
                 
                 // Features - Bold style
                 VStack(alignment: .leading, spacing: 20) {
-                    FeatureRow(icon: "dollarsign.circle.fill", title: "$100K TO PLAY", description: "Paper trading. Real stakes.")
+                    FeatureRow(icon: "dollarsign.circle.fill", title: "MURDER THE MARKET", description: "$100K paper money. Real carnage.")
                     FeatureRow(icon: "person.3.fill", title: "DESTROY FRIENDSHIPS", description: "Climb the leaderboard.")
                     FeatureRow(icon: "brain", title: "KILLER AI AGENTS", description: "Smack talk that buries.")
                 }

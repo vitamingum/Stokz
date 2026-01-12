@@ -67,12 +67,16 @@ class PortfolioManager: ObservableObject {
                     
                     if newValue > 0 {
                         let newShares = newValue / price
+                        // Reduce cost basis proportionally to shares sold
+                        let shareRatio = newShares / holding.shares
+                        let newCostBasis = holding.costBasis * shareRatio
                         let updatedHolding = PortfolioHolding(
                             id: holding.id,
                             symbol: holding.symbol,
                             shares: newShares,
-                            entryPrice: holding.entryPrice, // Preserve original entry price
-                            entryDate: holding.entryDate
+                            entryPrice: holding.entryPrice,
+                            entryDate: holding.entryDate,
+                            costBasis: newCostBasis
                         )
                         newHoldings.append(updatedHolding)
                         logDebug("Reduced \(holding.symbol) by $\(String(format: "%.2f", sellPerStock))", category: .portfolio)
@@ -103,12 +107,16 @@ class PortfolioManager: ObservableObject {
                 
                 if newValue > 0 {
                     let newShares = newValue / price
+                    // Reduce cost basis proportionally to shares sold
+                    let shareRatio = newShares / holding.shares
+                    let newCostBasis = holding.costBasis * shareRatio
                     let updatedHolding = PortfolioHolding(
                         id: holding.id,
                         symbol: holding.symbol,
                         shares: newShares,
-                        entryPrice: holding.entryPrice, // Preserve original entry price
-                        entryDate: holding.entryDate
+                        entryPrice: holding.entryPrice,
+                        entryDate: holding.entryDate,
+                        costBasis: newCostBasis
                     )
                     newHoldings.append(updatedHolding)
                     logDebug("Reduced \(holding.symbol) by $\(String(format: "%.2f", actualSell))", category: .portfolio)
@@ -202,31 +210,53 @@ class PortfolioManager: ObservableObject {
         
         for holding in portfolio.holdings {
             let price = prices[holding.symbol] ?? holding.entryPrice
+            let currentValue = holding.currentValue(at: price)
             
             if holding.symbol == symbol {
                 // Set target allocation
                 let newShares = targetValue / price
+                // Adjust cost basis: if buying more, add to basis; if selling, reduce proportionally
+                let valueDelta = targetValue - currentValue
+                var newCostBasis = holding.costBasis
+                if valueDelta > 0 {
+                    // Buying more - add the delta to cost basis
+                    newCostBasis += valueDelta
+                } else if valueDelta < 0 && currentValue > 0 {
+                    // Selling - reduce cost basis proportionally
+                    let shareRatio = newShares / holding.shares
+                    newCostBasis = holding.costBasis * shareRatio
+                }
                 let updatedHolding = PortfolioHolding(
                     id: holding.id,
                     symbol: holding.symbol,
                     shares: newShares,
                     entryPrice: price,
-                    entryDate: Date()
+                    entryDate: holding.entryDate,
+                    costBasis: newCostBasis
                 )
                 newHoldings.append(updatedHolding)
             } else {
                 // Scale proportionally based on current market value
-                let currentValue = holding.currentValue(at: price)
                 let proportion = otherStocksValue > 0 ? currentValue / otherStocksValue : 1.0 / Double(portfolio.holdings.count - 1)
                 let newValue = remainingValue * proportion
                 let newShares = newValue / price
+                // Adjust cost basis proportionally
+                let valueDelta = newValue - currentValue
+                var newCostBasis = holding.costBasis
+                if valueDelta > 0 {
+                    newCostBasis += valueDelta
+                } else if valueDelta < 0 && currentValue > 0 {
+                    let shareRatio = newShares / holding.shares
+                    newCostBasis = holding.costBasis * shareRatio
+                }
                 
                 let updatedHolding = PortfolioHolding(
                     id: holding.id,
                     symbol: holding.symbol,
                     shares: newShares,
                     entryPrice: price,
-                    entryDate: Date()
+                    entryDate: holding.entryDate,
+                    costBasis: newCostBasis
                 )
                 newHoldings.append(updatedHolding)
             }
@@ -252,14 +282,28 @@ class PortfolioManager: ObservableObject {
         
         for holding in portfolio.holdings {
             let price = prices[holding.symbol] ?? holding.entryPrice
+            let currentValue = holding.currentValue(at: price)
             let newShares = equalAllocation / price
+            
+            // Adjust cost basis based on value change
+            let valueDelta = equalAllocation - currentValue
+            var newCostBasis = holding.costBasis
+            if valueDelta > 0 {
+                // Buying more - add to cost basis
+                newCostBasis += valueDelta
+            } else if valueDelta < 0 && holding.shares > 0 {
+                // Selling - reduce cost basis proportionally
+                let shareRatio = newShares / holding.shares
+                newCostBasis = holding.costBasis * shareRatio
+            }
             
             let updatedHolding = PortfolioHolding(
                 id: holding.id,
                 symbol: holding.symbol,
                 shares: newShares,
                 entryPrice: price,
-                entryDate: Date()
+                entryDate: holding.entryDate,
+                costBasis: newCostBasis
             )
             newHoldings.append(updatedHolding)
         }
@@ -299,14 +343,17 @@ class PortfolioManager: ObservableObject {
                 updatedPortfolio.holdings.remove(at: holdingIndex)
                 logInfo("Sold all \(symbol) for $\(String(format: "%.2f", currentValue)), cash now $\(String(format: "%.2f", updatedPortfolio.cashBalance))", category: .portfolio)
             } else {
-                // Partial sell
+                // Partial sell - reduce cost basis proportionally
                 let newShares = newValue / price
+                let shareRatio = newShares / holding.shares
+                let newCostBasis = holding.costBasis * shareRatio
                 updatedPortfolio.holdings[holdingIndex] = PortfolioHolding(
                     id: holding.id,
                     symbol: symbol,
                     shares: newShares,
                     entryPrice: price,
-                    entryDate: Date()
+                    entryDate: holding.entryDate,
+                    costBasis: newCostBasis
                 )
                 updatedPortfolio.cashBalance += abs(amountDelta)
                 logInfo("Sold $\(String(format: "%.2f", abs(amountDelta))) of \(symbol), cash now $\(String(format: "%.2f", updatedPortfolio.cashBalance))", category: .portfolio)
@@ -320,12 +367,15 @@ class PortfolioManager: ObservableObject {
             if amountToBuy > 0 {
                 let additionalShares = amountToBuy / price
                 let newShares = holding.shares + additionalShares
+                // Add the purchase amount to cost basis
+                let newCostBasis = holding.costBasis + amountToBuy
                 updatedPortfolio.holdings[holdingIndex] = PortfolioHolding(
                     id: holding.id,
                     symbol: symbol,
                     shares: newShares,
                     entryPrice: price,
-                    entryDate: Date()
+                    entryDate: holding.entryDate,
+                    costBasis: newCostBasis
                 )
                 updatedPortfolio.cashBalance -= amountToBuy
                 logInfo("Bought $\(String(format: "%.2f", amountToBuy)) of \(symbol), cash now $\(String(format: "%.2f", updatedPortfolio.cashBalance))", category: .portfolio)

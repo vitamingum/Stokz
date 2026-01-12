@@ -43,6 +43,29 @@ struct PortfolioHolding: Identifiable, Codable {
     var shares: Double // Implied shares based on entry
     var entryPrice: Double // Price at which shares were calculated
     var entryDate: Date
+    var costBasis: Double // Total $ invested in this position (survives rebalances)
+    
+    // Initialize with costBasis defaulting to shares * entryPrice for backwards compatibility
+    init(id: String = UUID().uuidString, symbol: String, shares: Double, entryPrice: Double, entryDate: Date = Date(), costBasis: Double? = nil) {
+        self.id = id
+        self.symbol = symbol
+        self.shares = shares
+        self.entryPrice = entryPrice
+        self.entryDate = entryDate
+        self.costBasis = costBasis ?? (shares * entryPrice)
+    }
+    
+    // Custom decoder to handle missing costBasis in existing data
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        id = try container.decode(String.self, forKey: .id)
+        symbol = try container.decode(String.self, forKey: .symbol)
+        shares = try container.decode(Double.self, forKey: .shares)
+        entryPrice = try container.decode(Double.self, forKey: .entryPrice)
+        entryDate = try container.decode(Date.self, forKey: .entryDate)
+        // Default costBasis to shares * entryPrice if not present
+        costBasis = try container.decodeIfPresent(Double.self, forKey: .costBasis) ?? (shares * entryPrice)
+    }
     
     // Calculated properties using current prices
     func currentValue(at price: Double) -> Double {
@@ -54,13 +77,14 @@ struct PortfolioHolding: Identifiable, Codable {
         return (currentValue(at: currentPrice) / totalValue) * 100
     }
     
+    // P/L based on cost basis (accurate across rebalances)
     func profitLoss(at currentPrice: Double) -> Double {
-        (currentPrice - entryPrice) * shares
+        currentValue(at: currentPrice) - costBasis
     }
     
     func profitLossPercent(at currentPrice: Double) -> Double {
-        guard entryPrice > 0 else { return 0 }
-        return ((currentPrice - entryPrice) / entryPrice) * 100
+        guard costBasis > 0 else { return 0 }
+        return ((currentValue(at: currentPrice) - costBasis) / costBasis) * 100
     }
 }
 

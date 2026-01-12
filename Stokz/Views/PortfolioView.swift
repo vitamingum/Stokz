@@ -182,22 +182,25 @@ struct PortfolioView: View {
                                             .tracking(1)
                                             .foregroundColor(.white)
                                         
-                                        // Daily change
-                                        if let stock = stock {
-                                            Text("\(stock.priceChangePercent >= 0 ? "+" : "")\(String(format: "%.1f", stock.priceChangePercent))%")
+                                        // Cumulative change since added (P/L %)
+                                        if let stock = stock, let holding = holding, holding.entryPrice > 0 {
+                                            let plPercent = ((stock.currentPrice - holding.entryPrice) / holding.entryPrice) * 100
+                                            Text("\(plPercent >= 0 ? "+" : "")\(String(format: "%.1f", plPercent))%")
                                                 .font(.system(size: 11, weight: .bold))
-                                                .foregroundColor(stock.priceChangePercent >= 0 ? .green : .red)
+                                                .foregroundColor(plPercent >= 0 ? .green : .red)
                                         }
                                     }
                                     
                                     if let stock = stock, let holding = holding {
-                                        // Show: shares @ current price (entry: $X)
+                                        // Show: shares @ current price
                                         Text("\(String(format: "%.2f", holding.shares)) @ \(stock.currentPrice.asCurrency)")
                                             .font(.system(size: 11, weight: .bold))
                                             .foregroundColor(Color(white: 0.6))
-                                        Text("entry: \(holding.entryPrice.asCurrency)")
+                                        // Show dollar P/L for this position
+                                        let dollarPL = holding.profitLoss(at: stock.currentPrice)
+                                        Text("\(dollarPL >= 0 ? "+" : "")\(dollarPL.asCurrency)")
                                             .font(.system(size: 10, weight: .medium))
-                                            .foregroundColor(Color(white: 0.4))
+                                            .foregroundColor(dollarPL >= 0 ? .green : .red)
                                     } else if let stock = stock {
                                         Text(stock.currentPrice.asCurrency)
                                             .font(.system(size: 12, weight: .bold))

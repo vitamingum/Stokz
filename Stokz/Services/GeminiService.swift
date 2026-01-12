@@ -161,6 +161,52 @@ class GeminiService: ObservableObject {
         styleCache.removeAll()
         print("🗑️ [Gemini] Cache cleared")
     }
+    
+    // MARK: - General Chat
+    
+    /// General purpose chat with Gemini - returns raw text response
+    func chat(system: String, user: String) async throws -> String {
+        guard !apiKey.isEmpty && apiKey != "YOUR_API_KEY_HERE" else {
+            throw GeminiError.invalidResponse
+        }
+        
+        let url = URL(string: "\(baseURL)?key=\(apiKey)")!
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        let body: [String: Any] = [
+            "contents": [
+                ["role": "user", "parts": [["text": "\(system)\n\n\(user)"]]]
+            ],
+            "generationConfig": [
+                "temperature": 0.7,
+                "maxOutputTokens": 4096
+            ]
+        ]
+        
+        request.httpBody = try JSONSerialization.data(withJSONObject: body)
+        
+        let (data, response) = try await URLSession.shared.data(for: request)
+        
+        guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
+            let errorBody = String(data: data, encoding: .utf8) ?? "Unknown error"
+            throw GeminiError.httpError((response as? HTTPURLResponse)?.statusCode ?? 0, errorBody)
+        }
+        
+        guard let json = try JSONSerialization.jsonObject(with: data) as? [String: Any],
+              let candidates = json["candidates"] as? [[String: Any]],
+              let firstCandidate = candidates.first,
+              let content = firstCandidate["content"] as? [String: Any],
+              let parts = content["parts"] as? [[String: Any]],
+              let firstPart = parts.first,
+              let text = firstPart["text"] as? String else {
+            throw GeminiError.parseError
+        }
+        
+        return text
+    }
 }
 
 // MARK: - Errors

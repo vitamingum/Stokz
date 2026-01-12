@@ -32,6 +32,9 @@ struct PortfolioView: View {
                         } else {
                             emptyStateView
                         }
+                        
+                        // AI Stock Screener Chat
+                        StockScreenerChatView()
                     }
                 }
             }

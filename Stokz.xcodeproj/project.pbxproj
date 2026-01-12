@@ -34,6 +34,8 @@
 		A1000029 /* StockDiscoveryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000029 /* StockDiscoveryView.swift */; };
 		A1000030 /* GeminiService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000030 /* GeminiService.swift */; };
 		A1000031 /* Secrets.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000031 /* Secrets.swift */; };
+		A1000032 /* StockScreenerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000032 /* StockScreenerService.swift */; };
+		A1000033 /* StockScreenerChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000033 /* StockScreenerChatView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -79,6 +81,8 @@
 		A2000029 /* StockDiscoveryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StockDiscoveryView.swift; sourceTree = "<group>"; };
 		A2000030 /* GeminiService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeminiService.swift; sourceTree = "<group>"; };
 		A2000031 /* Secrets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Secrets.swift; sourceTree = "<group>"; };
+		A2000032 /* StockScreenerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StockScreenerService.swift; sourceTree = "<group>"; };
+		A2000033 /* StockScreenerChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StockScreenerChatView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -154,6 +158,7 @@
 				A2000028 /* StockDataService.swift */,
 				A2000030 /* GeminiService.swift */,
 				A2000031 /* Secrets.swift */,
+				A2000032 /* StockScreenerService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -171,6 +176,7 @@
 				A2000018 /* UserPortfolioView.swift */,
 				A2000024 /* SettingsView.swift */,
 				A2000029 /* StockDiscoveryView.swift */,
+				A2000033 /* StockScreenerChatView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -278,6 +284,10 @@
 				A1000028 /* StockDataService.swift in Sources */,
 				A1000024 /* SettingsView.swift in Sources */,
 				A1000029 /* StockDiscoveryView.swift in Sources */,
+				A1000030 /* GeminiService.swift in Sources */,
+				A1000031 /* Secrets.swift in Sources */,
+				A1000032 /* StockScreenerService.swift in Sources */,
+				A1000033 /* StockScreenerChatView.swift in Sources */,
 				A1000030 /* GeminiService.swift in Sources */,
 				A1000031 /* Secrets.swift in Sources */,
 			);

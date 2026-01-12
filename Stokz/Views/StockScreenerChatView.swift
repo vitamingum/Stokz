@@ -408,6 +408,12 @@ struct StockPickDetailView: View {
     @State private var isAdding = false
     @State private var showAddedConfirmation = false
     
+    // Chat state
+    @State private var chatMessages: [StockScreenerService.ChatMessage] = []
+    @State private var chatInput: String = ""
+    @State private var isSendingChat = false
+    @FocusState private var isChatFocused: Bool
+    
     private var isInPortfolio: Bool {
         appState.currentUserPortfolio?.holdings.contains(where: { $0.symbol == pick.ticker }) ?? false
     }
@@ -417,65 +423,76 @@ struct StockPickDetailView: View {
             ZStack {
                 Color.black.ignoresSafeArea()
                 
-                ScrollView {
-                    VStack(spacing: 24) {
-                        // Header
-                        VStack(spacing: 8) {
-                            Text(pick.ticker)
-                                .font(.system(size: 48, weight: .black))
-                                .foregroundColor(.white)
-                            
-                            Text(pick.company)
-                                .font(.system(size: 14, weight: .medium))
-                                .foregroundColor(Color(white: 0.5))
-                            
-                            // Score badge
-                            HStack(spacing: 6) {
-                                Text("MATCH SCORE")
-                                    .font(.system(size: 10, weight: .bold))
-                                    .tracking(1)
-                                    .foregroundColor(Color(white: 0.4))
+                ScrollViewReader { proxy in
+                    ScrollView {
+                        VStack(spacing: 24) {
+                            // Header
+                            VStack(spacing: 8) {
+                                Text(pick.ticker)
+                                    .font(.system(size: 48, weight: .black))
+                                    .foregroundColor(.white)
                                 
-                                Text(String(format: "%.0f", pick.score))
-                                    .font(.system(size: 14, weight: .black))
-                                    .foregroundColor(.black)
-                                    .padding(.horizontal, 8)
-                                    .padding(.vertical, 4)
-                                    .background(scoreColor)
-                                    .cornerRadius(4)
+                                Text(pick.company)
+                                    .font(.system(size: 14, weight: .medium))
+                                    .foregroundColor(Color(white: 0.5))
+                                
+                                // Score badge
+                                HStack(spacing: 6) {
+                                    Text("MATCH SCORE")
+                                        .font(.system(size: 10, weight: .bold))
+                                        .tracking(1)
+                                        .foregroundColor(Color(white: 0.4))
+                                    
+                                    Text(String(format: "%.0f", pick.score))
+                                        .font(.system(size: 14, weight: .black))
+                                        .foregroundColor(.black)
+                                        .padding(.horizontal, 8)
+                                        .padding(.vertical, 4)
+                                        .background(scoreColor)
+                                        .cornerRadius(4)
+                                }
+                                .padding(.top, 8)
                             }
-                            .padding(.top, 8)
-                        }
-                        .padding(.top, 20)
-                        
-                        // Add to Portfolio button
-                        addButton
-                        
-                        // AI Thesis section
-                        thesisSection
-                        
-                        // Quick reason from screening
-                        VStack(alignment: .leading, spacing: 8) {
-                            HStack {
-                                Text("📋")
-                                    .font(.system(size: 14))
-                                Text("QUICK TAKE")
-                                    .font(.system(size: 11, weight: .bold))
-                                    .tracking(2)
-                                    .foregroundColor(Color(white: 0.4))
-                            }
+                            .padding(.top, 20)
                             
-                            Text(pick.thesis)
-                                .font(.system(size: 13, weight: .medium))
-                                .foregroundColor(Color(white: 0.6))
-                                .padding()
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                                .background(Color(white: 0.08))
-                                .cornerRadius(12)
+                            // Add to Portfolio button
+                            addButton
+                            
+                            // AI Thesis section
+                            thesisSection
+                            
+                            // Chat section
+                            chatSection
+                                .id("chatBottom")
+                            
+                            // Quick reason from screening
+                            VStack(alignment: .leading, spacing: 8) {
+                                HStack {
+                                    Text("📋")
+                                        .font(.system(size: 14))
+                                    Text("QUICK TAKE")
+                                        .font(.system(size: 11, weight: .bold))
+                                        .tracking(2)
+                                        .foregroundColor(Color(white: 0.4))
+                                }
+                                
+                                Text(pick.thesis)
+                                    .font(.system(size: 13, weight: .medium))
+                                    .foregroundColor(Color(white: 0.6))
+                                    .padding()
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                    .background(Color(white: 0.08))
+                                    .cornerRadius(12)
+                            }
+                            .padding(.horizontal)
                         }
-                        .padding(.horizontal)
+                        .padding(.bottom, 40)
                     }
-                    .padding(.bottom, 40)
+                    .onChange(of: chatMessages.count) { _, _ in
+                        withAnimation {
+                            proxy.scrollTo("chatBottom", anchor: .bottom)
+                        }
+                    }
                 }
             }
             .navigationBarTitleDisplayMode(.inline)
@@ -491,6 +508,132 @@ struct StockPickDetailView: View {
         .task {
             await loadDetailedThesis()
         }
+    }
+    
+    // MARK: - Chat Section
+    
+    private var chatSection: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack {
+                Text("💬")
+                    .font(.system(size: 14))
+                Text("ASK TALL BOY")
+                    .font(.system(size: 11, weight: .bold))
+                    .tracking(2)
+                    .foregroundColor(Color(white: 0.4))
+                
+                Spacer()
+                
+                if !chatMessages.isEmpty {
+                    Button(action: clearChat) {
+                        Text("CLEAR")
+                            .font(.system(size: 9, weight: .bold))
+                            .foregroundColor(Color(white: 0.35))
+                    }
+                }
+            }
+            
+            // Chat messages
+            if !chatMessages.isEmpty {
+                VStack(spacing: 12) {
+                    ForEach(chatMessages) { message in
+                        chatBubble(message)
+                    }
+                }
+            }
+            
+            // Input row
+            HStack(spacing: 8) {
+                TextField("Ask a follow-up question...", text: $chatInput)
+                    .font(.system(size: 14, weight: .medium))
+                    .foregroundColor(.white)
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 10)
+                    .background(Color(white: 0.1))
+                    .cornerRadius(20)
+                    .focused($isChatFocused)
+                    .onSubmit {
+                        sendChat()
+                    }
+                
+                Button(action: sendChat) {
+                    if isSendingChat {
+                        ProgressView()
+                            .scaleEffect(0.8)
+                            .tint(.white)
+                            .frame(width: 32, height: 32)
+                    } else {
+                        Image(systemName: "arrow.up.circle.fill")
+                            .font(.system(size: 32))
+                            .foregroundColor(chatInput.isEmpty ? Color(white: 0.3) : .green)
+                    }
+                }
+                .disabled(chatInput.isEmpty || isSendingChat)
+            }
+        }
+        .padding()
+        .background(Color(white: 0.05))
+        .cornerRadius(12)
+        .padding(.horizontal)
+    }
+    
+    private func chatBubble(_ message: StockScreenerService.ChatMessage) -> some View {
+        HStack {
+            if message.role == .user { Spacer(minLength: 40) }
+            
+            VStack(alignment: message.role == .user ? .trailing : .leading, spacing: 4) {
+                Text(message.content)
+                    .font(.system(size: 13, weight: .medium))
+                    .foregroundColor(message.role == .user ? .black : Color(white: 0.85))
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 8)
+                    .background(message.role == .user ? Color.green : Color(white: 0.12))
+                    .cornerRadius(16)
+            }
+            
+            if message.role == .assistant { Spacer(minLength: 40) }
+        }
+    }
+    
+    private func sendChat() {
+        guard !chatInput.isEmpty, !isSendingChat else { return }
+        
+        let question = chatInput
+        chatInput = ""
+        isSendingChat = true
+        
+        // Add user message immediately for responsiveness
+        let userMessage = StockScreenerService.ChatMessage(
+            role: .user,
+            content: question,
+            timestamp: Date()
+        )
+        chatMessages.append(userMessage)
+        
+        Task {
+            let response = await StockScreenerService.shared.askFollowUp(
+                ticker: pick.ticker,
+                company: pick.company,
+                question: question
+            )
+            
+            await MainActor.run {
+                // Remove the user message we added (service already tracks it)
+                // Add assistant response
+                let assistantMessage = StockScreenerService.ChatMessage(
+                    role: .assistant,
+                    content: response,
+                    timestamp: Date()
+                )
+                chatMessages.append(assistantMessage)
+                isSendingChat = false
+            }
+        }
+    }
+    
+    private func clearChat() {
+        chatMessages = []
+        StockScreenerService.shared.clearConversation(for: pick.ticker)
     }
     
     private var thesisSection: some View {

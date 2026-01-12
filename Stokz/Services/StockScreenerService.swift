@@ -24,7 +24,23 @@ class StockScreenerService: ObservableObject {
     @Published var liveFeed: [FeedItem] = []
     @Published var topScorers: [ScoredStock] = []  // Running top picks
     
+    // Conversation history per stock (keyed by ticker)
+    private var conversations: [String: [ChatMessage]] = [:]
+    
     private init() {}
+    
+    /// Chat message for conversation history
+    struct ChatMessage: Identifiable {
+        let id = UUID()
+        let role: Role
+        let content: String
+        let timestamp: Date
+        
+        enum Role {
+            case user
+            case assistant
+        }
+    }
     
     /// A single item in the live feed
     struct FeedItem: Identifiable {
@@ -46,6 +62,9 @@ class StockScreenerService: ObservableObject {
     /// Screen stocks based on natural language prompt
     func screen(prompt: String) async {
         guard !isScreening else { return }
+        
+        // Clear conversations when starting a new screen
+        conversations = [:]
         
         isScreening = true
         progress = .generatingCriteria
@@ -128,11 +147,82 @@ class StockScreenerService: ObservableObject {
                 system: "You are a stock analyst. Write structured bullet-point analyses. Use • for main bullets and - for sub-bullets. No markdown formatting, no asterisks.",
                 user: prompt
             )
-            return response.trimmingCharacters(in: .whitespacesAndNewlines)
+            let thesis = response.trimmingCharacters(in: .whitespacesAndNewlines)
+            
+            // Initialize conversation history with the thesis
+            conversations[ticker] = [
+                ChatMessage(role: .assistant, content: thesis, timestamp: Date())
+            ]
+            
+            return thesis
         } catch {
             print("❌ [Screener] Detail thesis error: \(error)")
             return "Unable to generate thesis."
         }
+    }
+    
+    // MARK: - Conversation Follow-up
+    
+    /// Get conversation history for a stock
+    func getConversation(for ticker: String) -> [ChatMessage] {
+        return conversations[ticker] ?? []
+    }
+    
+    /// Ask a follow-up question about a stock
+    func askFollowUp(ticker: String, company: String, question: String) async -> String {
+        guard !lastPrompt.isEmpty else {
+            return "No search criteria available."
+        }
+        
+        // Add user's question to history
+        let userMessage = ChatMessage(role: .user, content: question, timestamp: Date())
+        if conversations[ticker] == nil {
+            conversations[ticker] = []
+        }
+        conversations[ticker]?.append(userMessage)
+        
+        // Build conversation context
+        let history = conversations[ticker] ?? []
+        var conversationText = ""
+        for msg in history {
+            let role = msg.role == .user ? "User" : "Assistant"
+            conversationText += "\(role): \(msg.content)\n\n"
+        }
+        
+        let prompt = """
+        Context:
+        - User's original search criteria: "\(lastPrompt)"
+        - Stock being discussed: \(ticker) (\(company))
+        
+        Previous conversation:
+        \(conversationText)
+        
+        The user just asked: "\(question)"
+        
+        Respond helpfully and concisely. If they ask about risks, valuation, competitors, financials, or anything else about this stock, answer based on your knowledge. Keep responses focused and conversational.
+        """
+        
+        do {
+            let response = try await GeminiService.shared.chat(
+                system: "You are a helpful stock analyst having a conversation. Be concise but thorough. No markdown formatting.",
+                user: prompt
+            )
+            let answer = response.trimmingCharacters(in: .whitespacesAndNewlines)
+            
+            // Add assistant's response to history
+            let assistantMessage = ChatMessage(role: .assistant, content: answer, timestamp: Date())
+            conversations[ticker]?.append(assistantMessage)
+            
+            return answer
+        } catch {
+            print("❌ [Screener] Follow-up error: \(error)")
+            return "Sorry, I couldn't process that question. Please try again."
+        }
+    }
+    
+    /// Clear conversation for a stock
+    func clearConversation(for ticker: String) {
+        conversations[ticker] = nil
     }
     
     // MARK: - Step 1: Generate Criteria (simplified - just wrap user prompt)

@@ -1,6 +1,6 @@
 # AI Context - Stokz
 
-## Project Layout (25 Swift files, ~6,800 LOC)
+## Project Layout (26 Swift files, ~7,000 LOC)
 
 ```
 Stokz/
@@ -15,10 +15,12 @@ Stokz/
 │   ├── StockDataService    # Company info from JSON bundle
 │   ├── PortfolioManager    # Buy/sell logic
 │   ├── AuthenticationService
+│   ├── GeminiService       # AI taglines via Gemini API
+│   ├── Secrets.swift       # API keys (GITIGNORED)
 │   └── Logger
 ├── Views/
 │   ├── PortfolioView       # User's holdings
-│   ├── LeaderboardView     # Ranked players
+│   ├── LeaderboardView     # Ranked players + AI taglines
 │   ├── UsersView           # All players
 │   ├── StocksView          # All stocks union
 │   ├── SettingsView        # Debug console
@@ -31,6 +33,13 @@ Stokz/
 ├── Extensions.swift        # Currency/date formatters
 └── stock_data_bundle.json  # 1005 companies (788KB)
 ```
+
+## Gemini API Integration
+- **Service**: `GeminiService.swift` - generates witty portfolio taglines
+- **API Key**: Store in `Secrets.swift` (gitignored) - get from https://aistudio.google.com/app/apikey
+- **Model**: `gemini-2.0-flash`
+- **Usage**: LeaderboardView calls on row appear, results cached
+- **Billing**: Must link Google Cloud billing for quota (free tier: 1500/day)
 
 ## Dev Workflow (Build + Deploy + Logs)
 

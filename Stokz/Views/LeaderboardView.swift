@@ -5,6 +5,8 @@ import SwiftUI
 struct LeaderboardView: View {
     @EnvironmentObject var appState: AppState
     @State private var selectedUser: User?
+    @State private var investmentStyles: [String: String] = [:]  // cacheKey -> style
+    @State private var isLoadingStyles = false
     
     var body: some View {
         NavigationStack {
@@ -37,8 +39,48 @@ struct LeaderboardView: View {
             }
             .refreshable {
                 await appState.loadAllData()
+                await loadAllInvestmentStyles()
+            }
+            .onAppear {
+                loadAllInvestmentStylesIfNeeded()
             }
         }
+    }
+    
+    private func loadAllInvestmentStylesIfNeeded() {
+        guard !isLoadingStyles, investmentStyles.isEmpty else { return }
+        Task {
+            await loadAllInvestmentStyles()
+        }
+    }
+    
+    private func loadAllInvestmentStyles() async {
+        guard !appState.leaderboard.isEmpty else { return }
+        
+        await MainActor.run { isLoadingStyles = true }
+        defer { Task { @MainActor in isLoadingStyles = false } }
+        
+        // Build list of portfolios
+        var portfolios: [(userId: String, holdings: [String])] = []
+        for entry in appState.leaderboard {
+            if let portfolio = appState.sheetsService.portfolios[entry.user.id],
+               !portfolio.holdings.isEmpty {
+                portfolios.append((entry.user.id, portfolio.holdings.map { $0.symbol }))
+            }
+        }
+        
+        // Batch fetch all styles in ONE API call
+        let styles = await AIService.shared.getInvestmentStylesBatch(portfolios: portfolios)
+        
+        await MainActor.run {
+            self.investmentStyles = styles
+        }
+    }
+    
+    private func styleFor(entry: LeaderboardEntry) -> String? {
+        guard let portfolio = appState.sheetsService.portfolios[entry.user.id] else { return nil }
+        let cacheKey = portfolio.holdings.map { $0.symbol }.sorted().joined(separator: ",")
+        return investmentStyles[cacheKey]
     }
     
     // MARK: - Podium View (Liquid Death Style)
@@ -129,6 +171,8 @@ struct LeaderboardView: View {
                 VStack(spacing: 0) {
                     LeaderboardRow(
                         entry: entry,
+                        investmentStyle: styleFor(entry: entry),
+                        isLoadingStyle: isLoadingStyles && styleFor(entry: entry) == nil,
                         onTap: {
                             selectedUser = entry.user
                         }
@@ -153,10 +197,9 @@ struct LeaderboardView: View {
 struct LeaderboardRow: View {
     @EnvironmentObject var appState: AppState
     let entry: LeaderboardEntry
+    var investmentStyle: String?  // Passed from parent (batch loaded)
+    var isLoadingStyle: Bool = false
     var onTap: (() -> Void)?
-    
-    @State private var investmentStyle: String?
-    @State private var isLoadingStyle = false
     
     var body: some View {
         Button(action: { onTap?() }) {
@@ -182,7 +225,7 @@ struct LeaderboardRow: View {
                         .tracking(1)
                         .foregroundColor(.white)
                     
-                    // Investment style tagline from Gemini
+                    // Investment style tagline from AI
                     if let style = investmentStyle {
                         Text(style)
                             .font(.system(size: 10, weight: .medium))
@@ -222,37 +265,6 @@ struct LeaderboardRow: View {
             .padding(.vertical, 12)
         }
         .buttonStyle(PlainButtonStyle())
-        .onAppear {
-            loadInvestmentStyle()
-        }
-    }
-    
-    private func loadInvestmentStyle() {
-        print("🤖 [Gemini] loadInvestmentStyle called for user: \(entry.user.displayName)")
-        
-        // Get user's holdings from the sheets service
-        guard let portfolio = appState.sheetsService.portfolios[entry.user.id] else {
-            print("🤖 [Gemini] No portfolio found for user \(entry.user.id)")
-            return
-        }
-        
-        guard !portfolio.holdings.isEmpty else {
-            print("🤖 [Gemini] Portfolio empty for user \(entry.user.displayName)")
-            return
-        }
-        
-        let holdings = portfolio.holdings.map { $0.symbol }
-        print("🤖 [AI] Found \(holdings.count) holdings: \(holdings.joined(separator: ", "))")
-        
-        isLoadingStyle = true
-        Task {
-            let style = await AIService.shared.getInvestmentStyle(holdings: holdings)
-            await MainActor.run {
-                self.investmentStyle = style
-                self.isLoadingStyle = false
-                print("🤖 [AI] Style set: \(style ?? "nil")")
-            }
-        }
     }
     
     private var rankColor: Color {

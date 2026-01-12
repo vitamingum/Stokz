@@ -422,6 +422,88 @@ class AIService: ObservableObject {
         }
     }
     
+    /// Batch generate styles for multiple users in ONE API call
+    /// Returns dictionary of cacheKey -> style
+    func getInvestmentStylesBatch(portfolios: [(userId: String, holdings: [String])]) async -> [String: String] {
+        guard isConfigured, !portfolios.isEmpty else { return [:] }
+        
+        // Filter out users we already have cached
+        var uncached: [(userId: String, holdings: [String], cacheKey: String)] = []
+        var results: [String: String] = [:]
+        
+        for portfolio in portfolios {
+            let cacheKey = portfolio.holdings.sorted().joined(separator: ",")
+            if let cached = styleCache[cacheKey] {
+                results[cacheKey] = cached
+            } else if !portfolio.holdings.isEmpty {
+                uncached.append((portfolio.userId, portfolio.holdings, cacheKey))
+            }
+        }
+        
+        // If everything was cached, return early
+        if uncached.isEmpty {
+            print("✅ [AI] All \(portfolios.count) styles from cache")
+            return results
+        }
+        
+        print("🤖 [AI] Generating \(uncached.count) styles in batch (cached: \(results.count))")
+        
+        // Build batch prompt
+        var promptLines: [String] = []
+        promptLines.append("Generate witty, sarcastic 4-6 word investment style taglines for these portfolios:")
+        promptLines.append("")
+        
+        for (index, item) in uncached.enumerated() {
+            promptLines.append("\(index + 1). Holdings: \(item.holdings.joined(separator: ", "))")
+        }
+        
+        promptLines.append("")
+        promptLines.append("Rules:")
+        promptLines.append("- Be funny and slightly roast-y")
+        promptLines.append("- Reference specific stocks or sectors when possible")
+        promptLines.append("- No emojis")
+        promptLines.append("")
+        promptLines.append("Output format - just numbered taglines, one per line:")
+        promptLines.append("1. [tagline]")
+        promptLines.append("2. [tagline]")
+        promptLines.append("etc.")
+        
+        let prompt = promptLines.joined(separator: "\n")
+        
+        do {
+            let response = try await chat(system: "You are a witty financial analyst.", user: prompt)
+            
+            // Parse numbered responses
+            let lines = response.components(separatedBy: .newlines)
+            for line in lines {
+                // Match "1. tagline" or "1: tagline" format
+                let trimmed = line.trimmingCharacters(in: .whitespaces)
+                if let match = trimmed.range(of: #"^(\d+)[.\):\s]+(.+)$"#, options: .regularExpression) {
+                    let fullMatch = String(trimmed[match])
+                    if let numMatch = fullMatch.range(of: #"^\d+"#, options: .regularExpression),
+                       let index = Int(fullMatch[numMatch]),
+                       index >= 1, index <= uncached.count {
+                        
+                        let taglineStart = fullMatch.index(after: numMatch.upperBound)
+                        var tagline = String(fullMatch[taglineStart...])
+                            .trimmingCharacters(in: CharacterSet(charactersIn: ".:) "))
+                            .replacingOccurrences(of: "\"", with: "")
+                            .trimmingCharacters(in: .whitespaces)
+                        
+                        let cacheKey = uncached[index - 1].cacheKey
+                        styleCache[cacheKey] = tagline
+                        results[cacheKey] = tagline
+                        print("✅ [AI] Batch style \(index): \"\(tagline)\"")
+                    }
+                }
+            }
+        } catch {
+            print("❌ [AI] Batch error: \(error.localizedDescription)")
+        }
+        
+        return results
+    }
+    
     func clearCache() {
         styleCache.removeAll()
     }

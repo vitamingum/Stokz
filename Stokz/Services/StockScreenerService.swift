@@ -203,7 +203,7 @@ class StockScreenerService: ObservableObject {
         """
         
         do {
-            let response = try await GeminiService.shared.chat(
+            let response = try await AIService.shared.chat(
                 system: "You are a helpful stock analyst having a conversation. Be concise but thorough. No markdown formatting.",
                 user: prompt
             )

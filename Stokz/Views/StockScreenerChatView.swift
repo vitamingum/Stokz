@@ -205,22 +205,8 @@ struct StockScreenerChatView: View {
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack(spacing: 8) {
                             ForEach(screener.topScorers.prefix(8), id: \.ticker) { stock in
-                                HStack(spacing: 4) {
-                                    Text(stock.ticker)
-                                        .font(.system(size: 12, weight: .bold))
-                                        .foregroundColor(.white)
-                                    Text("\(Int(stock.score))")
-                                        .font(.system(size: 10, weight: .black))
-                                        .foregroundColor(.black)
-                                        .padding(.horizontal, 4)
-                                        .padding(.vertical, 2)
-                                        .background(stock.score >= 7 ? Color.green : Color(white: 0.6))
-                                        .cornerRadius(4)
-                                }
-                                .padding(.horizontal, 8)
-                                .padding(.vertical, 6)
-                                .background(Color(white: 0.15))
-                                .cornerRadius(6)
+                                ContenderChip(stock: stock)
+                                    .environmentObject(appState)
                             }
                         }
                     }
@@ -739,6 +725,402 @@ struct StockPickDetailView: View {
         
         Task {
             await appState.addStock(symbol: pick.ticker)
+            await MainActor.run {
+                isAdding = false
+                showAddedConfirmation = true
+            }
+            
+            // Reset confirmation after delay
+            try? await Task.sleep(nanoseconds: 2_000_000_000)
+            await MainActor.run {
+                showAddedConfirmation = false
+            }
+        }
+    }
+}
+
+// MARK: - Contender Chip (tappable during screening)
+
+struct ContenderChip: View {
+    let stock: ScoredStock
+    @EnvironmentObject var appState: AppState
+    @State private var showDetail = false
+    
+    private var companyName: String {
+        StockDataService.shared.getFact(ticker: stock.ticker)?.company ?? stock.ticker
+    }
+    
+    var body: some View {
+        Button(action: { showDetail = true }) {
+            HStack(spacing: 4) {
+                Text(stock.ticker)
+                    .font(.system(size: 12, weight: .bold))
+                    .foregroundColor(.white)
+                Text("\(Int(stock.score))")
+                    .font(.system(size: 10, weight: .black))
+                    .foregroundColor(.black)
+                    .padding(.horizontal, 4)
+                    .padding(.vertical, 2)
+                    .background(stock.score >= 7 ? Color.green : Color(white: 0.6))
+                    .cornerRadius(4)
+            }
+            .padding(.horizontal, 8)
+            .padding(.vertical, 6)
+            .background(Color(white: 0.15))
+            .cornerRadius(6)
+        }
+        .buttonStyle(PlainButtonStyle())
+        .sheet(isPresented: $showDetail) {
+            ContenderDetailView(stock: stock, companyName: companyName)
+                .environmentObject(appState)
+        }
+    }
+}
+
+// MARK: - Contender Detail View (early look during screening)
+
+struct ContenderDetailView: View {
+    let stock: ScoredStock
+    let companyName: String
+    @EnvironmentObject var appState: AppState
+    @Environment(\.dismiss) var dismiss
+    
+    @State private var detailedThesis: String = ""
+    @State private var isLoadingThesis = true
+    @State private var isAdding = false
+    @State private var showAddedConfirmation = false
+    
+    // Chat state
+    @State private var chatMessages: [StockScreenerService.ChatMessage] = []
+    @State private var chatInput: String = ""
+    @State private var isSendingChat = false
+    @FocusState private var isChatFocused: Bool
+    
+    private var isInPortfolio: Bool {
+        appState.currentUserPortfolio?.holdings.contains(where: { $0.symbol == stock.ticker }) ?? false
+    }
+    
+    var body: some View {
+        NavigationStack {
+            ZStack {
+                Color.black.ignoresSafeArea()
+                
+                ScrollViewReader { proxy in
+                    ScrollView {
+                        VStack(spacing: 24) {
+                            // Header
+                            VStack(spacing: 8) {
+                                // "Still screening" badge
+                                HStack(spacing: 4) {
+                                    ProgressView()
+                                        .scaleEffect(0.6)
+                                        .tint(.green)
+                                    Text("STILL SCREENING")
+                                        .font(.system(size: 10, weight: .black))
+                                        .tracking(1)
+                                        .foregroundColor(.green)
+                                }
+                                .padding(.horizontal, 10)
+                                .padding(.vertical, 6)
+                                .background(Color.green.opacity(0.15))
+                                .cornerRadius(8)
+                                
+                                Text(stock.ticker)
+                                    .font(.system(size: 48, weight: .black))
+                                    .foregroundColor(.white)
+                                
+                                Text(companyName)
+                                    .font(.system(size: 14, weight: .medium))
+                                    .foregroundColor(Color(white: 0.5))
+                                
+                                // Score badge
+                                HStack(spacing: 6) {
+                                    Text("PRELIMINARY SCORE")
+                                        .font(.system(size: 10, weight: .bold))
+                                        .tracking(1)
+                                        .foregroundColor(Color(white: 0.4))
+                                    
+                                    Text("\(Int(stock.score))")
+                                        .font(.system(size: 14, weight: .black))
+                                        .foregroundColor(.black)
+                                        .padding(.horizontal, 8)
+                                        .padding(.vertical, 4)
+                                        .background(stock.score >= 7 ? Color.green : Color(white: 0.6))
+                                        .cornerRadius(4)
+                                }
+                                .padding(.top, 8)
+                            }
+                            .padding(.top, 20)
+                            
+                            // Add to Portfolio button
+                            addButton
+                            
+                            // Initial reason from batch scoring
+                            if !stock.reason.isEmpty {
+                                VStack(alignment: .leading, spacing: 8) {
+                                    HStack {
+                                        Text("⚡")
+                                            .font(.system(size: 14))
+                                        Text("INITIAL READ")
+                                            .font(.system(size: 11, weight: .bold))
+                                            .tracking(2)
+                                            .foregroundColor(Color(white: 0.4))
+                                    }
+                                    
+                                    Text(stock.reason)
+                                        .font(.system(size: 13, weight: .medium))
+                                        .foregroundColor(Color(white: 0.6))
+                                        .padding()
+                                        .frame(maxWidth: .infinity, alignment: .leading)
+                                        .background(Color(white: 0.08))
+                                        .cornerRadius(12)
+                                }
+                                .padding(.horizontal)
+                            }
+                            
+                            // AI Thesis section
+                            thesisSection
+                            
+                            // Chat section
+                            chatSection
+                                .id("chatBottom")
+                        }
+                        .padding(.bottom, 40)
+                    }
+                    .onChange(of: chatMessages.count) { _, _ in
+                        withAnimation {
+                            proxy.scrollTo("chatBottom", anchor: .bottom)
+                        }
+                    }
+                }
+            }
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button("DONE") { dismiss() }
+                        .font(.system(size: 14, weight: .bold))
+                        .foregroundColor(.white)
+                }
+            }
+        }
+        .preferredColorScheme(.dark)
+        .task {
+            await loadDetailedThesis()
+        }
+    }
+    
+    // MARK: - Add Button
+    
+    private var addButton: some View {
+        Button(action: addToPortfolio) {
+            HStack(spacing: 8) {
+                if isAdding {
+                    ProgressView()
+                        .scaleEffect(0.8)
+                        .tint(.black)
+                } else if showAddedConfirmation {
+                    Image(systemName: "checkmark")
+                        .font(.system(size: 14, weight: .bold))
+                    Text("ADDED!")
+                        .font(.system(size: 14, weight: .black))
+                } else if isInPortfolio {
+                    Image(systemName: "checkmark.circle.fill")
+                        .font(.system(size: 14))
+                    Text("IN PORTFOLIO")
+                        .font(.system(size: 14, weight: .black))
+                } else {
+                    Image(systemName: "plus")
+                        .font(.system(size: 14, weight: .bold))
+                    Text("ADD TO PORTFOLIO")
+                        .font(.system(size: 14, weight: .black))
+                }
+            }
+            .foregroundColor(isInPortfolio ? Color(white: 0.4) : .black)
+            .padding(.horizontal, 24)
+            .padding(.vertical, 12)
+            .background(isInPortfolio ? Color(white: 0.15) : .white)
+            .cornerRadius(12)
+        }
+        .disabled(isInPortfolio || isAdding)
+    }
+    
+    // MARK: - Thesis Section
+    
+    private var thesisSection: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            HStack {
+                Text("🥤")
+                    .font(.system(size: 14))
+                Text("TALL BOY'S ANALYSIS")
+                    .font(.system(size: 11, weight: .bold))
+                    .tracking(2)
+                    .foregroundColor(Color(white: 0.4))
+            }
+            
+            if isLoadingThesis {
+                HStack {
+                    ProgressView()
+                        .scaleEffect(0.8)
+                        .tint(.white)
+                    Text("Generating analysis...")
+                        .font(.system(size: 12, weight: .medium))
+                        .foregroundColor(Color(white: 0.4))
+                }
+                .padding()
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .background(Color(white: 0.08))
+                .cornerRadius(12)
+            } else {
+                Text(detailedThesis)
+                    .font(.system(size: 14, weight: .regular))
+                    .foregroundColor(Color(white: 0.85))
+                    .lineSpacing(6)
+                    .padding()
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .background(Color(white: 0.08))
+                    .cornerRadius(12)
+            }
+        }
+        .padding(.horizontal)
+    }
+    
+    // MARK: - Chat Section
+    
+    private var chatSection: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack {
+                Text("💬")
+                    .font(.system(size: 14))
+                Text("ASK TALL BOY")
+                    .font(.system(size: 11, weight: .bold))
+                    .tracking(2)
+                    .foregroundColor(Color(white: 0.4))
+                
+                Spacer()
+                
+                if !chatMessages.isEmpty {
+                    Button(action: clearChat) {
+                        Text("CLEAR")
+                            .font(.system(size: 9, weight: .bold))
+                            .foregroundColor(Color(white: 0.35))
+                    }
+                }
+            }
+            
+            // Chat messages
+            if !chatMessages.isEmpty {
+                VStack(spacing: 12) {
+                    ForEach(chatMessages) { message in
+                        chatBubble(message)
+                    }
+                }
+            }
+            
+            // Input row
+            HStack(spacing: 8) {
+                TextField("Ask a follow-up question...", text: $chatInput)
+                    .font(.system(size: 14, weight: .medium))
+                    .foregroundColor(.white)
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 10)
+                    .background(Color(white: 0.1))
+                    .cornerRadius(20)
+                    .focused($isChatFocused)
+                    .onSubmit {
+                        sendChat()
+                    }
+                
+                Button(action: sendChat) {
+                    if isSendingChat {
+                        ProgressView()
+                            .scaleEffect(0.7)
+                            .tint(.white)
+                            .frame(width: 32, height: 32)
+                    } else {
+                        Image(systemName: "arrow.up.circle.fill")
+                            .font(.system(size: 28))
+                            .foregroundColor(chatInput.isEmpty ? Color(white: 0.3) : .green)
+                    }
+                }
+                .disabled(chatInput.isEmpty || isSendingChat)
+            }
+        }
+        .padding(.horizontal)
+    }
+    
+    private func chatBubble(_ message: StockScreenerService.ChatMessage) -> some View {
+        HStack {
+            if message.role == .user { Spacer() }
+            
+            Text(message.content)
+                .font(.system(size: 13, weight: .medium))
+                .foregroundColor(message.role == .user ? .black : Color(white: 0.85))
+                .padding(.horizontal, 12)
+                .padding(.vertical, 8)
+                .background(message.role == .user ? Color.green : Color(white: 0.12))
+                .cornerRadius(16)
+            
+            if message.role == .assistant { Spacer() }
+        }
+    }
+    
+    private func sendChat() {
+        guard !chatInput.isEmpty, !isSendingChat else { return }
+        
+        let question = chatInput
+        chatInput = ""
+        isChatFocused = false
+        
+        // Add user message immediately
+        let userMessage = StockScreenerService.ChatMessage(
+            role: .user,
+            content: question,
+            timestamp: Date()
+        )
+        chatMessages.append(userMessage)
+        
+        isSendingChat = true
+        Task {
+            let response = await StockScreenerService.shared.askFollowUp(
+                ticker: stock.ticker,
+                company: companyName,
+                question: question
+            )
+            
+            await MainActor.run {
+                let assistantMessage = StockScreenerService.ChatMessage(
+                    role: .assistant,
+                    content: response,
+                    timestamp: Date()
+                )
+                chatMessages.append(assistantMessage)
+                isSendingChat = false
+            }
+        }
+    }
+    
+    private func clearChat() {
+        chatMessages = []
+        StockScreenerService.shared.clearConversation(for: stock.ticker)
+    }
+    
+    private func loadDetailedThesis() async {
+        let thesis = await StockScreenerService.shared.getDetailedThesis(
+            ticker: stock.ticker,
+            company: companyName
+        )
+        await MainActor.run {
+            detailedThesis = thesis
+            isLoadingThesis = false
+        }
+    }
+    
+    private func addToPortfolio() {
+        guard !isInPortfolio else { return }
+        isAdding = true
+        
+        Task {
+            await appState.addStock(symbol: stock.ticker)
             await MainActor.run {
                 isAdding = false
                 showAddedConfirmation = true

@@ -48,7 +48,7 @@ struct ContentView: View {
                     .transition(.move(edge: .top).combined(with: .opacity))
                     .onTapGesture {
                         // Navigate to settings
-                        selectedTab = 5
+                        selectedTab = 4
                         withAnimation { showInvalidKeyToast = false }
                     }
             }
@@ -86,9 +86,9 @@ struct ContentView: View {
                 }
                 .tag(0)
             
-            UsersView()
+            LeaderboardView()
                 .tabItem {
-                    Label("PLAYERS", systemImage: "person.2.fill")
+                    Label("PLAYERS", systemImage: "trophy.fill")
                 }
                 .tag(1)
             
@@ -98,23 +98,17 @@ struct ContentView: View {
                 }
                 .tag(2)
             
-            LeaderboardView()
-                .tabItem {
-                    Label("SCORES", systemImage: "trophy.fill")
-                }
-                .tag(3)
-            
             AIPlayersView()
                 .tabItem {
                     Label("AI", systemImage: "cpu")
                 }
-                .tag(4)
+                .tag(3)
             
             SettingsView()
                 .tabItem {
                     Label("SETTINGS", systemImage: "gearshape.fill")
                 }
-                .tag(5)
+                .tag(4)
         }
         .tint(.white)
         .background(Color.black)

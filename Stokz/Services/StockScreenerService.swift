@@ -115,10 +115,14 @@ class StockScreenerService: ObservableObject {
     
     // MARK: - Silent Screening for AI Bots
     
+    /// Progress callback for bot screening
+    typealias BotProgressCallback = (String) -> Void
+    
     /// Screen stocks silently (no UI updates) - for AI bot portfolio building
     /// Returns top stock picks matching the investment thesis
-    func screenForBot(thesis: String, maxPicks: Int = 10) async throws -> [StockPick] {
+    func screenForBot(thesis: String, maxPicks: Int = 10, progress: BotProgressCallback? = nil) async throws -> [StockPick] {
         print("🤖 [Screener] Bot screening for thesis: \(thesis.prefix(50))...")
+        progress?("Analyzing thesis...")
         
         // Step 1: Generate criteria from thesis with proper pick count
         let criteria = ScreeningCriteria(batchPrompt: thesis, resultCount: maxPicks)
@@ -126,27 +130,36 @@ class StockScreenerService: ObservableObject {
         // Step 2: Get all stocks
         let allStocks = getAllStocks()
         print("🤖 [Screener] Evaluating \(allStocks.count) stocks...")
+        progress?("Found \(allStocks.count) stocks to evaluate")
         
-        // Step 3: Batch evaluate (same map-reduce as main screener)
-        let scored = try await batchEvaluate(stocks: allStocks, criteria: criteria)
+        // Step 3: Batch evaluate with progress updates
+        let scored = try await batchEvaluateForBot(stocks: allStocks, criteria: criteria, progress: progress)
         print("🤖 [Screener] Got \(scored.count) scored stocks")
         
         // If no scored stocks, return empty
         guard !scored.isEmpty else {
             print("⚠️ [Screener] No scored stocks from batch evaluation")
+            progress?("No matches found")
             return []
         }
         
+        progress?("Found \(scored.count) candidates, picking top \(maxPicks)...")
+        
         // Step 4: Final analysis on top candidates
         let topN = Array(scored.prefix(topCandidates))
+        progress?("Analyzing top \(topN.count) candidates...")
+        
         let picks = try await finalAnalysisBotMode(candidates: topN, thesis: thesis, pickCount: maxPicks)
         
         print("🤖 [Screener] Bot screen complete: \(picks.count) picks")
         
         // If final analysis failed but we have scored stocks, return top scorers directly
-        if picks.isEmpty && !scored.isEmpty {
-            print("⚠️ [Screener] Final analysis returned 0 picks, using top scorers as fallback")
-            return scored.prefix(maxPicks).map { scored in
+        if picks.count < maxPicks && !scored.isEmpty {
+            print("⚠️ [Screener] Final analysis returned \(picks.count) picks, using top scorers as fallback")
+            progress?("Using top \(maxPicks) highest-scoring stocks")
+            
+            // Use the scored stocks directly
+            let fallbackPicks = scored.prefix(maxPicks).map { scored in
                 StockPick(
                     ticker: scored.ticker,
                     score: scored.score * 10, // Convert 0-10 to 0-100
@@ -154,9 +167,62 @@ class StockScreenerService: ObservableObject {
                     company: StockDataService.shared.getFact(ticker: scored.ticker)?.company ?? scored.ticker
                 )
             }
+            progress?("Selected \(fallbackPicks.count) stocks!")
+            return Array(fallbackPicks)
         }
         
+        progress?("Selected \(picks.count) stocks!")
         return Array(picks.prefix(maxPicks))
+    }
+    
+    /// Batch evaluate for bot mode with progress callback
+    private func batchEvaluateForBot(stocks: [(ticker: String, fact: StockFact)], criteria: ScreeningCriteria, progress: BotProgressCallback?) async throws -> [ScoredStock] {
+        let batches = stocks.chunked(into: batchSize)
+        let totalBatches = batches.count
+        
+        var allScored: [ScoredStock] = []
+        progress?("Evaluating \(stocks.count) stocks in \(totalBatches) batches...")
+        
+        // Process in parallel groups
+        for (groupIndex, batchGroup) in batches.chunked(into: maxParallel).enumerated() {
+            let groupStart = groupIndex * maxParallel
+            
+            // Run this group in parallel
+            let groupResults = await withTaskGroup(of: (batchNum: Int, scores: [ScoredStock]).self) { group in
+                for (batchIndex, batch) in batchGroup.enumerated() {
+                    let batchNum = groupStart + batchIndex + 1
+                    group.addTask {
+                        do {
+                            let scores = try await self.evaluateBatch(batch, criteria: criteria)
+                            return (batchNum, scores)
+                        } catch {
+                            print("🔍 [Screener] Batch \(batchNum) failed: \(error)")
+                            return (batchNum, [])
+                        }
+                    }
+                }
+                
+                var results: [ScoredStock] = []
+                for await (batchNum, batchScores) in group {
+                    results.append(contentsOf: batchScores)
+                    let highScorers = batchScores.filter { $0.score >= 6 }
+                    if !highScorers.isEmpty {
+                        let names = highScorers.prefix(3).map { "\($0.ticker)(\(Int($0.score)))" }.joined(separator: " ")
+                        progress?("Batch \(batchNum)/\(totalBatches): Found \(names)")
+                    } else {
+                        progress?("Batch \(batchNum)/\(totalBatches) complete")
+                    }
+                }
+                return results
+            }
+            
+            allScored.append(contentsOf: groupResults)
+        }
+        
+        progress?("Scored \(allScored.count) stocks total")
+        
+        // Sort by score descending
+        return allScored.sorted { $0.score > $1.score }
     }
     
     /// Dedicated final analysis for bot mode - more aggressive about returning picks
@@ -186,9 +252,11 @@ class StockScreenerService: ObservableObject {
             user: prompt
         )
         
-        print("🤖 [Screener] Bot final analysis response: \(response.prefix(300))")
+        print("🤖 [Screener] Bot final analysis response: \(response.prefix(500))")
         
-        return parsePicks(response)
+        let picks = parsePicks(response)
+        print("🤖 [Screener] Parsed \(picks.count) picks from response")
+        return picks
     }
     
     // MARK: - Detail Thesis Generation

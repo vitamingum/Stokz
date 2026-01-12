@@ -12,6 +12,7 @@ struct AIPlayersView: View {
     @State private var errorMessage: String?
     @State private var isAutoTrading = false
     @State private var lastTradeResults: [String: String] = [:]  // playerId -> result message
+    @State private var progressMessages: [String: String] = [:]  // playerId -> current progress
     
     /// Current user's AI players only (for auto-trading)
     private var myAIPlayers: [User] {
@@ -152,6 +153,7 @@ struct AIPlayersView: View {
                         player: player,
                         isOwned: true,
                         lastTradeResult: lastTradeResults[player.id],
+                        progressMessage: progressMessages[player.id],
                         onTrade: { setTrading in
                             Task {
                                 setTrading(true)
@@ -178,6 +180,7 @@ struct AIPlayersView: View {
                         player: player,
                         isOwned: false,
                         lastTradeResult: nil,
+                        progressMessage: nil,
                         onTrade: { _ in }
                     )
                 }
@@ -219,9 +222,17 @@ struct AIPlayersView: View {
             return
         }
         
+        // Helper to update progress
+        let updateProgress: (String) -> Void = { message in
+            Task { @MainActor in
+                self.progressMessages[player.id] = message
+            }
+        }
+        
         do {
             let prices = appState.priceService.prices
             
+            updateProgress("Liquidating portfolio...")
             print("🤖 [\(player.displayName)] LIQUIDATING portfolio to rebuild with TALL BOY...")
             
             // Step 1: Liquidate all holdings - convert to cash
@@ -232,26 +243,37 @@ struct AIPlayersView: View {
             
             print("🤖 [\(player.displayName)] Liquidated to $\(String(format: "%.0f", totalValue)) cash")
             
-            // Step 2: Get fresh picks from TALL BOY screener
-            let tickers = try await aiPlayerService.getInitialPortfolio(for: player, maxStocks: 10)
+            // Step 2: Get fresh picks from TALL BOY screener with progress
+            updateProgress("Screening stocks...")
+            let tickers = try await aiPlayerService.getInitialPortfolio(for: player, maxStocks: 10) { progress in
+                updateProgress(progress)
+            }
             
             guard !tickers.isEmpty else {
                 print("⚠️ [\(player.displayName)] TALL BOY returned no picks, keeping cash")
                 try await appState.sheetsService.savePortfolio(liquidatedPortfolio)
                 await MainActor.run {
                     lastTradeResults[player.id] = "No picks found"
+                    progressMessages[player.id] = nil
                 }
                 return
             }
             
             print("🤖 [\(player.displayName)] TALL BOY picks: \(tickers.joined(separator: ", "))")
+            updateProgress("Fetching prices for \(tickers.count) stocks...")
             
-            // Step 3: Build new portfolio with equal allocation to each pick
+            // Step 3: Fetch prices for new stocks (they might not be in our price cache)
+            await appState.priceService.refreshAllPrices(for: tickers)
+            let newPrices = appState.priceService.prices  // Get updated prices
+            
+            updateProgress("Building portfolio with \(tickers.count) stocks...")
+            
+            // Step 4: Build new portfolio with equal allocation to each pick
             var newPortfolio = liquidatedPortfolio
             let perStock = totalValue / Double(tickers.count)
             
             for ticker in tickers {
-                guard let price = prices[ticker], price > 0 else {
+                guard let price = newPrices[ticker], price > 0 else {
                     print("⚠️ [\(player.displayName)] No price for \(ticker), skipping")
                     continue
                 }
@@ -286,17 +308,20 @@ struct AIPlayersView: View {
             print("🤖 [\(player.displayName)] New portfolio built with \(newPortfolio.holdings.count) stocks")
             
             // Step 4: Save the new portfolio
+            updateProgress("Saving portfolio...")
             try await appState.sheetsService.savePortfolio(newPortfolio)
             
             print("✅ [\(player.displayName)] Portfolio rebuild complete!")
             
             await MainActor.run {
                 lastTradeResults[player.id] = "Rebuilt with \(newPortfolio.holdings.count) stocks"
+                progressMessages[player.id] = nil
             }
             
         } catch {
             await MainActor.run {
                 lastTradeResults[player.id] = "Error: \(error.localizedDescription)"
+                progressMessages[player.id] = nil
             }
             print("❌ AI trade error: \(error)")
         }
@@ -330,6 +355,7 @@ struct AIPlayerCard: View {
     let player: User
     var isOwned: Bool = true
     var lastTradeResult: String?
+    var progressMessage: String?
     let onTrade: (@escaping (Bool) -> Void) -> Void
     
     @EnvironmentObject var appState: AppState
@@ -422,6 +448,24 @@ struct AIPlayerCard: View {
                         .fontWeight(.medium)
                         .foregroundColor(Theme.neonGreen)
                 }
+                .transition(.opacity)
+            }
+            
+            // Progress message during rebuild
+            if let progress = progressMessage, isTrading {
+                HStack(spacing: 6) {
+                    ProgressView()
+                        .tint(Theme.textSecondary)
+                        .scaleEffect(0.6)
+                    Text(progress)
+                        .font(.caption2)
+                        .foregroundColor(Theme.textSecondary)
+                        .lineLimit(1)
+                }
+                .padding(.vertical, 4)
+                .padding(.horizontal, 8)
+                .background(Theme.cardBackground.opacity(0.5))
+                .cornerRadius(6)
                 .transition(.opacity)
             }
             

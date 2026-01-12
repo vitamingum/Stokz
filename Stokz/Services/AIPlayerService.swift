@@ -144,7 +144,8 @@ class AIPlayerService: ObservableObject {
     func getInitialPortfolio(
         for aiPlayer: User,
         budget: Double = 100_000,
-        maxStocks: Int = 10
+        maxStocks: Int = 10,
+        progress: ((String) -> Void)? = nil
     ) async throws -> [String] {
         guard aiPlayer.isAI, let thesis = aiPlayer.aiThesis else {
             throw AIPlayerError.notAnAIPlayer
@@ -154,12 +155,14 @@ class AIPlayerService: ObservableObject {
         defer { isProcessing = false }
         
         print("🤖 [AIPlayer] Building portfolio for \(aiPlayer.displayName) using TALL BOY screener...")
+        progress?("Starting stock screening...")
         
         // Use TALL BOY screener to find stocks matching the AI's thesis
-        let picks = try await StockScreenerService.shared.screenForBot(thesis: thesis, maxPicks: maxStocks)
+        let picks = try await StockScreenerService.shared.screenForBot(thesis: thesis, maxPicks: maxStocks, progress: progress)
         
         let tickers = picks.map { $0.ticker }
         print("🤖 [AIPlayer] TALL BOY found \(tickers.count) stocks: \(tickers.joined(separator: ", "))")
+        progress?("Found \(tickers.count) stocks!")
         
         return tickers
     }

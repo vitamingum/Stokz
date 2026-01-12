@@ -20,6 +20,7 @@ class GoogleSheetsService: ObservableObject {
     private let portfoliosSheet = "Portfolios"
     private let priceCacheSheet = "PriceCache"
     private let snapshotsSheet = "NetWorthSnapshots"
+    private let bugReportsSheet = "BugReports"
     
     private let baseURL = "https://sheets.googleapis.com/v4/spreadsheets"
     
@@ -327,6 +328,29 @@ class GoogleSheetsService: ObservableObject {
         let snapshot = NetWorthSnapshot(userId: userId, netWorth: netWorth)
         
         try await saveSnapshot(snapshot)
+    }
+    
+    // MARK: - Bug Reports
+    func submitBugReport(_ report: BugReport) async throws {
+        logInfo("Submitting bug report: \(report.title)", category: .sheets)
+        
+        let values = [[
+            report.id,
+            report.userId,
+            report.userEmail,
+            report.title,
+            report.description,
+            report.severity.rawValue,
+            report.deviceInfo,
+            report.appVersion,
+            report.sessionSummary,
+            ISO8601DateFormatter().string(from: report.timestamp),
+            report.recentLogs,
+            report.screenshotData ?? ""
+        ]]
+        
+        try await appendRows(sheet: bugReportsSheet, values: values)
+        logSuccess("Bug report submitted: \(report.title)", category: .sheets)
     }
     
     // MARK: - Price Cache

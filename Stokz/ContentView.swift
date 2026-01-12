@@ -4,6 +4,7 @@ import SwiftUI
 struct ContentView: View {
     @EnvironmentObject var appState: AppState
     @AppStorage("selectedTab") private var selectedTab = 0
+    @StateObject private var bugReportService = BugReportService.shared
     
     var body: some View {
         Group {
@@ -22,6 +23,13 @@ struct ContentView: View {
             }
         }
         .preferredColorScheme(.dark)
+        .onShake {
+            bugReportService.triggerBugReport()
+        }
+        .sheet(isPresented: $bugReportService.isShowingBugReport) {
+            BugReportView()
+                .environmentObject(appState)
+        }
     }
     
     private var mainTabView: some View {

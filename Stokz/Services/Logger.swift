@@ -92,6 +92,27 @@ final class Logger: ObservableObject {
         entries.removeAll()
     }
     
+    /// Export recent logs for bug reports (last N entries, truncated)
+    func exportRecentLogs(count: Int = 30) -> String {
+        let recentEntries = entries.suffix(count)
+        // Truncate each log to 150 chars max to keep payload small
+        return recentEntries.map { entry in
+            let display = entry.display
+            return display.count > 150 ? String(display.prefix(150)) + "..." : display
+        }.joined(separator: "\n")
+    }
+    
+    /// Get session summary for bug reports
+    func getSessionSummary() -> String {
+        let errorCount = entries.filter { $0.level == .error }.count
+        let warningCount = entries.filter { $0.level == .warning }.count
+        let sessionDuration = entries.first.map { Date().timeIntervalSince($0.time) } ?? 0
+        let minutes = Int(sessionDuration / 60)
+        let seconds = Int(sessionDuration.truncatingRemainder(dividingBy: 60))
+        
+        return "Session: \(minutes)m \(seconds)s | Errors: \(errorCount) | Warnings: \(warningCount) | Total logs: \(entries.count)"
+    }
+    
     private func log(_ message: String, level: LogLevel, category: LogCategory) {
         let entry = LogEntry(time: Date(), level: level, category: category, message: message)
         

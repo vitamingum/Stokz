@@ -7,6 +7,8 @@ struct SettingsView: View {
     @StateObject private var aiService = AIService.shared
     @State private var showDebugConsole = false
     @State private var apiKeyInput: String = ""
+    @State private var isValidatingKey = false
+    @State private var validationError: String?
     
     var body: some View {
         NavigationStack {
@@ -125,10 +127,24 @@ struct SettingsView: View {
                             .font(.system(size: 10, weight: .bold))
                             .foregroundColor(Color(white: 0.5))
                         Spacer()
-                        if aiService.isConfigured {
-                            Image(systemName: "checkmark.circle.fill")
-                                .foregroundColor(.green)
-                                .font(.system(size: 12))
+                        if isValidatingKey {
+                            ProgressView()
+                                .scaleEffect(0.7)
+                        } else if aiService.isConfigured {
+                            if aiService.isKeyValid {
+                                Image(systemName: "checkmark.circle.fill")
+                                    .foregroundColor(.green)
+                                    .font(.system(size: 12))
+                            } else {
+                                HStack(spacing: 4) {
+                                    Image(systemName: "exclamationmark.triangle.fill")
+                                        .foregroundColor(.yellow)
+                                        .font(.system(size: 12))
+                                    Text("INVALID")
+                                        .font(.system(size: 10, weight: .bold))
+                                        .foregroundColor(.yellow)
+                                }
+                            }
                         }
                     }
                     
@@ -140,22 +156,41 @@ struct SettingsView: View {
                             .disableAutocorrection(true)
                         
                         if !apiKeyInput.isEmpty && apiKeyInput != aiService.apiKey {
-                            Button(action: {
-                                aiService.apiKey = apiKeyInput
-                            }) {
-                                Text("SAVE")
-                                    .font(.system(size: 10, weight: .black))
-                                    .padding(.horizontal, 10)
-                                    .padding(.vertical, 6)
-                                    .background(Color.green)
-                                    .foregroundColor(.black)
-                                    .cornerRadius(4)
+                            Button(action: validateAndSaveKey) {
+                                if isValidatingKey {
+                                    ProgressView()
+                                        .scaleEffect(0.7)
+                                        .frame(width: 40)
+                                } else {
+                                    Text("SAVE")
+                                        .font(.system(size: 10, weight: .black))
+                                        .padding(.horizontal, 10)
+                                        .padding(.vertical, 6)
+                                        .background(Color.green)
+                                        .foregroundColor(.black)
+                                        .cornerRadius(4)
+                                }
                             }
+                            .disabled(isValidatingKey)
                         }
                     }
                     .padding()
                     .background(Color(white: 0.1))
                     .cornerRadius(8)
+                    
+                    // Show validation error
+                    if let error = validationError {
+                        Text(error)
+                            .font(.system(size: 11))
+                            .foregroundColor(.red)
+                    }
+                    
+                    // Show invalid key message if saved key is bad
+                    if aiService.isConfigured && !aiService.isKeyValid && validationError == nil {
+                        Text(aiService.validationMessage ?? "API key is invalid")
+                            .font(.system(size: 11))
+                            .foregroundColor(.yellow)
+                    }
                 }
                 
                 // Get API key link
@@ -255,6 +290,29 @@ struct SettingsView: View {
     
     private func signOut() {
         appState.signOut()
+    }
+    
+    private func validateAndSaveKey() {
+        isValidatingKey = true
+        validationError = nil
+        
+        Task {
+            let (valid, error) = await aiService.validateKey(apiKeyInput, for: aiService.selectedProvider)
+            
+            await MainActor.run {
+                isValidatingKey = false
+                
+                if valid {
+                    // Key is valid - save it
+                    aiService.apiKey = apiKeyInput
+                    aiService.isKeyValid = true
+                    aiService.validationMessage = nil
+                    validationError = nil
+                } else {
+                    validationError = error ?? "Invalid API key"
+                }
+            }
+        }
     }
 }
 

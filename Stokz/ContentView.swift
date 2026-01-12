@@ -5,6 +5,8 @@ struct ContentView: View {
     @EnvironmentObject var appState: AppState
     @AppStorage("selectedTab") private var selectedTab = 0
     @StateObject private var bugReportService = BugReportService.shared
+    @StateObject private var aiService = AIService.shared
+    @AppStorage("hasCompletedAPIKeySetup") private var hasCompletedAPIKeySetup = false
     
     var body: some View {
         Group {
@@ -12,7 +14,12 @@ struct ContentView: View {
                 // Show loading screen while initializing
                 LoadingView()
             } else if appState.authService.isAuthenticated {
-                if appState.isLoading && appState.leaderboard.isEmpty && appState.allStocksWithOwners.isEmpty {
+                // After auth, check if API key is set up
+                if !hasCompletedAPIKeySetup && !aiService.isConfigured {
+                    APIKeySetupView(onComplete: {
+                        hasCompletedAPIKeySetup = true
+                    })
+                } else if appState.isLoading && appState.leaderboard.isEmpty && appState.allStocksWithOwners.isEmpty {
                     // Still loading data after auth - check multiple data sources
                     LoadingView(message: "Loading portfolio...")
                 } else {

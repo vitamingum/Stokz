@@ -40,6 +40,7 @@
 		A1000032 /* StockScreenerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000032 /* StockScreenerService.swift */; };
 		A1000033 /* StockScreenerChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000033 /* StockScreenerChatView.swift */; };
 		ACADB3AC3C5307E2CFDF9C0A /* AIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C8E62F0FC3E272BC075DCEA /* AIService.swift */; };
+		D0123E116E7AA8735F13474C /* APIKeySetupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B448C8C94F0A1BC539D901A /* APIKeySetupView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -56,6 +57,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		3B448C8C94F0A1BC539D901A /* APIKeySetupView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = APIKeySetupView.swift; path = APIKeySetupView.swift; sourceTree = "<group>"; };
 		4F4235A1D6F4CE448102C357 /* BugReportService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = BugReportService.swift; sourceTree = "<group>"; };
 		645CB82A3A64EAD65469C31D /* BugReportView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = BugReportView.swift; sourceTree = "<group>"; };
 		6FBA77F0C2D1171A5178869B /* StockScreenerChatView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = StockScreenerChatView.swift; sourceTree = "<group>"; };
@@ -183,6 +185,7 @@
 				A2000033 /* StockScreenerChatView.swift */,
 				645CB82A3A64EAD65469C31D /* BugReportView.swift */,
 				6FBA77F0C2D1171A5178869B /* StockScreenerChatView.swift */,
+				3B448C8C94F0A1BC539D901A /* APIKeySetupView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -313,6 +316,7 @@
 				5BE6905729CB610AD14EE906 /* StockScreenerChatView.swift in Sources */,
 				192F52A1E3BF20C45B444BF1 /* StockScreenerService.swift in Sources */,
 				ACADB3AC3C5307E2CFDF9C0A /* AIService.swift in Sources */,
+				D0123E116E7AA8735F13474C /* APIKeySetupView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

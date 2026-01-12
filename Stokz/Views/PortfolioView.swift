@@ -147,12 +147,10 @@ struct PortfolioView: View {
     
     // MARK: - Holdings List (Liquid Death Style)
     private var holdingsList: some View {
-        // Rank holdings by daily change percent (best first)
+        // Sort holdings by portfolio weight (largest first)
         let allocations = appState.getAllocations()
         let sortedAllocations = allocations.sorted { a, b in
-            let aChange = appState.priceService.stocks[a.symbol]?.priceChangePercent ?? 0
-            let bChange = appState.priceService.stocks[b.symbol]?.priceChangePercent ?? 0
-            return aChange > bChange
+            return a.percent > b.percent
         }
         let totalHoldings = sortedAllocations.count
         

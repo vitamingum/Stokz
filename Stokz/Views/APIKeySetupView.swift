@@ -1,6 +1,6 @@
 import SwiftUI
 
-/// APIKeySetupView - Onboarding screen to set up AI provider after login
+/// APIKeySetupView - Onboarding screen to set up Gemini API key after Google sign-in
 struct APIKeySetupView: View {
     @StateObject private var aiService = AIService.shared
     @State private var apiKeyInput: String = ""
@@ -21,12 +21,12 @@ struct APIKeySetupView: View {
                             .font(.system(size: 60))
                             .foregroundColor(.white)
                         
-                        Text("SET UP AI")
+                        Text("ONE MORE THING")
                             .font(.system(size: 28, weight: .black))
                             .tracking(3)
                             .foregroundColor(.white)
                         
-                        Text("Add an API key to enable AI-powered stock analysis and smack talk")
+                        Text("Add your free Gemini API key to enable AI-powered smack talk")
                             .font(.system(size: 14))
                             .foregroundColor(Color(white: 0.5))
                             .multilineTextAlignment(.center)
@@ -34,59 +34,14 @@ struct APIKeySetupView: View {
                     }
                     .padding(.top, 60)
                     
-                    // Provider Selection
-                    VStack(alignment: .leading, spacing: 12) {
-                        Text("CHOOSE PROVIDER")
-                            .font(.system(size: 12, weight: .bold))
-                            .tracking(1)
-                            .foregroundColor(Color(white: 0.5))
-                        
-                        VStack(spacing: 8) {
-                            ForEach(LLMProvider.allCases, id: \.self) { provider in
-                                Button(action: {
-                                    aiService.selectedProvider = provider
-                                    aiService.loadKeyForCurrentProvider()
-                                    apiKeyInput = aiService.apiKey
-                                }) {
-                                    HStack {
-                                        Text(provider.displayName)
-                                            .font(.system(size: 16, weight: .bold))
-                                        
-                                        Spacer()
-                                        
-                                        if provider == .gemini {
-                                            Text("FREE")
-                                                .font(.system(size: 10, weight: .black))
-                                                .padding(.horizontal, 8)
-                                                .padding(.vertical, 4)
-                                                .background(Color.green)
-                                                .foregroundColor(.black)
-                                                .cornerRadius(4)
-                                        }
-                                        
-                                        if aiService.selectedProvider == provider {
-                                            Image(systemName: "checkmark.circle.fill")
-                                                .foregroundColor(.green)
-                                        }
-                                    }
-                                    .padding()
-                                    .background(aiService.selectedProvider == provider ? Color(white: 0.2) : Color(white: 0.1))
-                                    .foregroundColor(.white)
-                                    .cornerRadius(8)
-                                }
-                            }
-                        }
-                    }
-                    .padding(.horizontal)
-                    
                     // API Key Input
                     VStack(alignment: .leading, spacing: 12) {
-                        Text("ENTER API KEY")
+                        Text("GEMINI API KEY")
                             .font(.system(size: 12, weight: .bold))
                             .tracking(1)
                             .foregroundColor(Color(white: 0.5))
                         
-                        SecureField(aiService.selectedProvider.apiKeyPlaceholder, text: $apiKeyInput)
+                        SecureField("AIza...", text: $apiKeyInput)
                             .font(.system(size: 16, weight: .medium, design: .monospaced))
                             .foregroundColor(.white)
                             .padding()
@@ -103,17 +58,21 @@ struct APIKeySetupView: View {
                         
                         // Get API key link
                         Button(action: {
-                            if let url = URL(string: aiService.selectedProvider.helpURL) {
+                            if let url = URL(string: "https://aistudio.google.com/app/apikey") {
                                 UIApplication.shared.open(url)
                             }
                         }) {
                             HStack {
                                 Image(systemName: "arrow.up.right.circle")
-                                Text("Get a free \(aiService.selectedProvider.displayName) API key")
+                                Text("Get a free Gemini API key")
                             }
                             .font(.system(size: 14, weight: .medium))
                             .foregroundColor(.blue)
                         }
+                        
+                        Text("Uses same Google account you just signed in with")
+                            .font(.system(size: 12))
+                            .foregroundColor(Color(white: 0.4))
                     }
                     .padding(.horizontal)
                     
@@ -157,13 +116,12 @@ struct APIKeySetupView: View {
         isValidating = true
         validationError = nil
         
-        // Save the key
+        // Set provider to Gemini and save key
+        aiService.selectedProvider = .gemini
         aiService.apiKey = apiKeyInput
         
-        // Simple validation - just check it's not empty
-        // A real validation would test the API
         Task {
-            try? await Task.sleep(nanoseconds: 500_000_000) // Brief delay for UX
+            try? await Task.sleep(nanoseconds: 300_000_000)
             await MainActor.run {
                 isValidating = false
                 onComplete()

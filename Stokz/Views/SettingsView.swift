@@ -193,6 +193,19 @@ struct SettingsView: View {
                     }
                 }
                 
+                // Free tier toggle (rate limits requests)
+                Toggle(isOn: $aiService.isFreeTier) {
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text("FREE TIER")
+                            .font(.system(size: 11, weight: .bold))
+                            .foregroundColor(.white)
+                        Text("Rate limit requests (15/min)")
+                            .font(.system(size: 10))
+                            .foregroundColor(Color(white: 0.5))
+                    }
+                }
+                .tint(.green)
+                
                 // Get API key link
                 Button(action: {
                     if let url = URL(string: aiService.selectedProvider.helpURL) {

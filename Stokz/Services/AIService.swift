@@ -41,6 +41,12 @@ class AIService: ObservableObject {
     @Published var selectedProvider: LLMProvider {
         didSet {
             UserDefaults.standard.set(selectedProvider.rawValue, forKey: "ai_provider")
+            // Auto-enable free tier when switching to Gemini
+            if selectedProvider == .gemini {
+                isFreeTier = true
+            } else {
+                isFreeTier = false
+            }
             clearCache()
         }
     }
@@ -55,12 +61,19 @@ class AIService: ObservableObject {
     @Published var isLoading = false
     @Published var lastError: String?
     
+    // Free tier rate limiting (user can toggle off if they have paid)
+    @Published var isFreeTier: Bool {
+        didSet {
+            UserDefaults.standard.set(isFreeTier, forKey: "ai_free_tier")
+        }
+    }
+    
     // Cache for style taglines
     private var styleCache: [String: String] = [:]
     
-    // Rate limiting
+    // Rate limiting for free tier (15 RPM = 4 sec between requests)
     private var lastRequestTime: Date?
-    private let minRequestInterval: TimeInterval = 1.0
+    private let freeTierMinRequestInterval: TimeInterval = 4.0
     
     private init() {
         // Load saved provider first
@@ -71,6 +84,10 @@ class AIService: ObservableObject {
         } else {
             provider = .gemini
         }
+        
+        // Load free tier setting (default to true for Gemini)
+        let savedFreeTier = UserDefaults.standard.object(forKey: "ai_free_tier") as? Bool
+        self.isFreeTier = savedFreeTier ?? (provider == .gemini)
         
         // Initialize all stored properties before using self
         self.selectedProvider = provider
@@ -161,7 +178,7 @@ class AIService: ObservableObject {
     }
     
     private func testGeminiKey(_ key: String) async throws -> Bool {
-        let url = URL(string: "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=\(key)")!
+        let url = URL(string: "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-lite:generateContent?key=\(key)")!
         
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
@@ -284,14 +301,16 @@ class AIService: ObservableObject {
             throw AIError.notConfigured
         }
         
-        // Rate limiting
-        if let lastTime = lastRequestTime {
-            let elapsed = Date().timeIntervalSince(lastTime)
-            if elapsed < minRequestInterval {
-                try? await Task.sleep(nanoseconds: UInt64((minRequestInterval - elapsed) * 1_000_000_000))
+        // Rate limit if on free tier (user can toggle off in Settings)
+        if isFreeTier {
+            if let lastTime = lastRequestTime {
+                let elapsed = Date().timeIntervalSince(lastTime)
+                if elapsed < freeTierMinRequestInterval {
+                    try? await Task.sleep(nanoseconds: UInt64((freeTierMinRequestInterval - elapsed) * 1_000_000_000))
+                }
             }
+            lastRequestTime = Date()
         }
-        lastRequestTime = Date()
         
         switch selectedProvider {
         case .gemini:
@@ -358,7 +377,7 @@ class AIService: ObservableObject {
     // MARK: - Provider Implementations
     
     private func callGemini(system: String, user: String) async throws -> String {
-        let url = URL(string: "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=\(apiKey)")!
+        let url = URL(string: "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-lite:generateContent?key=\(apiKey)")!
         
         var request = URLRequest(url: url)
         request.httpMethod = "POST"

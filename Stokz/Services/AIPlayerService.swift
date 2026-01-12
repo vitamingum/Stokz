@@ -92,6 +92,7 @@ class AIPlayerService: ObservableObject {
     }
     
     /// Get multiple stock recommendations for initial portfolio build
+    /// Uses TALL BOY screener with map-reduce pattern for quality picks
     func getInitialPortfolio(
         for aiPlayer: User,
         budget: Double = 100_000,
@@ -104,40 +105,15 @@ class AIPlayerService: ObservableObject {
         isProcessing = true
         defer { isProcessing = false }
         
-        // Get all available stocks
-        let allStocks = stockDataService.allTickers
-        let stockSummaries = allStocks.prefix(200).compactMap { ticker -> String? in
-            guard let fact = stockDataService.getFact(ticker: ticker) else { return nil }
-            return "\(ticker): \(fact.company) (\(fact.sector)) - \(fact.summary.prefix(80))..."
-        }
+        print("🤖 [AIPlayer] Building portfolio for \(aiPlayer.displayName) using TALL BOY screener...")
         
-        let systemPrompt = """
-        You are an AI investment manager building an initial portfolio based on your thesis.
+        // Use TALL BOY screener to find stocks matching the AI's thesis
+        let picks = try await StockScreenerService.shared.screenForBot(thesis: thesis, maxPicks: maxStocks)
         
-        YOUR INVESTMENT THESIS:
-        \(thesis)
+        let tickers = picks.map { $0.ticker }
+        print("🤖 [AIPlayer] TALL BOY found \(tickers.count) stocks: \(tickers.joined(separator: ", "))")
         
-        TASK:
-        Select \(maxStocks) stocks that best match your thesis.
-        Choose a focused portfolio that strongly reflects your investment beliefs.
-        
-        Respond with ONLY a JSON array of ticker symbols, like: ["AAPL", "MSFT", "GOOGL"]
-        """
-        
-        let userPrompt = """
-        AVAILABLE STOCKS (showing \(stockSummaries.count) of \(allStocks.count)):
-        \(stockSummaries.joined(separator: "\n"))
-        
-        Select \(maxStocks) tickers that best match your thesis:
-        """
-        
-        let response = try await makeAIRequest(
-            provider: aiPlayer.llmProvider ?? .gemini,
-            system: systemPrompt,
-            user: userPrompt
-        )
-        
-        return try parseTickerList(response)
+        return tickers
     }
     
     // MARK: - Helpers

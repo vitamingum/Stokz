@@ -151,10 +151,15 @@ struct AIPlayersView: View {
                     AIPlayerCard(
                         player: player,
                         isOwned: true,
-                        lastTradeResult: lastTradeResults[player.id]
-                    ) {
-                        Task { await triggerTrade(for: player) }
-                    }
+                        lastTradeResult: lastTradeResults[player.id],
+                        onTrade: { setTrading in
+                            Task {
+                                setTrading(true)
+                                await triggerTrade(for: player)
+                                setTrading(false)
+                            }
+                        }
+                    )
                 }
             }
             
@@ -172,8 +177,9 @@ struct AIPlayersView: View {
                     AIPlayerCard(
                         player: player,
                         isOwned: false,
-                        lastTradeResult: nil
-                    ) { }
+                        lastTradeResult: nil,
+                        onTrade: { _ in }
+                    )
                 }
             }
         }
@@ -204,54 +210,90 @@ struct AIPlayersView: View {
         aiPlayers = appState.sheetsService.users.filter { $0.isAI }
     }
     
+    /// Liquidates entire portfolio and rebuilds from scratch using TALL BOY screener
     private func triggerTrade(for player: User) async {
         guard let portfolio = appState.sheetsService.portfolios[player.id] else {
-            lastTradeResults[player.id] = "No portfolio found"
+            await MainActor.run {
+                lastTradeResults[player.id] = "No portfolio found"
+            }
             return
         }
         
         do {
             let prices = appState.priceService.prices
-            let decision = try await aiPlayerService.getTradeDecision(
-                for: player,
-                portfolio: portfolio,
-                prices: prices
-            )
             
-            print("🤖 [\(player.displayName)] Decision: \(decision.action.rawValue) \(decision.symbol ?? "") - \(decision.reasoning)")
+            print("🤖 [\(player.displayName)] LIQUIDATING portfolio to rebuild with TALL BOY...")
             
-            // Execute the trade
-            var resultMessage = ""
-            if let symbol = decision.symbol {
-                switch decision.action {
-                case .buy:
-                    let updatedPortfolio = PortfolioManager.shared.addStock(
-                        symbol: symbol,
-                        to: portfolio,
-                        prices: prices
-                    )
-                    try await appState.sheetsService.savePortfolio(updatedPortfolio)
-                    resultMessage = "Bought \(symbol)"
-                    
-                case .sell:
-                    let updatedPortfolio = PortfolioManager.shared.removeStock(
-                        symbol: symbol,
-                        from: portfolio,
-                        prices: prices
-                    )
-                    try await appState.sheetsService.savePortfolio(updatedPortfolio)
-                    resultMessage = "Sold \(symbol)"
-                    
-                case .hold:
-                    resultMessage = "Holding"
+            // Step 1: Liquidate all holdings - convert to cash
+            var liquidatedPortfolio = portfolio
+            let totalValue = portfolio.totalValue(prices: prices)
+            liquidatedPortfolio.holdings = []
+            liquidatedPortfolio.cashBalance = totalValue
+            
+            print("🤖 [\(player.displayName)] Liquidated to $\(String(format: "%.0f", totalValue)) cash")
+            
+            // Step 2: Get fresh picks from TALL BOY screener
+            let tickers = try await aiPlayerService.getInitialPortfolio(for: player, maxStocks: 10)
+            
+            guard !tickers.isEmpty else {
+                print("⚠️ [\(player.displayName)] TALL BOY returned no picks, keeping cash")
+                try await appState.sheetsService.savePortfolio(liquidatedPortfolio)
+                await MainActor.run {
+                    lastTradeResults[player.id] = "No picks found"
                 }
-            } else {
-                resultMessage = "Holding"
+                return
             }
+            
+            print("🤖 [\(player.displayName)] TALL BOY picks: \(tickers.joined(separator: ", "))")
+            
+            // Step 3: Build new portfolio with equal allocation to each pick
+            var newPortfolio = liquidatedPortfolio
+            let perStock = totalValue / Double(tickers.count)
+            
+            for ticker in tickers {
+                guard let price = prices[ticker], price > 0 else {
+                    print("⚠️ [\(player.displayName)] No price for \(ticker), skipping")
+                    continue
+                }
+                
+                let shares = perStock / price
+                let holding = PortfolioHolding(
+                    id: UUID().uuidString,
+                    symbol: ticker,
+                    shares: shares,
+                    entryPrice: price,
+                    entryDate: Date(),
+                    costBasis: perStock
+                )
+                newPortfolio.holdings.append(holding)
+                newPortfolio.cashBalance -= perStock
+            }
+            
+            // Mop up any remaining cash into first holding
+            if newPortfolio.cashBalance > 1 && !newPortfolio.holdings.isEmpty {
+                let extraShares = newPortfolio.cashBalance / (prices[newPortfolio.holdings[0].symbol] ?? 1)
+                newPortfolio.holdings[0] = PortfolioHolding(
+                    id: newPortfolio.holdings[0].id,
+                    symbol: newPortfolio.holdings[0].symbol,
+                    shares: newPortfolio.holdings[0].shares + extraShares,
+                    entryPrice: newPortfolio.holdings[0].entryPrice,
+                    entryDate: newPortfolio.holdings[0].entryDate,
+                    costBasis: newPortfolio.holdings[0].costBasis + newPortfolio.cashBalance
+                )
+                newPortfolio.cashBalance = 0
+            }
+            
+            print("🤖 [\(player.displayName)] New portfolio built with \(newPortfolio.holdings.count) stocks")
+            
+            // Step 4: Save the new portfolio
+            try await appState.sheetsService.savePortfolio(newPortfolio)
+            
+            print("✅ [\(player.displayName)] Portfolio rebuild complete!")
             
             await MainActor.run {
-                lastTradeResults[player.id] = resultMessage
+                lastTradeResults[player.id] = "Rebuilt with \(newPortfolio.holdings.count) stocks"
             }
+            
         } catch {
             await MainActor.run {
                 lastTradeResults[player.id] = "Error: \(error.localizedDescription)"
@@ -288,7 +330,7 @@ struct AIPlayerCard: View {
     let player: User
     var isOwned: Bool = true
     var lastTradeResult: String?
-    let onTrade: () -> Void
+    let onTrade: (@escaping (Bool) -> Void) -> Void
     
     @EnvironmentObject var appState: AppState
     @State private var isTrading = false
@@ -386,11 +428,8 @@ struct AIPlayerCard: View {
             // Trade Button (only for owned AI players)
             if isOwned {
                 Button {
-                    isTrading = true
-                    onTrade()
-                    // Reset after delay
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                        isTrading = false
+                    onTrade { trading in
+                        isTrading = trading
                     }
                 } label: {
                     HStack {
@@ -401,7 +440,7 @@ struct AIPlayerCard: View {
                         } else {
                             Image(systemName: "bolt.fill")
                         }
-                        Text(isTrading ? "THINKING..." : "MAKE A TRADE")
+                        Text(isTrading ? "REBUILDING..." : "REBUILD PORTFOLIO")
                     }
                     .font(.caption)
                     .fontWeight(.bold)
@@ -455,113 +494,77 @@ struct CreateAIPlayerView: View {
                 
                 ScrollView {
                     VStack(spacing: 24) {
-                        // Name Field
+                        // Name
                         VStack(alignment: .leading, spacing: 8) {
                             Text("NAME")
                                 .font(.caption)
                                 .fontWeight(.bold)
-                                .foregroundColor(Theme.neonGreen)
+                                .foregroundColor(Theme.textSecondary)
                             
-                            TextField("e.g. Warren Bot", text: $name)
+                            TextField("e.g., TALL BOY", text: $name)
                                 .textFieldStyle(.plain)
-                                .font(.body)
+                                .font(.headline)
                                 .foregroundColor(Theme.text)
                                 .padding()
                                 .background(Theme.cardBackground)
                                 .cornerRadius(12)
                         }
                         
-                        // Provider Selection
+                        // LLM Provider
                         VStack(alignment: .leading, spacing: 8) {
-                            Text("LLM BRAIN")
+                            Text("AI BRAIN")
                                 .font(.caption)
                                 .fontWeight(.bold)
-                                .foregroundColor(Theme.neonGreen)
+                                .foregroundColor(Theme.textSecondary)
                             
-                            LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 12) {
+                            Picker("Provider", selection: $selectedProvider) {
                                 ForEach(LLMProvider.allCases, id: \.self) { provider in
-                                    ProviderButton(
-                                        provider: provider,
-                                        isSelected: selectedProvider == provider,
-                                        hasKey: hasAPIKey(for: provider)
-                                    ) {
-                                        selectedProvider = provider
-                                    }
+                                    Text(provider.rawValue.uppercased())
+                                        .tag(provider)
                                 }
                             }
-                            
-                            if !hasAPIKey(for: selectedProvider) {
-                                HStack {
-                                    Image(systemName: "exclamationmark.triangle.fill")
-                                        .foregroundColor(.orange)
-                                    Text("No API key for \(selectedProvider.displayName). Add it in Settings first.")
-                                        .font(.caption)
-                                        .foregroundColor(.orange)
-                                }
-                                .padding(.top, 4)
-                            }
+                            .pickerStyle(.segmented)
                         }
                         
-                        // Thesis Field
+                        // Thesis
                         VStack(alignment: .leading, spacing: 8) {
-                            HStack {
-                                Text("INVESTMENT THESIS")
-                                    .font(.caption)
-                                    .fontWeight(.bold)
-                                    .foregroundColor(Theme.neonGreen)
-                                
-                                Spacer()
-                                
-                                Text("\(thesis.count)/500")
-                                    .font(.caption)
-                                    .foregroundColor(Theme.textSecondary)
-                            }
+                            Text("INVESTMENT THESIS")
+                                .font(.caption)
+                                .fontWeight(.bold)
+                                .foregroundColor(Theme.textSecondary)
                             
                             TextEditor(text: $thesis)
                                 .font(.body)
                                 .foregroundColor(Theme.text)
                                 .scrollContentBackground(.hidden)
-                                .frame(minHeight: 150)
+                                .frame(minHeight: 120)
                                 .padding()
                                 .background(Theme.cardBackground)
                                 .cornerRadius(12)
-                                .onChange(of: thesis) { _, newValue in
-                                    if newValue.count > 500 {
-                                        thesis = String(newValue.prefix(500))
-                                    }
-                                }
                             
-                            Text("Describe how this AI should invest. Be specific about sectors, risk tolerance, and strategy.")
+                            Text("\(thesis.count)/20 min characters")
                                 .font(.caption)
-                                .foregroundColor(Theme.textSecondary)
+                                .foregroundColor(thesis.count >= 20 ? Theme.positive : Theme.textSecondary)
                         }
                         
-                        // Example Theses
+                        // Example theses
                         VStack(alignment: .leading, spacing: 8) {
                             Text("EXAMPLE THESES")
                                 .font(.caption)
                                 .fontWeight(.bold)
                                 .foregroundColor(Theme.textSecondary)
                             
-                            ForEach(exampleTheses, id: \.name) { example in
+                            ForEach(exampleTheses, id: \.self) { example in
                                 Button {
-                                    name = example.name
-                                    thesis = example.thesis
+                                    thesis = example
                                 } label: {
-                                    VStack(alignment: .leading, spacing: 4) {
-                                        Text(example.name)
-                                            .font(.caption)
-                                            .fontWeight(.bold)
-                                            .foregroundColor(Theme.neonGreen)
-                                        Text(example.thesis)
-                                            .font(.caption)
-                                            .foregroundColor(Theme.textSecondary)
-                                            .lineLimit(2)
-                                    }
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-                                    .padding()
-                                    .background(Theme.cardBackground.opacity(0.5))
-                                    .cornerRadius(8)
+                                    Text(example)
+                                        .font(.caption)
+                                        .foregroundColor(Theme.text)
+                                        .padding(8)
+                                        .frame(maxWidth: .infinity, alignment: .leading)
+                                        .background(Theme.cardBackground)
+                                        .cornerRadius(8)
                                 }
                             }
                         }
@@ -570,110 +573,64 @@ struct CreateAIPlayerView: View {
                             Text(error)
                                 .font(.caption)
                                 .foregroundColor(Theme.negative)
-                                .padding()
-                                .background(Theme.negative.opacity(0.1))
-                                .cornerRadius(8)
                         }
                         
-                        // Create Button
-                        Button {
-                            Task { await createAIPlayer() }
-                        } label: {
-                            HStack {
-                                if isCreating {
-                                    ProgressView()
-                                        .tint(Theme.background)
-                                } else {
-                                    Image(systemName: "cpu")
-                                    Text("CREATE AI PLAYER")
-                                }
-                            }
-                            .font(.headline)
-                            .foregroundColor(Theme.background)
-                            .frame(maxWidth: .infinity)
-                            .padding()
-                            .background(isValid ? Theme.neonGreen : Theme.textSecondary)
-                            .cornerRadius(12)
-                        }
-                        .disabled(!isValid || isCreating)
+                        Spacer()
                     }
                     .padding()
                 }
             }
-            .navigationTitle("NEW AI PLAYER")
+            .navigationTitle("CREATE AI PLAYER")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .topBarLeading) {
+                ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel") {
                         dismiss()
                     }
                     .foregroundColor(Theme.textSecondary)
                 }
+                
+                ToolbarItem(placement: .confirmationAction) {
+                    Button {
+                        Task { await createAIPlayer() }
+                    } label: {
+                        if isCreating {
+                            ProgressView()
+                                .tint(Theme.neonGreen)
+                        } else {
+                            Text("Create")
+                                .fontWeight(.bold)
+                        }
+                    }
+                    .foregroundColor(isValid ? Theme.neonGreen : Theme.textSecondary)
+                    .disabled(!isValid || isCreating)
+                }
             }
         }
     }
     
-    private func hasAPIKey(for provider: LLMProvider) -> Bool {
-        let key = UserDefaults.standard.string(forKey: "stokz_ai_key_\(provider.rawValue)") ?? ""
-        return !key.isEmpty
-    }
+    private let exampleTheses = [
+        "Focus on high-growth tech companies with strong AI exposure and recurring revenue models.",
+        "Value investing in dividend aristocrats with 10+ years of consistent dividend growth.",
+        "Small-cap momentum plays with recent earnings beats and analyst upgrades.",
+        "ESG leaders with strong environmental ratings and clean energy exposure."
+    ]
     
     private func createAIPlayer() async {
         guard isValid else { return }
-        guard let currentUser = appState.authService.currentUser else {
-            errorMessage = "You must be logged in to create an AI player"
-            return
-        }
         
         isCreating = true
         errorMessage = nil
         
         do {
-            // Create the AI user owned by the current user
-            let aiUser = User(
-                id: "ai_\(UUID().uuidString.prefix(8))",
-                email: "ai@stokz.app",
-                displayName: name,
-                photoURL: nil,
-                createdAt: Date(),
-                isAI: true,
-                aiThesis: thesis,
-                aiProvider: selectedProvider.rawValue,
-                ownerId: currentUser.id  // Set owner to current user
+            let aiPlayer = try await AIPlayerService.shared.createAIPlayer(
+                name: name,
+                thesis: thesis,
+                provider: selectedProvider
             )
             
-            // Save to Google Sheets
-            try await appState.sheetsService.saveUser(aiUser)
-            
-            // Create empty portfolio for AI
-            let portfolio = Portfolio(userId: aiUser.id)
-            try await appState.sheetsService.savePortfolio(portfolio)
-            
-            // Get initial stock picks from AI
-            let aiService = AIPlayerService.shared
-            let initialPicks = try await aiService.getInitialPortfolio(for: aiUser)
-            
-            // Build the portfolio with those picks
-            var updatedPortfolio = portfolio
-            let priceService = StockPriceService.shared
-            
-            // Fetch prices for all picks
-            let _ = try? await priceService.fetchQuotes(symbols: initialPicks)
-            let prices = priceService.prices
-            
-            for symbol in initialPicks {
-                updatedPortfolio = PortfolioManager.shared.addStock(
-                    symbol: symbol,
-                    to: updatedPortfolio,
-                    prices: prices
-                )
-            }
-            
-            // Save the built portfolio
-            try await appState.sheetsService.savePortfolio(updatedPortfolio)
-            
             await MainActor.run {
-                onCreated(aiUser)
+                onCreated(aiPlayer)
                 dismiss()
             }
         } catch {
@@ -681,78 +638,6 @@ struct CreateAIPlayerView: View {
                 errorMessage = error.localizedDescription
                 isCreating = false
             }
-        }
-    }
-    
-    private var exampleTheses: [(name: String, thesis: String)] {
-        [
-            (
-                name: "Tech Bull 🚀",
-                thesis: "I believe technology is the future. I focus heavily on AI, cloud computing, and semiconductor companies. I'm willing to take on higher volatility for potentially higher returns. I prefer established tech giants but will consider promising growth stocks."
-            ),
-            (
-                name: "Dividend Hunter 💰",
-                thesis: "I prioritize stable, dividend-paying companies. I look for established businesses with consistent cash flows in sectors like utilities, consumer staples, and healthcare. Capital preservation is more important than aggressive growth."
-            ),
-            (
-                name: "Contrarian Carl 🎲",
-                thesis: "I buy when others are fearful. I look for beaten-down stocks in out-of-favor sectors that have strong fundamentals. I'm patient and willing to hold positions that the market currently hates, waiting for sentiment to turn."
-            )
-        ]
-    }
-}
-
-// MARK: - Provider Button
-
-struct ProviderButton: View {
-    let provider: LLMProvider
-    let isSelected: Bool
-    let hasKey: Bool
-    let action: () -> Void
-    
-    var body: some View {
-        Button(action: action) {
-            HStack {
-                Image(systemName: providerIcon)
-                    .foregroundColor(isSelected ? Theme.background : providerColor)
-                
-                Text(provider.displayName)
-                    .font(.caption)
-                    .fontWeight(.bold)
-                    .foregroundColor(isSelected ? Theme.background : Theme.text)
-                
-                if !hasKey {
-                    Image(systemName: "lock.fill")
-                        .font(.caption2)
-                        .foregroundColor(.orange)
-                }
-            }
-            .frame(maxWidth: .infinity)
-            .padding(.vertical, 12)
-            .background(isSelected ? providerColor : Theme.cardBackground)
-            .cornerRadius(10)
-            .overlay(
-                RoundedRectangle(cornerRadius: 10)
-                    .stroke(isSelected ? providerColor : Color.clear, lineWidth: 2)
-            )
-        }
-    }
-    
-    private var providerIcon: String {
-        switch provider {
-        case .gemini: return "sparkles"
-        case .openai: return "bubble.left.fill"
-        case .anthropic: return "brain"
-        case .grok: return "bolt.fill"
-        }
-    }
-    
-    private var providerColor: Color {
-        switch provider {
-        case .gemini: return .blue
-        case .openai: return .green
-        case .anthropic: return .orange
-        case .grok: return .purple
         }
     }
 }

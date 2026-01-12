@@ -113,6 +113,32 @@ class StockScreenerService: ObservableObject {
         isScreening = false
     }
     
+    // MARK: - Silent Screening for AI Bots
+    
+    /// Screen stocks silently (no UI updates) - for AI bot portfolio building
+    /// Returns top stock picks matching the investment thesis
+    func screenForBot(thesis: String, maxPicks: Int = 10) async throws -> [StockPick] {
+        print("🤖 [Screener] Bot screening for thesis: \(thesis.prefix(50))...")
+        
+        // Step 1: Generate criteria from thesis
+        let criteria = try await generateCriteria(prompt: thesis)
+        
+        // Step 2: Get all stocks
+        let allStocks = getAllStocks()
+        print("🤖 [Screener] Evaluating \(allStocks.count) stocks...")
+        
+        // Step 3: Batch evaluate (same map-reduce as main screener)
+        let scored = try await batchEvaluate(stocks: allStocks, criteria: criteria)
+        print("🤖 [Screener] Got \(scored.count) scored stocks")
+        
+        // Step 4: Final analysis on top candidates
+        let topN = Array(scored.prefix(topCandidates))
+        let picks = try await finalAnalysis(candidates: topN, originalPrompt: thesis, criteria: criteria)
+        
+        print("🤖 [Screener] Bot screen complete: \(picks.count) picks")
+        return Array(picks.prefix(maxPicks))
+    }
+    
     // MARK: - Detail Thesis Generation
     
     /// Generate a detailed thesis for a single stock based on the user's criteria

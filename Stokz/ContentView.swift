@@ -48,7 +48,7 @@ struct ContentView: View {
                     .transition(.move(edge: .top).combined(with: .opacity))
                     .onTapGesture {
                         // Navigate to settings
-                        selectedTab = 4
+                        selectedTab = 5
                         withAnimation { showInvalidKeyToast = false }
                     }
             }
@@ -104,11 +104,17 @@ struct ContentView: View {
                 }
                 .tag(3)
             
+            AIPlayersView()
+                .tabItem {
+                    Label("AI", systemImage: "cpu")
+                }
+                .tag(4)
+            
             SettingsView()
                 .tabItem {
                     Label("SETTINGS", systemImage: "gearshape.fill")
                 }
-                .tag(4)
+                .tag(5)
         }
         .tint(.white)
         .background(Color.black)

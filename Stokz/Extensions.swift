@@ -87,14 +87,6 @@ extension Color {
 
 // MARK: - View Extensions
 extension View {
-    /// Apply card styling
-    func cardStyle() -> some View {
-        self
-            .background(Color(.systemBackground))
-            .cornerRadius(12)
-            .shadow(color: Color.black.opacity(0.05), radius: 8, x: 0, y: 2)
-    }
-    
     /// Hide view conditionally
     @ViewBuilder func hidden(_ shouldHide: Bool) -> some View {
         if shouldHide {

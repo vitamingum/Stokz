@@ -14,14 +14,24 @@ struct Theme {
     static let backgroundSecondary = Color(white: 0.08) // Near black
     static let backgroundCard = Color(white: 0.12) // Dark gray cards
     
+    // Convenience aliases
+    static let background = backgroundPrimary
+    static let cardBackground = backgroundCard
+    
     // MARK: - Semantic Colors (B&W style - muted)
     static let positive = Color(white: 0.9) // Light for gains
     static let negative = Color(white: 0.4) // Darker for losses
+    
+    // Neon green accent for special elements
+    static let neonGreen = Color(red: 0.2, green: 1.0, blue: 0.4)
     
     // MARK: - Text Colors
     static let textPrimary = Color.white
     static let textSecondary = Color(white: 0.65)
     static let textTertiary = Color(white: 0.4)
+    
+    // Convenience aliases
+    static let text = textPrimary
     
     // MARK: - Gradients (Subtle B&W)
     static let accentGradient = LinearGradient(

@@ -62,7 +62,7 @@ class GoogleSheetsService: ObservableObject {
     // MARK: - Users
     func fetchUsers() async throws -> [User] {
         logDebug("Fetching users from sheet", category: .sheets)
-        let range = "\(usersSheet)!A2:E"
+        let range = "\(usersSheet)!A2:H"  // Extended to include isAI, aiThesis, aiProvider
         let request = try buildAuthenticatedReadRequest(range: range)
         
         Logger.shared.net("GET", "sheets")
@@ -80,51 +80,94 @@ class GoogleSheetsService: ObservableObject {
         
         let users = sheetsResponse.values?.compactMap { row -> User? in
             guard row.count >= 5 else { return nil }
+            // Parse AI fields if present (columns F, G, H)
+            let isAI = row.count > 5 ? (row[5].lowercased() == "true") : false
+            let aiThesis = row.count > 6 && !row[6].isEmpty ? row[6] : nil
+            let aiProvider = row.count > 7 && !row[7].isEmpty ? row[7] : nil
+            
             return User(
                 id: row[0],
                 email: row[1],
                 displayName: row[2],
                 photoURL: row[3].isEmpty ? nil : row[3],
-                createdAt: ISO8601DateFormatter().date(from: row[4]) ?? Date()
+                createdAt: ISO8601DateFormatter().date(from: row[4]) ?? Date(),
+                isAI: isAI,
+                aiThesis: aiThesis,
+                aiProvider: aiProvider
             )
         } ?? []
         
-        logInfo("Fetched \(users.count) users", category: .sheets)
+        logInfo("Fetched \(users.count) users (\(users.filter { $0.isAI }.count) AI players)", category: .sheets)
         return users
     }
     
     func saveUser(_ user: User) async throws {
-        logInfo("Saving user: \(user.displayName) (id: \(user.id))", category: .sheets)
+        logInfo("Saving user: \(user.displayName) (id: \(user.id), isAI: \(user.isAI))", category: .sheets)
         
         // Check if user already exists in sheet - don't duplicate
         let existingUsers = try await fetchUsers()
         if existingUsers.contains(where: { $0.id == user.id }) {
-            logDebug("User already exists in sheet, updating local cache only", category: .sheets)
-            // User already exists, just update local cache
-            if let index = users.firstIndex(where: { $0.id == user.id }) {
-                users[index] = user
-            } else {
-                users.append(user)
-            }
+            logDebug("User already exists in sheet, updating...", category: .sheets)
+            // User exists - update their row
+            try await updateUser(user)
             return
         }
         
         logDebug("New user - appending to sheet", category: .sheets)
-        // New user - append to sheet
+        // New user - append to sheet with AI fields
         let values = [[
             user.id,
             user.email,
             user.displayName,
             user.photoURL ?? "",
-            ISO8601DateFormatter().string(from: user.createdAt)
+            ISO8601DateFormatter().string(from: user.createdAt),
+            user.isAI ? "true" : "false",
+            user.aiThesis ?? "",
+            user.aiProvider ?? ""
         ]]
         
         try await appendRows(sheet: usersSheet, values: values)
         logSuccess("User saved to sheet: \(user.displayName)", category: .sheets)
         
         // Update local cache
-        if !users.contains(where: { $0.id == user.id }) {
+        if let index = users.firstIndex(where: { $0.id == user.id }) {
+            users[index] = user
+        } else {
             users.append(user)
+        }
+    }
+    
+    /// Update an existing user's row (for AI player updates)
+    func updateUser(_ user: User) async throws {
+        // Find the row number for this user
+        let allUsers = try await fetchUsers()
+        guard let rowIndex = allUsers.firstIndex(where: { $0.id == user.id }) else {
+            // User not found, save as new
+            try await saveUser(user)
+            return
+        }
+        
+        // Row index is 0-based, sheet rows start at 2 (row 1 is header)
+        let sheetRow = rowIndex + 2
+        let range = "\(usersSheet)!A\(sheetRow):H\(sheetRow)"
+        
+        let values = [[
+            user.id,
+            user.email,
+            user.displayName,
+            user.photoURL ?? "",
+            ISO8601DateFormatter().string(from: user.createdAt),
+            user.isAI ? "true" : "false",
+            user.aiThesis ?? "",
+            user.aiProvider ?? ""
+        ]]
+        
+        try await updateRows(range: range, values: values)
+        logSuccess("Updated user: \(user.displayName)", category: .sheets)
+        
+        // Update local cache
+        if let index = users.firstIndex(where: { $0.id == user.id }) {
+            users[index] = user
         }
     }
     

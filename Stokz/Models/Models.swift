@@ -7,6 +7,39 @@ struct User: Identifiable, Codable, Equatable {
     let displayName: String
     let photoURL: String?
     let createdAt: Date
+    var isAI: Bool  // True if this is an AI-controlled player
+    var aiThesis: String?  // Investment thesis for AI players (multi-sentence)
+    var aiProvider: String?  // LLM provider for AI players (gemini, openai, anthropic, grok)
+    
+    // Custom decoder to handle missing isAI field in existing data
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        id = try container.decode(String.self, forKey: .id)
+        email = try container.decode(String.self, forKey: .email)
+        displayName = try container.decode(String.self, forKey: .displayName)
+        photoURL = try container.decodeIfPresent(String.self, forKey: .photoURL)
+        createdAt = try container.decode(Date.self, forKey: .createdAt)
+        isAI = try container.decodeIfPresent(Bool.self, forKey: .isAI) ?? false
+        aiThesis = try container.decodeIfPresent(String.self, forKey: .aiThesis)
+        aiProvider = try container.decodeIfPresent(String.self, forKey: .aiProvider)
+    }
+    
+    init(id: String, email: String, displayName: String, photoURL: String?, createdAt: Date, isAI: Bool = false, aiThesis: String? = nil, aiProvider: String? = nil) {
+        self.id = id
+        self.email = email
+        self.displayName = displayName
+        self.photoURL = photoURL
+        self.createdAt = createdAt
+        self.isAI = isAI
+        self.aiThesis = aiThesis
+        self.aiProvider = aiProvider
+    }
+    
+    /// Get the LLM provider enum for this AI player
+    var llmProvider: LLMProvider? {
+        guard isAI, let providerStr = aiProvider else { return nil }
+        return LLMProvider(rawValue: providerStr)
+    }
     
     static func == (lhs: User, rhs: User) -> Bool {
         lhs.id == rhs.id

@@ -327,7 +327,32 @@ class AIService: ObservableObject {
             lastRequestTime = Date()
         }
         
-        switch selectedProvider {
+        // Retry with exponential backoff for rate limits
+        var lastError: Error?
+        for attempt in 0..<3 {
+            do {
+                return try await makeRequest(provider: selectedProvider, system: system, user: user)
+            } catch let error as AIError {
+                if case .httpError(let code, _) = error, code == 429 {
+                    // Rate limited - wait and retry
+                    let delay = Double(pow(2.0, Double(attempt))) * 2.0  // 2s, 4s, 8s
+                    print("⚠️ [AI] Rate limited, retrying in \(delay)s (attempt \(attempt + 1)/3)")
+                    try? await Task.sleep(nanoseconds: UInt64(delay * 1_000_000_000))
+                    lastError = error
+                    continue
+                }
+                throw error
+            } catch {
+                throw error
+            }
+        }
+        
+        // All retries failed
+        throw lastError ?? AIError.invalidResponse
+    }
+    
+    private func makeRequest(provider: LLMProvider, system: String, user: String) async throws -> String {
+        switch provider {
         case .gemini:
             return try await callGemini(system: system, user: user)
         case .openai:

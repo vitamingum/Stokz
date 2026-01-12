@@ -91,6 +91,54 @@ class AIPlayerService: ObservableObject {
         return try parseTradeDecision(response)
     }
     
+    // MARK: - Create AI Player
+    
+    /// Create a new AI player with given thesis and provider
+    /// - Parameters:
+    ///   - name: Display name for the AI player
+    ///   - thesis: Investment thesis (must be at least 20 characters)
+    ///   - provider: LLM provider to use for trading decisions
+    /// - Returns: The created User object representing the AI player
+    func createAIPlayer(
+        name: String,
+        thesis: String,
+        provider: LLMProvider
+    ) async throws -> User {
+        guard !name.isEmpty else {
+            throw AIPlayerError.invalidInput("Name cannot be empty")
+        }
+        guard thesis.count >= 20 else {
+            throw AIPlayerError.invalidInput("Thesis must be at least 20 characters")
+        }
+        
+        // Create AI user with unique ID
+        let aiPlayer = User(
+            id: "ai_\(UUID().uuidString.prefix(8).lowercased())",
+            email: "\(name.lowercased().replacingOccurrences(of: " ", with: "_"))@ai.stokz.app",
+            displayName: name,
+            photoURL: nil,
+            createdAt: Date(),
+            isAI: true,
+            aiThesis: thesis,
+            aiProvider: provider.rawValue,
+            ownerId: AppState.shared.authService.currentUser?.id
+        )
+        
+        // Save to Google Sheets
+        try await AppState.shared.sheetsService.saveUser(aiPlayer)
+        
+        // Create initial portfolio with starting cash
+        let portfolio = Portfolio(
+            id: UUID().uuidString,
+            userId: aiPlayer.id,
+            holdings: [],
+            cashBalance: 100_000 // $100k starting balance
+        )
+        try await AppState.shared.sheetsService.savePortfolio(portfolio)
+        
+        return aiPlayer
+    }
+    
     /// Get multiple stock recommendations for initial portfolio build
     /// Uses TALL BOY screener with map-reduce pattern for quality picks
     func getInitialPortfolio(
@@ -420,6 +468,7 @@ enum AIPlayerError: LocalizedError {
     case rateLimited
     case apiError(Int, String)
     case invalidResponse(String)
+    case invalidInput(String)
     
     var errorDescription: String? {
         switch self {
@@ -435,6 +484,8 @@ enum AIPlayerError: LocalizedError {
             return "API error \(code): \(message)"
         case .invalidResponse(let detail):
             return "Invalid response: \(detail)"
+        case .invalidInput(let detail):
+            return "Invalid input: \(detail)"
         }
     }
 }

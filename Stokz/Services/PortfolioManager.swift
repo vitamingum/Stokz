@@ -12,12 +12,14 @@ class PortfolioManager: ObservableObject {
     static let initialCash: Double = 100_000
     
     // MARK: - Add Stock to Portfolio
-    /// When adding a new stock, rebalance portfolio equally across all stocks at current market prices
+    /// When adding a new stock:
+    /// 1. If cash available, use cash to buy the new stock
+    /// 2. If no cash, sell $5000 evenly from existing stocks to fund the purchase
     /// - Parameters:
     ///   - symbol: Stock symbol to add
     ///   - portfolio: Current portfolio
     ///   - prices: Current market prices
-    /// - Returns: Updated portfolio with new stock and rebalanced holdings
+    /// - Returns: Updated portfolio with new stock (existing positions preserved)
     func addStock(symbol: String, to portfolio: Portfolio, prices: [String: Double]) -> Portfolio {
         logInfo("PortfolioManager.addStock called for \(symbol)", category: .portfolio)
         logDebug("Portfolio has \(portfolio.holdings.count) holdings, cash: $\(String(format: "%.2f", portfolio.cashBalance)), prices dict has \(prices.count) entries", category: .portfolio)
@@ -38,36 +40,90 @@ class PortfolioManager: ObservableObject {
         
         logDebug("Price for \(symbol): $\(String(format: "%.2f", currentPrice))", category: .portfolio)
         
-        // Calculate total portfolio value (totalValue already includes holdings + cash)
-        // If brand new (empty and no cash set), use initial cash
-        let totalValue = portfolio.totalValue(prices: prices)
+        let purchaseAmount: Double = 5000.0
+        var amountToBuy: Double = 0
         
-        logDebug("Total portfolio value: $\(String(format: "%.2f", totalValue)), Cash: $\(String(format: "%.2f", portfolio.cashBalance))", category: .portfolio)
-        
-        // New equal allocation for each stock (including the new one)
-        let newStockCount = portfolio.holdings.count + 1
-        let equalAllocation = totalValue / Double(newStockCount)
-        logDebug("Equal allocation per stock: $\(String(format: "%.2f", equalAllocation)) for \(newStockCount) stocks", category: .portfolio)
-        
-        // Rebalance existing holdings
-        var newHoldings: [PortfolioHolding] = []
-        
-        for holding in portfolio.holdings {
-            let price = prices[holding.symbol] ?? holding.entryPrice
-            let newShares = equalAllocation / price
+        // CASE 1: Use cash if available
+        if portfolio.cashBalance >= purchaseAmount {
+            amountToBuy = purchaseAmount
+            updatedPortfolio.cashBalance -= purchaseAmount
+            logInfo("Using $\(String(format: "%.2f", purchaseAmount)) cash to buy \(symbol). Remaining cash: $\(String(format: "%.2f", updatedPortfolio.cashBalance))", category: .portfolio)
+        } else if portfolio.cashBalance > 0 {
+            // Use all available cash + sell from stocks for the rest
+            let cashPortion = portfolio.cashBalance
+            let sellPortion = purchaseAmount - cashPortion
+            amountToBuy = purchaseAmount
+            updatedPortfolio.cashBalance = 0
             
-            let updatedHolding = PortfolioHolding(
-                id: holding.id,
-                symbol: holding.symbol,
-                shares: newShares,
-                entryPrice: price, // Update entry price to current (rebalance)
-                entryDate: Date()
-            )
-            newHoldings.append(updatedHolding)
+            // Sell evenly from existing holdings
+            if !portfolio.holdings.isEmpty {
+                let sellPerStock = sellPortion / Double(portfolio.holdings.count)
+                var newHoldings: [PortfolioHolding] = []
+                
+                for holding in portfolio.holdings {
+                    let price = prices[holding.symbol] ?? holding.entryPrice
+                    let currentValue = holding.currentValue(at: price)
+                    let newValue = max(0, currentValue - sellPerStock)
+                    
+                    if newValue > 0 {
+                        let newShares = newValue / price
+                        let updatedHolding = PortfolioHolding(
+                            id: holding.id,
+                            symbol: holding.symbol,
+                            shares: newShares,
+                            entryPrice: holding.entryPrice, // Preserve original entry price
+                            entryDate: holding.entryDate
+                        )
+                        newHoldings.append(updatedHolding)
+                        logDebug("Reduced \(holding.symbol) by $\(String(format: "%.2f", sellPerStock))", category: .portfolio)
+                    } else {
+                        logDebug("Sold all of \(holding.symbol)", category: .portfolio)
+                    }
+                }
+                updatedPortfolio.holdings = newHoldings
+            }
+            logInfo("Used $\(String(format: "%.2f", cashPortion)) cash + sold $\(String(format: "%.2f", sellPortion)) from stocks to buy \(symbol)", category: .portfolio)
+        } else {
+            // CASE 2: No cash - sell $5000 evenly from existing stocks
+            if portfolio.holdings.isEmpty {
+                logError("Cannot add stock: no cash and no existing holdings", category: .portfolio)
+                return portfolio
+            }
+            
+            let sellPerStock = purchaseAmount / Double(portfolio.holdings.count)
+            var newHoldings: [PortfolioHolding] = []
+            var actualSellTotal: Double = 0
+            
+            for holding in portfolio.holdings {
+                let price = prices[holding.symbol] ?? holding.entryPrice
+                let currentValue = holding.currentValue(at: price)
+                let actualSell = min(sellPerStock, currentValue) // Can't sell more than we have
+                let newValue = currentValue - actualSell
+                actualSellTotal += actualSell
+                
+                if newValue > 0 {
+                    let newShares = newValue / price
+                    let updatedHolding = PortfolioHolding(
+                        id: holding.id,
+                        symbol: holding.symbol,
+                        shares: newShares,
+                        entryPrice: holding.entryPrice, // Preserve original entry price
+                        entryDate: holding.entryDate
+                    )
+                    newHoldings.append(updatedHolding)
+                    logDebug("Reduced \(holding.symbol) by $\(String(format: "%.2f", actualSell))", category: .portfolio)
+                } else {
+                    logDebug("Sold all of \(holding.symbol)", category: .portfolio)
+                }
+            }
+            
+            updatedPortfolio.holdings = newHoldings
+            amountToBuy = actualSellTotal
+            logInfo("Sold $\(String(format: "%.2f", actualSellTotal)) evenly from \(portfolio.holdings.count) stocks to buy \(symbol)", category: .portfolio)
         }
         
-        // Add new stock with equal allocation
-        let newShares = equalAllocation / currentPrice
+        // Add new stock
+        let newShares = amountToBuy / currentPrice
         let newHolding = PortfolioHolding(
             id: UUID().uuidString,
             symbol: symbol,
@@ -75,13 +131,10 @@ class PortfolioManager: ObservableObject {
             entryPrice: currentPrice,
             entryDate: Date()
         )
-        newHoldings.append(newHolding)
-        
-        updatedPortfolio.holdings = newHoldings
-        updatedPortfolio.cashBalance = 0 // All cash is now invested
+        updatedPortfolio.holdings.append(newHolding)
         updatedPortfolio.lastUpdated = Date()
         
-        logSuccess("Added \(symbol) to portfolio. Now has \(newHoldings.count) holdings", category: .portfolio)
+        logSuccess("Added \(symbol) to portfolio: \(String(format: "%.4f", newShares)) shares @ $\(String(format: "%.2f", currentPrice)) = $\(String(format: "%.2f", amountToBuy)). Now has \(updatedPortfolio.holdings.count) holdings", category: .portfolio)
         
         return updatedPortfolio
     }

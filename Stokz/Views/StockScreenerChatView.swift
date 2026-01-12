@@ -43,6 +43,11 @@ struct StockScreenerChatView: View {
             .padding(.top, 16)
             .padding(.bottom, 8)
             
+            // Progress bar during screening
+            if screener.isScreening {
+                progressBarView
+            }
+            
             // Live feed during screening
             if screener.isScreening {
                 liveFeedView
@@ -99,6 +104,90 @@ struct StockScreenerChatView: View {
             }
         }
         .background(Color.black)
+    }
+    
+    // MARK: - Progress Bar View
+    
+    private var progressBarView: some View {
+        VStack(spacing: 6) {
+            // Progress info
+            HStack {
+                Text(progressPhase)
+                    .font(.system(size: 11, weight: .bold))
+                    .foregroundColor(Color(white: 0.5))
+                
+                Spacer()
+                
+                Text(progressPercent)
+                    .font(.system(size: 11, weight: .black, design: .monospaced))
+                    .foregroundColor(.white)
+            }
+            
+            // The bar
+            GeometryReader { geo in
+                ZStack(alignment: .leading) {
+                    // Background
+                    RoundedRectangle(cornerRadius: 4)
+                        .fill(Color(white: 0.15))
+                    
+                    // Fill
+                    RoundedRectangle(cornerRadius: 4)
+                        .fill(
+                            LinearGradient(
+                                colors: [Color.green.opacity(0.8), Color.green],
+                                startPoint: .leading,
+                                endPoint: .trailing
+                            )
+                        )
+                        .frame(width: geo.size.width * progressFraction)
+                        .animation(.easeOut(duration: 0.3), value: progressFraction)
+                }
+            }
+            .frame(height: 8)
+        }
+        .padding(.horizontal)
+        .padding(.bottom, 8)
+    }
+    
+    private var progressFraction: CGFloat {
+        switch screener.progress {
+        case .idle:
+            return 0
+        case .generatingCriteria:
+            return 0.05  // Just starting
+        case .evaluating(let completed, let total):
+            guard total > 0 else { return 0 }
+            // Evaluating is 5% to 90%
+            return 0.05 + (CGFloat(completed) / CGFloat(total)) * 0.85
+        case .finalAnalysis:
+            return 0.95  // Almost done
+        case .complete:
+            return 1.0
+        case .error:
+            return 0
+        }
+    }
+    
+    private var progressPhase: String {
+        switch screener.progress {
+        case .idle:
+            return ""
+        case .generatingCriteria:
+            return "🧠 Analyzing criteria..."
+        case .evaluating:
+            return "🔍 Screening stocks..."
+        case .finalAnalysis:
+            return "🏆 Picking winners..."
+        case .complete:
+            return "✅ Complete"
+        case .error:
+            return "❌ Error"
+        }
+    }
+    
+    private var progressPercent: String {
+        let pct = Int(progressFraction * 100)
+        return "\(pct)%"
     }
     
     // MARK: - Live Feed View

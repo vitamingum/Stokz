@@ -38,6 +38,8 @@
 		A1000029 /* StockDiscoveryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000029 /* StockDiscoveryView.swift */; };
 		A1000030 /* GeminiService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000030 /* GeminiService.swift */; };
 		A1000031 /* Secrets.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000031 /* Secrets.swift */; };
+		A1000032 /* StockScreenerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000032 /* StockScreenerService.swift */; };
+		A1000033 /* StockScreenerChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000033 /* StockScreenerChatView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -87,6 +89,9 @@
 		A2000029 /* StockDiscoveryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StockDiscoveryView.swift; sourceTree = "<group>"; };
 		A2000030 /* GeminiService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeminiService.swift; sourceTree = "<group>"; };
 		A2000031 /* Secrets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Secrets.swift; sourceTree = "<group>"; };
+		A2000032 /* StockScreenerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StockScreenerService.swift; sourceTree = "<group>"; };
+		A2000033 /* StockScreenerChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StockScreenerChatView.swift; sourceTree = "<group>"; };
+		A9000001 /* Development.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Development.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -119,6 +124,7 @@
 				A4000004 /* Services */,
 				A4000005 /* Views */,
 				A4000006 /* Components */,
+				A4000008 /* Config */,
 				A2000020 /* Extensions.swift */,
 				A2000003 /* Assets.xcassets */,
 				A2000021 /* Info.plist */,
@@ -154,6 +160,7 @@
 				A2000028 /* StockDataService.swift */,
 				A2000030 /* GeminiService.swift */,
 				A2000031 /* Secrets.swift */,
+				A2000032 /* StockScreenerService.swift */,
 				4F4235A1D6F4CE448102C357 /* BugReportService.swift */,
 				78037C261E320548EF3AA623 /* StockScreenerService.swift */,
 			);
@@ -173,6 +180,7 @@
 				A2000018 /* UserPortfolioView.swift */,
 				A2000024 /* SettingsView.swift */,
 				A2000029 /* StockDiscoveryView.swift */,
+				A2000033 /* StockScreenerChatView.swift */,
 				645CB82A3A64EAD65469C31D /* BugReportView.swift */,
 				6FBA77F0C2D1171A5178869B /* StockScreenerChatView.swift */,
 			);
@@ -193,6 +201,14 @@
 			children = (
 			);
 			path = Frameworks;
+			sourceTree = "<group>";
+		};
+		A4000008 /* Config */ = {
+			isa = PBXGroup;
+			children = (
+				A9000001 /* Development.xcconfig */,
+			);
+			path = Config;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -291,6 +307,8 @@
 				A1000029 /* StockDiscoveryView.swift in Sources */,
 				A1000030 /* GeminiService.swift in Sources */,
 				A1000031 /* Secrets.swift in Sources */,
+				A1000032 /* StockScreenerService.swift in Sources */,
+				A1000033 /* StockScreenerChatView.swift in Sources */,
 				71AAF279835579DA0DD811E2 /* BugReportService.swift in Sources */,
 				2574F619C1CE229C0FDCBE53 /* BugReportView.swift in Sources */,
 				5BE6905729CB610AD14EE906 /* StockScreenerChatView.swift in Sources */,
@@ -422,13 +440,13 @@
 		};
 		A8000003 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = A9000001 /* Development.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 15;
 				DEVELOPMENT_ASSET_PATHS = "";
-				DEVELOPMENT_TEAM = H3Q7V9JM7D;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Stokz/Info.plist;
@@ -452,13 +470,13 @@
 		};
 		A8000004 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = A9000001 /* Development.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 15;
 				DEVELOPMENT_ASSET_PATHS = "";
-				DEVELOPMENT_TEAM = H3Q7V9JM7D;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Stokz/Info.plist;

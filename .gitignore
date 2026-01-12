@@ -32,3 +32,6 @@ fastlane/test_output
 *.p12
 *.pem
 Secrets.swift
+
+# Local dev config (team-specific)
+Development.xcconfig

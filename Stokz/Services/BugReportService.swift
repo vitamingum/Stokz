@@ -32,12 +32,30 @@ struct BugReport: Codable {
         self.title = title
         self.description = description
         self.severity = severity
-        self.screenshotData = screenshot?.jpegData(compressionQuality: 0.5)?.base64EncodedString()
+        // Compress screenshot heavily and resize to fit in Google Sheets cell limit (50k chars)
+        self.screenshotData = BugReport.compressScreenshot(screenshot)
         self.deviceInfo = BugReport.getDeviceInfo()
         self.appVersion = BugReport.getAppVersion()
         self.sessionSummary = sessionSummary
-        self.recentLogs = recentLogs
+        // Truncate logs to fit in cell limit
+        self.recentLogs = String(recentLogs.prefix(40000))
         self.timestamp = Date()
+    }
+    
+    private static func compressScreenshot(_ image: UIImage?) -> String? {
+        guard let image = image else { return nil }
+        // Resize to max 400px wide to reduce size
+        let maxWidth: CGFloat = 400
+        let scale = min(maxWidth / image.size.width, 1.0)
+        let newSize = CGSize(width: image.size.width * scale, height: image.size.height * scale)
+        
+        UIGraphicsBeginImageContextWithOptions(newSize, false, 1.0)
+        image.draw(in: CGRect(origin: .zero, size: newSize))
+        let resized = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        // Compress to JPEG with low quality
+        return resized?.jpegData(compressionQuality: 0.3)?.base64EncodedString()
     }
     
     private static func getDeviceInfo() -> String {

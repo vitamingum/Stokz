@@ -4,7 +4,9 @@ import SwiftUI
 struct SettingsView: View {
     @EnvironmentObject var appState: AppState
     @StateObject private var logger = Logger.shared
+    @StateObject private var aiService = AIService.shared
     @State private var showDebugConsole = false
+    @State private var apiKeyInput: String = ""
     
     var body: some View {
         NavigationStack {
@@ -15,6 +17,9 @@ struct SettingsView: View {
                     VStack(spacing: 24) {
                         // Account Section  
                         accountSection
+                        
+                        // AI Section
+                        aiSection
                         
                         // About Section
                         aboutSection
@@ -36,6 +41,9 @@ struct SettingsView: View {
             }
             .sheet(isPresented: $showDebugConsole) {
                 DebugConsoleView()
+            }
+            .onAppear {
+                apiKeyInput = aiService.apiKey
             }
         }
     }
@@ -76,6 +84,98 @@ struct SettingsView: View {
                     }
                 }
             }
+        }
+    }
+    
+    // MARK: - AI Section
+    private var aiSection: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            sectionHeader("AI PROVIDER", icon: "brain")
+            
+            VStack(spacing: 12) {
+                // Provider picker
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("PROVIDER")
+                        .font(.system(size: 10, weight: .bold))
+                        .foregroundColor(Color(white: 0.5))
+                    
+                    HStack(spacing: 8) {
+                        ForEach(LLMProvider.allCases, id: \.self) { provider in
+                            Button(action: {
+                                aiService.selectedProvider = provider
+                                aiService.loadKeyForCurrentProvider()
+                                apiKeyInput = aiService.apiKey
+                            }) {
+                                Text(provider.displayName)
+                                    .font(.system(size: 11, weight: .bold))
+                                    .padding(.horizontal, 12)
+                                    .padding(.vertical, 8)
+                                    .background(aiService.selectedProvider == provider ? Color.white : Color(white: 0.15))
+                                    .foregroundColor(aiService.selectedProvider == provider ? .black : .white)
+                                    .cornerRadius(6)
+                            }
+                        }
+                    }
+                }
+                
+                // API Key input
+                VStack(alignment: .leading, spacing: 8) {
+                    HStack {
+                        Text("API KEY")
+                            .font(.system(size: 10, weight: .bold))
+                            .foregroundColor(Color(white: 0.5))
+                        Spacer()
+                        if aiService.isConfigured {
+                            Image(systemName: "checkmark.circle.fill")
+                                .foregroundColor(.green)
+                                .font(.system(size: 12))
+                        }
+                    }
+                    
+                    HStack {
+                        SecureField(aiService.selectedProvider.apiKeyPlaceholder, text: $apiKeyInput)
+                            .font(.system(size: 14, weight: .medium, design: .monospaced))
+                            .foregroundColor(.white)
+                            .autocapitalization(.none)
+                            .disableAutocorrection(true)
+                        
+                        if !apiKeyInput.isEmpty && apiKeyInput != aiService.apiKey {
+                            Button(action: {
+                                aiService.apiKey = apiKeyInput
+                            }) {
+                                Text("SAVE")
+                                    .font(.system(size: 10, weight: .black))
+                                    .padding(.horizontal, 10)
+                                    .padding(.vertical, 6)
+                                    .background(Color.green)
+                                    .foregroundColor(.black)
+                                    .cornerRadius(4)
+                            }
+                        }
+                    }
+                    .padding()
+                    .background(Color(white: 0.1))
+                    .cornerRadius(8)
+                }
+                
+                // Get API key link
+                Button(action: {
+                    if let url = URL(string: aiService.selectedProvider.helpURL) {
+                        UIApplication.shared.open(url)
+                    }
+                }) {
+                    HStack {
+                        Text("Get \(aiService.selectedProvider.displayName) API Key")
+                            .font(.system(size: 11, weight: .medium))
+                        Image(systemName: "arrow.up.right")
+                            .font(.system(size: 10))
+                    }
+                    .foregroundColor(Color(white: 0.5))
+                }
+            }
+            .padding()
+            .background(Color(white: 0.1))
+            .cornerRadius(8)
         }
     }
     

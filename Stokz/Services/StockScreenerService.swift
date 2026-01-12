@@ -124,7 +124,7 @@ class StockScreenerService: ObservableObject {
         """
         
         do {
-            let response = try await GeminiService.shared.chat(
+            let response = try await AIService.shared.chat(
                 system: "You are a stock analyst. Write structured bullet-point analyses. Use • for main bullets and - for sub-bullets. No markdown formatting, no asterisks.",
                 user: prompt
             )
@@ -226,7 +226,7 @@ class StockScreenerService: ObservableObject {
         If none match well, give all low scores. Return JSON only: [{"ticker": "X", "score": 0-10, "reason": "brief"}]
         """
         
-        let response = try await GeminiService.shared.chat(
+        let response = try await AIService.shared.chat(
             system: "You are a stock analyst with deep knowledge of public companies. Use your training knowledge to evaluate stocks. Return only valid JSON array.",
             user: prompt
         )
@@ -253,7 +253,7 @@ class StockScreenerService: ObservableObject {
         Return JSON array only: [{"ticker": "X", "score": 85-100, "thesis": "Brief reason (max 15 words)"}]
         """
         
-        let response = try await GeminiService.shared.chat(
+        let response = try await AIService.shared.chat(
             system: "You are a stock analyst. Respect the user's intent. Return only valid JSON array.",
             user: prompt
         )

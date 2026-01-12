@@ -40,6 +40,7 @@
 		A1000031 /* Secrets.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000031 /* Secrets.swift */; };
 		A1000032 /* StockScreenerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000032 /* StockScreenerService.swift */; };
 		A1000033 /* StockScreenerChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000033 /* StockScreenerChatView.swift */; };
+		ACADB3AC3C5307E2CFDF9C0A /* AIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C8E62F0FC3E272BC075DCEA /* AIService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -60,6 +61,7 @@
 		645CB82A3A64EAD65469C31D /* BugReportView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = BugReportView.swift; sourceTree = "<group>"; };
 		6FBA77F0C2D1171A5178869B /* StockScreenerChatView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = StockScreenerChatView.swift; sourceTree = "<group>"; };
 		78037C261E320548EF3AA623 /* StockScreenerService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = StockScreenerService.swift; sourceTree = "<group>"; };
+		9C8E62F0FC3E272BC075DCEA /* AIService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AIService.swift; sourceTree = "<group>"; };
 		A2000000 /* Stokz.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Stokz.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A2000001 /* StokzApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StokzApp.swift; sourceTree = "<group>"; };
 		A2000002 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -163,6 +165,7 @@
 				A2000032 /* StockScreenerService.swift */,
 				4F4235A1D6F4CE448102C357 /* BugReportService.swift */,
 				78037C261E320548EF3AA623 /* StockScreenerService.swift */,
+				9C8E62F0FC3E272BC075DCEA /* AIService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -313,6 +316,7 @@
 				2574F619C1CE229C0FDCBE53 /* BugReportView.swift in Sources */,
 				5BE6905729CB610AD14EE906 /* StockScreenerChatView.swift in Sources */,
 				192F52A1E3BF20C45B444BF1 /* StockScreenerService.swift in Sources */,
+				ACADB3AC3C5307E2CFDF9C0A /* AIService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

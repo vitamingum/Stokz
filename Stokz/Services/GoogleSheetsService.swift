@@ -62,7 +62,7 @@ class GoogleSheetsService: ObservableObject {
     // MARK: - Users
     func fetchUsers() async throws -> [User] {
         logDebug("Fetching users from sheet", category: .sheets)
-        let range = "\(usersSheet)!A2:H"  // Extended to include isAI, aiThesis, aiProvider
+        let range = "\(usersSheet)!A2:I"  // Extended to include ownerId
         let request = try buildAuthenticatedReadRequest(range: range)
         
         Logger.shared.net("GET", "sheets")
@@ -80,10 +80,11 @@ class GoogleSheetsService: ObservableObject {
         
         let users = sheetsResponse.values?.compactMap { row -> User? in
             guard row.count >= 5 else { return nil }
-            // Parse AI fields if present (columns F, G, H)
+            // Parse AI fields if present (columns F, G, H, I)
             let isAI = row.count > 5 ? (row[5].lowercased() == "true") : false
             let aiThesis = row.count > 6 && !row[6].isEmpty ? row[6] : nil
             let aiProvider = row.count > 7 && !row[7].isEmpty ? row[7] : nil
+            let ownerId = row.count > 8 && !row[8].isEmpty ? row[8] : nil
             
             return User(
                 id: row[0],
@@ -93,7 +94,8 @@ class GoogleSheetsService: ObservableObject {
                 createdAt: ISO8601DateFormatter().date(from: row[4]) ?? Date(),
                 isAI: isAI,
                 aiThesis: aiThesis,
-                aiProvider: aiProvider
+                aiProvider: aiProvider,
+                ownerId: ownerId
             )
         } ?? []
         
@@ -123,7 +125,8 @@ class GoogleSheetsService: ObservableObject {
             ISO8601DateFormatter().string(from: user.createdAt),
             user.isAI ? "true" : "false",
             user.aiThesis ?? "",
-            user.aiProvider ?? ""
+            user.aiProvider ?? "",
+            user.ownerId ?? ""
         ]]
         
         try await appendRows(sheet: usersSheet, values: values)
@@ -149,7 +152,7 @@ class GoogleSheetsService: ObservableObject {
         
         // Row index is 0-based, sheet rows start at 2 (row 1 is header)
         let sheetRow = rowIndex + 2
-        let range = "\(usersSheet)!A\(sheetRow):H\(sheetRow)"
+        let range = "\(usersSheet)!A\(sheetRow):I\(sheetRow)"
         
         let values = [[
             user.id,
@@ -159,7 +162,8 @@ class GoogleSheetsService: ObservableObject {
             ISO8601DateFormatter().string(from: user.createdAt),
             user.isAI ? "true" : "false",
             user.aiThesis ?? "",
-            user.aiProvider ?? ""
+            user.aiProvider ?? "",
+            user.ownerId ?? ""
         ]]
         
         try await updateRows(range: range, values: values)

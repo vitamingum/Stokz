@@ -10,6 +10,7 @@ struct User: Identifiable, Codable, Equatable {
     var isAI: Bool  // True if this is an AI-controlled player
     var aiThesis: String?  // Investment thesis for AI players (multi-sentence)
     var aiProvider: String?  // LLM provider for AI players (gemini, openai, anthropic, grok)
+    var ownerId: String?  // ID of the human user who created this AI player
     
     // Custom decoder to handle missing isAI field in existing data
     init(from decoder: Decoder) throws {
@@ -22,9 +23,10 @@ struct User: Identifiable, Codable, Equatable {
         isAI = try container.decodeIfPresent(Bool.self, forKey: .isAI) ?? false
         aiThesis = try container.decodeIfPresent(String.self, forKey: .aiThesis)
         aiProvider = try container.decodeIfPresent(String.self, forKey: .aiProvider)
+        ownerId = try container.decodeIfPresent(String.self, forKey: .ownerId)
     }
     
-    init(id: String, email: String, displayName: String, photoURL: String?, createdAt: Date, isAI: Bool = false, aiThesis: String? = nil, aiProvider: String? = nil) {
+    init(id: String, email: String, displayName: String, photoURL: String?, createdAt: Date, isAI: Bool = false, aiThesis: String? = nil, aiProvider: String? = nil, ownerId: String? = nil) {
         self.id = id
         self.email = email
         self.displayName = displayName
@@ -33,6 +35,7 @@ struct User: Identifiable, Codable, Equatable {
         self.isAI = isAI
         self.aiThesis = aiThesis
         self.aiProvider = aiProvider
+        self.ownerId = ownerId
     }
     
     /// Get the LLM provider enum for this AI player

@@ -4,11 +4,26 @@ import SwiftUI
 struct AIPlayersView: View {
     @EnvironmentObject var appState: AppState
     @StateObject private var aiPlayerService = AIPlayerService.shared
+    @Environment(\.scenePhase) private var scenePhase
     
     @State private var showingCreateSheet = false
     @State private var aiPlayers: [User] = []
     @State private var isLoading = false
     @State private var errorMessage: String?
+    @State private var isAutoTrading = false
+    @State private var lastTradeResults: [String: String] = [:]  // playerId -> result message
+    
+    /// Current user's AI players only (for auto-trading)
+    private var myAIPlayers: [User] {
+        guard let currentUser = appState.authService.currentUser else { return [] }
+        return aiPlayers.filter { $0.ownerId == currentUser.id }
+    }
+    
+    /// Check if current user owns this AI player
+    private func isOwned(_ player: User) -> Bool {
+        guard let currentUser = appState.authService.currentUser else { return false }
+        return player.ownerId == currentUser.id
+    }
     
     var body: some View {
         NavigationStack {
@@ -19,6 +34,11 @@ struct AIPlayersView: View {
                     VStack(spacing: 20) {
                         // Header
                         headerSection
+                        
+                        // Auto-trading status
+                        if isAutoTrading {
+                            autoTradingBanner
+                        }
                         
                         if isLoading {
                             ProgressView()
@@ -56,6 +76,14 @@ struct AIPlayersView: View {
             }
             .refreshable {
                 await loadAIPlayers()
+            }
+            .onChange(of: scenePhase) { _, newPhase in
+                if newPhase == .active {
+                    // Auto-trade when app comes to foreground
+                    Task {
+                        await autoTradeAllPlayers()
+                    }
+                }
             }
         }
     }
@@ -111,15 +139,60 @@ struct AIPlayersView: View {
     
     private var aiPlayersList: some View {
         LazyVStack(spacing: 12) {
-            ForEach(aiPlayers) { player in
-                AIPlayerCard(player: player) {
-                    // Trigger a trade for this AI
-                    Task {
-                        await triggerTrade(for: player)
+            // My AI Players section
+            if !myAIPlayers.isEmpty {
+                Text("MY AI PLAYERS")
+                    .font(.caption)
+                    .fontWeight(.bold)
+                    .foregroundColor(Theme.neonGreen)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                
+                ForEach(myAIPlayers) { player in
+                    AIPlayerCard(
+                        player: player,
+                        isOwned: true,
+                        lastTradeResult: lastTradeResults[player.id]
+                    ) {
+                        Task { await triggerTrade(for: player) }
                     }
                 }
             }
+            
+            // Other players' AI Players
+            let otherAIPlayers = aiPlayers.filter { !isOwned($0) }
+            if !otherAIPlayers.isEmpty {
+                Text("OTHER AI PLAYERS")
+                    .font(.caption)
+                    .fontWeight(.bold)
+                    .foregroundColor(Theme.textSecondary)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.top, myAIPlayers.isEmpty ? 0 : 16)
+                
+                ForEach(otherAIPlayers) { player in
+                    AIPlayerCard(
+                        player: player,
+                        isOwned: false,
+                        lastTradeResult: nil
+                    ) { }
+                }
+            }
         }
+    }
+    
+    private var autoTradingBanner: some View {
+        HStack {
+            ProgressView()
+                .tint(Theme.neonGreen)
+                .scaleEffect(0.8)
+            Text("AI PLAYERS ARE TRADING...")
+                .font(.caption)
+                .fontWeight(.bold)
+                .foregroundColor(Theme.neonGreen)
+        }
+        .frame(maxWidth: .infinity)
+        .padding()
+        .background(Theme.neonGreen.opacity(0.1))
+        .cornerRadius(12)
     }
     
     // MARK: - Actions
@@ -133,7 +206,7 @@ struct AIPlayersView: View {
     
     private func triggerTrade(for player: User) async {
         guard let portfolio = appState.sheetsService.portfolios[player.id] else {
-            errorMessage = "No portfolio found for \(player.displayName)"
+            lastTradeResults[player.id] = "No portfolio found"
             return
         }
         
@@ -148,6 +221,7 @@ struct AIPlayersView: View {
             print("🤖 [\(player.displayName)] Decision: \(decision.action.rawValue) \(decision.symbol ?? "") - \(decision.reasoning)")
             
             // Execute the trade
+            var resultMessage = ""
             if let symbol = decision.symbol {
                 switch decision.action {
                 case .buy:
@@ -157,6 +231,7 @@ struct AIPlayersView: View {
                         prices: prices
                     )
                     try await appState.sheetsService.savePortfolio(updatedPortfolio)
+                    resultMessage = "Bought \(symbol)"
                     
                 case .sell:
                     let updatedPortfolio = PortfolioManager.shared.removeStock(
@@ -165,14 +240,44 @@ struct AIPlayersView: View {
                         prices: prices
                     )
                     try await appState.sheetsService.savePortfolio(updatedPortfolio)
+                    resultMessage = "Sold \(symbol)"
                     
                 case .hold:
-                    break
+                    resultMessage = "Holding"
                 }
+            } else {
+                resultMessage = "Holding"
+            }
+            
+            await MainActor.run {
+                lastTradeResults[player.id] = resultMessage
             }
         } catch {
-            errorMessage = error.localizedDescription
+            await MainActor.run {
+                lastTradeResults[player.id] = "Error: \(error.localizedDescription)"
+            }
             print("❌ AI trade error: \(error)")
+        }
+    }
+    
+    /// Auto-trade all AI players owned by the current user
+    private func autoTradeAllPlayers() async {
+        guard !myAIPlayers.isEmpty else { return }
+        
+        await MainActor.run {
+            isAutoTrading = true
+            lastTradeResults = [:]
+        }
+        
+        // Trade each AI player sequentially to avoid rate limits
+        for player in myAIPlayers {
+            await triggerTrade(for: player)
+            // Small delay between trades to avoid rate limiting
+            try? await Task.sleep(nanoseconds: 500_000_000)  // 0.5 seconds
+        }
+        
+        await MainActor.run {
+            isAutoTrading = false
         }
     }
 }
@@ -181,6 +286,8 @@ struct AIPlayersView: View {
 
 struct AIPlayerCard: View {
     let player: User
+    var isOwned: Bool = true
+    var lastTradeResult: String?
     let onTrade: () -> Void
     
     @EnvironmentObject var appState: AppState
@@ -262,34 +369,50 @@ struct AIPlayerCard: View {
                 }
             }
             
-            // Trade Button
-            Button {
-                isTrading = true
-                onTrade()
-                // Reset after delay
-                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                    isTrading = false
-                }
-            } label: {
+            // Last trade result
+            if let result = lastTradeResult {
                 HStack {
-                    if isTrading {
-                        ProgressView()
-                            .tint(Theme.background)
-                            .scaleEffect(0.8)
-                    } else {
-                        Image(systemName: "bolt.fill")
-                    }
-                    Text(isTrading ? "THINKING..." : "MAKE A TRADE")
+                    Image(systemName: "checkmark.circle.fill")
+                        .font(.caption)
+                        .foregroundColor(Theme.neonGreen)
+                    Text(result)
+                        .font(.caption)
+                        .fontWeight(.medium)
+                        .foregroundColor(Theme.neonGreen)
                 }
-                .font(.caption)
-                .fontWeight(.bold)
-                .foregroundColor(Theme.background)
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, 10)
-                .background(providerColor)
-                .cornerRadius(8)
+                .transition(.opacity)
             }
-            .disabled(isTrading)
+            
+            // Trade Button (only for owned AI players)
+            if isOwned {
+                Button {
+                    isTrading = true
+                    onTrade()
+                    // Reset after delay
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                        isTrading = false
+                    }
+                } label: {
+                    HStack {
+                        if isTrading {
+                            ProgressView()
+                                .tint(Theme.background)
+                                .scaleEffect(0.8)
+                        } else {
+                            Image(systemName: "bolt.fill")
+                        }
+                        Text(isTrading ? "THINKING..." : "MAKE A TRADE")
+                    }
+                    .font(.caption)
+                    .fontWeight(.bold)
+                    .foregroundColor(Theme.background)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 10)
+                    .background(providerColor)
+                    .cornerRadius(8)
+                }
+                .disabled(isTrading)
+            }
         }
         .padding()
         .background(Theme.cardBackground)
@@ -497,12 +620,16 @@ struct CreateAIPlayerView: View {
     
     private func createAIPlayer() async {
         guard isValid else { return }
+        guard let currentUser = appState.authService.currentUser else {
+            errorMessage = "You must be logged in to create an AI player"
+            return
+        }
         
         isCreating = true
         errorMessage = nil
         
         do {
-            // Create the AI user
+            // Create the AI user owned by the current user
             let aiUser = User(
                 id: "ai_\(UUID().uuidString.prefix(8))",
                 email: "ai@stokz.app",
@@ -511,7 +638,8 @@ struct CreateAIPlayerView: View {
                 createdAt: Date(),
                 isAI: true,
                 aiThesis: thesis,
-                aiProvider: selectedProvider.rawValue
+                aiProvider: selectedProvider.rawValue,
+                ownerId: currentUser.id  // Set owner to current user
             )
             
             // Save to Google Sheets

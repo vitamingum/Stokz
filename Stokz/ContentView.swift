@@ -7,6 +7,8 @@ struct ContentView: View {
     @StateObject private var bugReportService = BugReportService.shared
     @StateObject private var aiService = AIService.shared
     @AppStorage("hasCompletedAPIKeySetup") private var hasCompletedAPIKeySetup = false
+    @State private var showInvalidKeyToast = false
+    @State private var invalidKeyMessage = ""
     
     var body: some View {
         Group {
@@ -24,6 +26,9 @@ struct ContentView: View {
                     LoadingView(message: "Loading portfolio...")
                 } else {
                     mainTabView
+                        .onAppear {
+                            validateAPIKeyOnStart()
+                        }
                 }
             } else {
                 LoginView()
@@ -36,6 +41,40 @@ struct ContentView: View {
         .sheet(isPresented: $bugReportService.isShowingBugReport) {
             BugReportView()
                 .environmentObject(appState)
+        }
+        .overlay(alignment: .top) {
+            if showInvalidKeyToast {
+                InvalidAPIKeyToast(message: invalidKeyMessage)
+                    .transition(.move(edge: .top).combined(with: .opacity))
+                    .onTapGesture {
+                        // Navigate to settings
+                        selectedTab = 4
+                        withAnimation { showInvalidKeyToast = false }
+                    }
+            }
+        }
+        .animation(.easeInOut, value: showInvalidKeyToast)
+    }
+    
+    private func validateAPIKeyOnStart() {
+        guard aiService.isConfigured else { return }
+        
+        Task {
+            let isValid = await aiService.validateAPIKey()
+            if !isValid {
+                await MainActor.run {
+                    invalidKeyMessage = aiService.validationMessage ?? "Invalid API key"
+                    showInvalidKeyToast = true
+                    
+                    // Auto-dismiss after 5 seconds
+                    Task {
+                        try? await Task.sleep(nanoseconds: 5_000_000_000)
+                        await MainActor.run {
+                            withAnimation { showInvalidKeyToast = false }
+                        }
+                    }
+                }
+            }
         }
     }
     
@@ -241,6 +280,44 @@ struct LoadingView: View {
                 pulseScale = 1.15
             }
         }
+    }
+}
+
+// MARK: - Invalid API Key Toast
+struct InvalidAPIKeyToast: View {
+    let message: String
+    
+    var body: some View {
+        HStack(spacing: 12) {
+            Image(systemName: "exclamationmark.triangle.fill")
+                .foregroundColor(.yellow)
+            
+            VStack(alignment: .leading, spacing: 2) {
+                Text("API KEY INVALID")
+                    .font(.system(size: 12, weight: .black))
+                    .tracking(1)
+                    .foregroundColor(.white)
+                
+                Text(message + " • Tap to fix")
+                    .font(.system(size: 11))
+                    .foregroundColor(Color(white: 0.6))
+            }
+            
+            Spacer()
+            
+            Image(systemName: "chevron.right")
+                .foregroundColor(Color(white: 0.4))
+        }
+        .padding(.horizontal, 16)
+        .padding(.vertical, 12)
+        .background(Color(white: 0.15))
+        .cornerRadius(12)
+        .overlay(
+            RoundedRectangle(cornerRadius: 12)
+                .stroke(Color.yellow.opacity(0.3), lineWidth: 1)
+        )
+        .padding(.horizontal, 16)
+        .padding(.top, 50) // Below dynamic island/notch
     }
 }
 

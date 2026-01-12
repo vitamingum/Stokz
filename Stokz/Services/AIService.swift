@@ -100,6 +100,183 @@ class AIService: ObservableObject {
         !apiKey.isEmpty
     }
     
+    @Published var isKeyValid: Bool = true
+    @Published var validationMessage: String?
+    
+    // MARK: - API Key Validation
+    
+    /// Validate the current API key by making a simple request
+    func validateAPIKey() async -> Bool {
+        guard isConfigured else { return false }
+        
+        do {
+            // Make a minimal request to test the key
+            let _ = try await chat(system: "Respond with OK", user: "Test")
+            await MainActor.run {
+                isKeyValid = true
+                validationMessage = nil
+            }
+            print("✅ [AI] API key validated successfully")
+            return true
+        } catch {
+            await MainActor.run {
+                isKeyValid = false
+                validationMessage = parseValidationError(error)
+            }
+            print("❌ [AI] API key validation failed: \(error)")
+            return false
+        }
+    }
+    
+    /// Validate a specific key for a provider (used during setup)
+    func validateKey(_ key: String, for provider: LLMProvider) async -> (valid: Bool, error: String?) {
+        guard !key.isEmpty else {
+            return (false, "API key is required")
+        }
+        
+        // Temporarily set the key to test it
+        let oldProvider = selectedProvider
+        let oldKey = apiKey
+        
+        // Test without saving
+        do {
+            let testResult = try await testKey(key, for: provider)
+            return (testResult, nil)
+        } catch {
+            return (false, parseValidationError(error))
+        }
+    }
+    
+    private func testKey(_ key: String, for provider: LLMProvider) async throws -> Bool {
+        switch provider {
+        case .gemini:
+            return try await testGeminiKey(key)
+        case .openai:
+            return try await testOpenAIKey(key)
+        case .anthropic:
+            return try await testAnthropicKey(key)
+        case .grok:
+            return try await testGrokKey(key)
+        }
+    }
+    
+    private func testGeminiKey(_ key: String) async throws -> Bool {
+        let url = URL(string: "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=\(key)")!
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        let body: [String: Any] = [
+            "contents": [["role": "user", "parts": [["text": "Say OK"]]]],
+            "generationConfig": ["maxOutputTokens": 10]
+        ]
+        request.httpBody = try JSONSerialization.data(withJSONObject: body)
+        
+        let (data, response) = try await URLSession.shared.data(for: request)
+        guard let httpResponse = response as? HTTPURLResponse else { return false }
+        
+        if httpResponse.statusCode == 200 { return true }
+        
+        let errorBody = String(data: data, encoding: .utf8) ?? ""
+        throw AIError.httpError(httpResponse.statusCode, errorBody)
+    }
+    
+    private func testOpenAIKey(_ key: String) async throws -> Bool {
+        let url = URL(string: "https://api.openai.com/v1/chat/completions")!
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("Bearer \(key)", forHTTPHeaderField: "Authorization")
+        
+        let body: [String: Any] = [
+            "model": "gpt-4o-mini",
+            "messages": [["role": "user", "content": "Say OK"]],
+            "max_tokens": 10
+        ]
+        request.httpBody = try JSONSerialization.data(withJSONObject: body)
+        
+        let (data, response) = try await URLSession.shared.data(for: request)
+        guard let httpResponse = response as? HTTPURLResponse else { return false }
+        
+        if httpResponse.statusCode == 200 { return true }
+        
+        let errorBody = String(data: data, encoding: .utf8) ?? ""
+        throw AIError.httpError(httpResponse.statusCode, errorBody)
+    }
+    
+    private func testAnthropicKey(_ key: String) async throws -> Bool {
+        let url = URL(string: "https://api.anthropic.com/v1/messages")!
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue(key, forHTTPHeaderField: "x-api-key")
+        request.setValue("2023-06-01", forHTTPHeaderField: "anthropic-version")
+        
+        let body: [String: Any] = [
+            "model": "claude-3-haiku-20240307",
+            "max_tokens": 10,
+            "messages": [["role": "user", "content": "Say OK"]]
+        ]
+        request.httpBody = try JSONSerialization.data(withJSONObject: body)
+        
+        let (data, response) = try await URLSession.shared.data(for: request)
+        guard let httpResponse = response as? HTTPURLResponse else { return false }
+        
+        if httpResponse.statusCode == 200 { return true }
+        
+        let errorBody = String(data: data, encoding: .utf8) ?? ""
+        throw AIError.httpError(httpResponse.statusCode, errorBody)
+    }
+    
+    private func testGrokKey(_ key: String) async throws -> Bool {
+        let url = URL(string: "https://api.x.ai/v1/chat/completions")!
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("Bearer \(key)", forHTTPHeaderField: "Authorization")
+        
+        let body: [String: Any] = [
+            "model": "grok-beta",
+            "messages": [["role": "user", "content": "Say OK"]],
+            "max_tokens": 10
+        ]
+        request.httpBody = try JSONSerialization.data(withJSONObject: body)
+        
+        let (data, response) = try await URLSession.shared.data(for: request)
+        guard let httpResponse = response as? HTTPURLResponse else { return false }
+        
+        if httpResponse.statusCode == 200 { return true }
+        
+        let errorBody = String(data: data, encoding: .utf8) ?? ""
+        throw AIError.httpError(httpResponse.statusCode, errorBody)
+    }
+    
+    private func parseValidationError(_ error: Error) -> String {
+        if let aiError = error as? AIError {
+            switch aiError {
+            case .httpError(let code, let body):
+                if code == 400 && body.contains("API_KEY_INVALID") {
+                    return "Invalid API key"
+                } else if code == 401 {
+                    return "Invalid API key"
+                } else if code == 403 {
+                    return "API key doesn't have permission"
+                } else if code == 429 {
+                    return "Rate limited - try again later"
+                } else {
+                    return "API error (\(code))"
+                }
+            default:
+                return aiError.localizedDescription
+            }
+        }
+        return error.localizedDescription
+    }
+    
     // MARK: - Chat API
     
     func chat(system: String, user: String) async throws -> String {

@@ -116,15 +116,22 @@ struct APIKeySetupView: View {
         isValidating = true
         validationError = nil
         
-        // Set provider to Gemini and save key
-        aiService.selectedProvider = .gemini
-        aiService.apiKey = apiKeyInput
-        
         Task {
-            try? await Task.sleep(nanoseconds: 300_000_000)
+            // Validate the key before saving
+            let (valid, error) = await aiService.validateKey(apiKeyInput, for: .gemini)
+            
             await MainActor.run {
                 isValidating = false
-                onComplete()
+                
+                if valid {
+                    // Key is valid - save and continue
+                    aiService.selectedProvider = .gemini
+                    aiService.apiKey = apiKeyInput
+                    onComplete()
+                } else {
+                    // Show error
+                    validationError = error ?? "Invalid API key"
+                }
             }
         }
     }

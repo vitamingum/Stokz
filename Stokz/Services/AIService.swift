@@ -68,8 +68,17 @@ class AIService: ObservableObject {
         }
     }
     
-    // Cache for style taglines
-    private var styleCache: [String: String] = [:]
+    // Cache for style taglines - persisted to UserDefaults
+    private var styleCache: [String: String] = [:] {
+        didSet {
+            // Persist to UserDefaults (limit to 50 entries to avoid bloat)
+            let limitedCache = Dictionary(uniqueKeysWithValues: styleCache.suffix(50))
+            UserDefaults.standard.set(limitedCache, forKey: "ai_style_cache")
+        }
+    }
+    
+    // Track in-flight requests to avoid duplicates
+    private var pendingStyleRequests: Set<String> = []
     
     // Rate limiting for free tier (15 RPM = 4 sec between requests)
     private var lastRequestTime: Date?
@@ -88,6 +97,12 @@ class AIService: ObservableObject {
         // Load free tier setting (default to true for Gemini)
         let savedFreeTier = UserDefaults.standard.object(forKey: "ai_free_tier") as? Bool
         self.isFreeTier = savedFreeTier ?? (provider == .gemini)
+        
+        // Load cached styles from UserDefaults
+        if let cachedStyles = UserDefaults.standard.dictionary(forKey: "ai_style_cache") as? [String: String] {
+            self.styleCache = cachedStyles
+            print("✅ [AI] Loaded \(cachedStyles.count) cached styles")
+        }
         
         // Initialize all stored properties before using self
         self.selectedProvider = provider
@@ -330,10 +345,22 @@ class AIService: ObservableObject {
         guard !holdings.isEmpty, isConfigured else { return nil }
         
         let cacheKey = holdings.sorted().joined(separator: ",")
+        
+        // Return cached value if available
         if let cached = styleCache[cacheKey] {
             print("✅ [AI] Cache hit for \(holdings.count) holdings")
             return cached
         }
+        
+        // Check if request already in flight (avoid duplicates from multiple onAppear)
+        if pendingStyleRequests.contains(cacheKey) {
+            print("⏳ [AI] Request already pending for these holdings, skipping")
+            return nil
+        }
+        
+        // Mark as pending
+        await MainActor.run { pendingStyleRequests.insert(cacheKey) }
+        defer { Task { @MainActor in pendingStyleRequests.remove(cacheKey) } }
         
         await MainActor.run { isLoading = true }
         defer { Task { @MainActor in isLoading = false } }

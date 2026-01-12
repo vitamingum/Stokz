@@ -112,7 +112,7 @@ struct LoginView: View {
                 VStack(alignment: .leading, spacing: 20) {
                     FeatureRow(icon: "dollarsign.circle.fill", title: "$100K TO PLAY", description: "Paper trading. Real stakes.")
                     FeatureRow(icon: "person.3.fill", title: "DESTROY FRIENDSHIPS", description: "Climb the leaderboard.")
-                    FeatureRow(icon: "chart.line.uptrend.xyaxis", title: "LIVE PRICES", description: "Real market data.")
+                    FeatureRow(icon: "brain", title: "KILLER AI AGENTS", description: "Smack talk that buries.")
                 }
                 .padding(.horizontal, 40)
                 

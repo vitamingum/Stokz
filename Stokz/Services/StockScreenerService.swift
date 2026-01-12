@@ -18,6 +18,7 @@ class StockScreenerService: ObservableObject {
     @Published var progress: ScreeningProgress = .idle
     @Published var results: [StockPick] = []
     @Published var lastError: String?
+    @Published var lastPrompt: String = ""  // Store for detail view
     
     // Live feed for UI
     @Published var liveFeed: [FeedItem] = []
@@ -52,6 +53,7 @@ class StockScreenerService: ObservableObject {
         lastError = nil
         liveFeed = []
         topScorers = []
+        lastPrompt = prompt  // Store for detail view
         
         addFeed(.system, "Starting AI screening...")
         print("🔍 [Screener] Starting screen for: \(prompt)")
@@ -90,6 +92,47 @@ class StockScreenerService: ObservableObject {
         }
         
         isScreening = false
+    }
+    
+    // MARK: - Detail Thesis Generation
+    
+    /// Generate a detailed thesis for a single stock based on the user's criteria
+    func getDetailedThesis(ticker: String, company: String) async -> String {
+        guard !lastPrompt.isEmpty else {
+            return "No search criteria available."
+        }
+        
+        let prompt = """
+        User's search criteria: "\(lastPrompt)"
+        
+        Stock: \(ticker) (\(company))
+        
+        Write a bullet-point analysis:
+        
+        • COMPANY: One line about what the company does
+        
+        • WHY IT MATCHES:
+          - [reason 1]
+          - [reason 2]
+          - [reason 3]
+          - [reason 4]
+          - [reason 5]
+        
+        • WATCH OUT: One key risk or reason it might NOT match
+        
+        Be specific and concise. Use plain text bullets (• and -), no markdown.
+        """
+        
+        do {
+            let response = try await GeminiService.shared.chat(
+                system: "You are a stock analyst. Write structured bullet-point analyses. Use • for main bullets and - for sub-bullets. No markdown formatting, no asterisks.",
+                user: prompt
+            )
+            return response.trimmingCharacters(in: .whitespacesAndNewlines)
+        } catch {
+            print("❌ [Screener] Detail thesis error: \(error)")
+            return "Unable to generate thesis."
+        }
     }
     
     // MARK: - Step 1: Generate Criteria (simplified - just wrap user prompt)

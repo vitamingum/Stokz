@@ -239,10 +239,10 @@ struct StockScreenerChatView: View {
 struct StockPickRow: View {
     let pick: StockPick
     @EnvironmentObject var appState: AppState
-    @State private var showDiscovery = false
+    @State private var showDetail = false
     
     var body: some View {
-        Button(action: { showDiscovery = true }) {
+        Button(action: { showDetail = true }) {
             HStack(alignment: .top, spacing: 12) {
                 // Score badge
                 Text(String(format: "%.0f", pick.score))
@@ -284,20 +284,9 @@ struct StockPickRow: View {
             .padding(.vertical, 10)
         }
         .buttonStyle(PlainButtonStyle())
-        .sheet(isPresented: $showDiscovery) {
-            NavigationStack {
-                StockDiscoveryView(ticker: pick.ticker, showAddButton: true)
-                    .environmentObject(appState)
-                    .toolbar {
-                        ToolbarItem(placement: .navigationBarTrailing) {
-                            Button("DONE") { showDiscovery = false }
-                                .font(.system(size: 14, weight: .bold))
-                                .foregroundColor(.white)
-                        }
-                    }
-            }
-            .background(Color.black)
-            .preferredColorScheme(.dark)
+        .sheet(isPresented: $showDetail) {
+            StockPickDetailView(pick: pick)
+                .environmentObject(appState)
         }
         
         Rectangle()
@@ -314,6 +303,220 @@ struct StockPickRow: View {
             return Color(red: 0.9, green: 0.8, blue: 0.2) // gold
         } else {
             return .white
+        }
+    }
+}
+
+// MARK: - Stock Pick Detail View
+
+struct StockPickDetailView: View {
+    let pick: StockPick
+    @EnvironmentObject var appState: AppState
+    @Environment(\.dismiss) var dismiss
+    
+    @State private var detailedThesis: String = ""
+    @State private var isLoadingThesis = true
+    @State private var isAdding = false
+    @State private var showAddedConfirmation = false
+    
+    private var isInPortfolio: Bool {
+        appState.currentUserPortfolio?.holdings.contains(where: { $0.symbol == pick.ticker }) ?? false
+    }
+    
+    var body: some View {
+        NavigationStack {
+            ZStack {
+                Color.black.ignoresSafeArea()
+                
+                ScrollView {
+                    VStack(spacing: 24) {
+                        // Header
+                        VStack(spacing: 8) {
+                            Text(pick.ticker)
+                                .font(.system(size: 48, weight: .black))
+                                .foregroundColor(.white)
+                            
+                            Text(pick.company)
+                                .font(.system(size: 14, weight: .medium))
+                                .foregroundColor(Color(white: 0.5))
+                            
+                            // Score badge
+                            HStack(spacing: 6) {
+                                Text("MATCH SCORE")
+                                    .font(.system(size: 10, weight: .bold))
+                                    .tracking(1)
+                                    .foregroundColor(Color(white: 0.4))
+                                
+                                Text(String(format: "%.0f", pick.score))
+                                    .font(.system(size: 14, weight: .black))
+                                    .foregroundColor(.black)
+                                    .padding(.horizontal, 8)
+                                    .padding(.vertical, 4)
+                                    .background(scoreColor)
+                                    .cornerRadius(4)
+                            }
+                            .padding(.top, 8)
+                        }
+                        .padding(.top, 20)
+                        
+                        // Add to Portfolio button
+                        addButton
+                        
+                        // AI Thesis section
+                        thesisSection
+                        
+                        // Quick reason from screening
+                        VStack(alignment: .leading, spacing: 8) {
+                            HStack {
+                                Text("📋")
+                                    .font(.system(size: 14))
+                                Text("QUICK TAKE")
+                                    .font(.system(size: 11, weight: .bold))
+                                    .tracking(2)
+                                    .foregroundColor(Color(white: 0.4))
+                            }
+                            
+                            Text(pick.thesis)
+                                .font(.system(size: 13, weight: .medium))
+                                .foregroundColor(Color(white: 0.6))
+                                .padding()
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .background(Color(white: 0.08))
+                                .cornerRadius(12)
+                        }
+                        .padding(.horizontal)
+                    }
+                    .padding(.bottom, 40)
+                }
+            }
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button("DONE") { dismiss() }
+                        .font(.system(size: 14, weight: .bold))
+                        .foregroundColor(.white)
+                }
+            }
+        }
+        .preferredColorScheme(.dark)
+        .task {
+            await loadDetailedThesis()
+        }
+    }
+    
+    private var thesisSection: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            HStack {
+                Text("🥤")
+                    .font(.system(size: 14))
+                Text("TALL BOY'S THESIS")
+                    .font(.system(size: 11, weight: .bold))
+                    .tracking(2)
+                    .foregroundColor(Color(white: 0.4))
+            }
+            
+            if isLoadingThesis {
+                HStack(spacing: 8) {
+                    ProgressView()
+                        .scaleEffect(0.8)
+                        .tint(.white)
+                    Text("Analyzing...")
+                        .font(.system(size: 13, weight: .medium))
+                        .foregroundColor(Color(white: 0.5))
+                }
+                .padding()
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .background(Color(white: 0.08))
+                .cornerRadius(12)
+            } else {
+                Text(detailedThesis)
+                    .font(.system(size: 14, weight: .medium))
+                    .foregroundColor(Color(white: 0.8))
+                    .lineSpacing(4)
+                    .padding()
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .background(Color(white: 0.08))
+                    .cornerRadius(12)
+            }
+        }
+        .padding(.horizontal)
+    }
+    
+    private var addButton: some View {
+        Button(action: addToPortfolio) {
+            HStack(spacing: 10) {
+                if isAdding {
+                    ProgressView()
+                        .progressViewStyle(CircularProgressViewStyle(tint: .black))
+                        .scaleEffect(0.8)
+                } else if showAddedConfirmation {
+                    Image(systemName: "checkmark")
+                        .font(.system(size: 16, weight: .bold))
+                    Text("ADDED!")
+                        .font(.system(size: 14, weight: .black))
+                        .tracking(2)
+                } else if isInPortfolio {
+                    Image(systemName: "checkmark.circle.fill")
+                        .font(.system(size: 16, weight: .bold))
+                    Text("IN PORTFOLIO")
+                        .font(.system(size: 14, weight: .black))
+                        .tracking(2)
+                } else {
+                    Image(systemName: "plus")
+                        .font(.system(size: 16, weight: .bold))
+                    Text("ADD TO PORTFOLIO")
+                        .font(.system(size: 14, weight: .black))
+                        .tracking(2)
+                }
+            }
+            .foregroundColor(.black)
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 16)
+            .background(isInPortfolio || showAddedConfirmation ? Color.green : Color.white)
+            .cornerRadius(12)
+            .padding(.horizontal)
+        }
+        .disabled(isAdding || isInPortfolio)
+        .opacity(isInPortfolio ? 0.7 : 1.0)
+    }
+    
+    private var scoreColor: Color {
+        if pick.score >= 85 {
+            return .green
+        } else if pick.score >= 70 {
+            return Color(red: 0.9, green: 0.8, blue: 0.2)
+        } else {
+            return .white
+        }
+    }
+    
+    private func loadDetailedThesis() async {
+        let thesis = await StockScreenerService.shared.getDetailedThesis(
+            ticker: pick.ticker,
+            company: pick.company
+        )
+        await MainActor.run {
+            detailedThesis = thesis
+            isLoadingThesis = false
+        }
+    }
+    
+    private func addToPortfolio() {
+        guard !isInPortfolio else { return }
+        isAdding = true
+        
+        Task {
+            await appState.addStock(symbol: pick.ticker)
+            await MainActor.run {
+                isAdding = false
+                showAddedConfirmation = true
+            }
+            
+            // Reset confirmation after delay
+            try? await Task.sleep(nanoseconds: 2_000_000_000)
+            await MainActor.run {
+                showAddedConfirmation = false
+            }
         }
     }
 }

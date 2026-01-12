@@ -36,7 +36,6 @@
 		A1000027 /* stock_data_bundle.json in Resources */ = {isa = PBXBuildFile; fileRef = A2000027 /* stock_data_bundle.json */; };
 		A1000028 /* StockDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000028 /* StockDataService.swift */; };
 		A1000029 /* StockDiscoveryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000029 /* StockDiscoveryView.swift */; };
-		A1000030 /* GeminiService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000030 /* GeminiService.swift */; };
 		A1000031 /* Secrets.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000031 /* Secrets.swift */; };
 		A1000032 /* StockScreenerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000032 /* StockScreenerService.swift */; };
 		A1000033 /* StockScreenerChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000033 /* StockScreenerChatView.swift */; };
@@ -89,7 +88,6 @@
 		A2000027 /* stock_data_bundle.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = stock_data_bundle.json; sourceTree = "<group>"; };
 		A2000028 /* StockDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StockDataService.swift; sourceTree = "<group>"; };
 		A2000029 /* StockDiscoveryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StockDiscoveryView.swift; sourceTree = "<group>"; };
-		A2000030 /* GeminiService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeminiService.swift; sourceTree = "<group>"; };
 		A2000031 /* Secrets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Secrets.swift; sourceTree = "<group>"; };
 		A2000032 /* StockScreenerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StockScreenerService.swift; sourceTree = "<group>"; };
 		A2000033 /* StockScreenerChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StockScreenerChatView.swift; sourceTree = "<group>"; };
@@ -160,7 +158,6 @@
 				A2000008 /* AuthenticationService.swift */,
 				A2000022 /* Logger.swift */,
 				A2000028 /* StockDataService.swift */,
-				A2000030 /* GeminiService.swift */,
 				A2000031 /* Secrets.swift */,
 				A2000032 /* StockScreenerService.swift */,
 				4F4235A1D6F4CE448102C357 /* BugReportService.swift */,
@@ -308,7 +305,6 @@
 				A1000028 /* StockDataService.swift in Sources */,
 				A1000024 /* SettingsView.swift in Sources */,
 				A1000029 /* StockDiscoveryView.swift in Sources */,
-				A1000030 /* GeminiService.swift in Sources */,
 				A1000031 /* Secrets.swift in Sources */,
 				A1000032 /* StockScreenerService.swift in Sources */,
 				A1000033 /* StockScreenerChatView.swift in Sources */,

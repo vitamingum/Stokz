@@ -242,15 +242,15 @@ struct LeaderboardRow: View {
         }
         
         let holdings = portfolio.holdings.map { $0.symbol }
-        print("🤖 [Gemini] Found \(holdings.count) holdings: \(holdings.joined(separator: ", "))")
+        print("🤖 [AI] Found \(holdings.count) holdings: \(holdings.joined(separator: ", "))")
         
         isLoadingStyle = true
         Task {
-            let style = await GeminiService.shared.getInvestmentStyle(holdings: holdings)
+            let style = await AIService.shared.getInvestmentStyle(holdings: holdings)
             await MainActor.run {
                 self.investmentStyle = style
                 self.isLoadingStyle = false
-                print("🤖 [Gemini] Style set: \(style ?? "nil")")
+                print("🤖 [AI] Style set: \(style ?? "nil")")
             }
         }
     }

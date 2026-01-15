@@ -26,8 +26,10 @@ class AppState: ObservableObject {
     @Published var showDataRefreshedToast = false
     @Published var dataRefreshMessage = ""
     
-    // Track when app went to background for stale data detection
+    // Track when app went to background or offline for stale data detection
     private var lastBackgroundTime: Date?
+    private var lastOfflineTime: Date?
+    private var isCurrentlyOffline = false
     private let staleDataThreshold: TimeInterval = 120 // 2 minutes
     
     // Timer for price updates
@@ -52,32 +54,67 @@ class AppState: ObservableObject {
         logDebug("Loading saved credentials", category: .app)
         authService.loadCredentials()
         
-        // Try to restore session if we have tokens
+        // If we have tokens, show app immediately with cached data
+        // Network refresh happens in background
         if authService.getAccessToken() != nil {
-            logInfo("Found existing access token, attempting to refresh", category: .auth)
-            // Try to refresh and verify the token
-            do {
-                try await authService.refreshAccessToken()
-                // Fetch user info to restore currentUser
-                await authService.fetchUserInfo()
-                authService.isAuthenticated = true
-                logSuccess("Session restored successfully", category: .auth)
-                await loadAllData()
-            } catch {
-                // Token expired or invalid, user needs to sign in again
-                logWarning("Token refresh failed, signing out: \(error.localizedDescription)", category: .auth)
-                authService.signOut()
+            logInfo("Found existing tokens - showing app with cached data", category: .auth)
+            
+            // Restore user from cache if available
+            if let cachedUserId = UserDefaults.standard.string(forKey: "cachedUserId"),
+               let cachedUser = sheetsService.users.first(where: { $0.id == cachedUserId }) {
+                authService.currentUser = cachedUser
+                logInfo("Restored user from cache: \(cachedUser.displayName)", category: .auth)
+            }
+            
+            // Set authenticated immediately - show the app
+            authService.isAuthenticated = true
+            updateDerivedState()
+            
+            isInitialized = true
+            isLoading = false
+            startPriceUpdates()
+            logSuccess("🚀 App showing with cached data", category: .app)
+            
+            // Now refresh in background
+            Task {
+                await refreshSessionInBackground()
             }
         } else {
             logInfo("No existing credentials found - user needs to sign in", category: .auth)
+            isInitialized = true
+            isLoading = false
         }
         
-        isInitialized = true
-        isLoading = false
         logSuccess("🚀 App initialization complete", category: .app)
+    }
+    
+    /// Refresh session and data in background (non-blocking)
+    private func refreshSessionInBackground() async {
+        logInfo("🔄 Background refresh starting", category: .auth)
         
-        // Start price update timer
-        startPriceUpdates()
+        do {
+            try await authService.refreshAccessToken()
+            await authService.fetchUserInfo()
+            
+            // Cache the user ID for offline restore
+            if let userId = authService.currentUser?.id {
+                UserDefaults.standard.set(userId, forKey: "cachedUserId")
+            }
+            
+            logSuccess("Token refresh successful", category: .auth)
+            await loadAllData()
+            
+            // Check if we just came back online after being offline for a while
+            handleNetworkReconnected()
+        } catch let error as URLError where error.code == .notConnectedToInternet || error.code == .networkConnectionLost || error.code == .timedOut {
+            // Network error - stay authenticated with cached data, track offline time
+            handleNetworkDisconnected()
+            logWarning("Network unavailable, using cached data: \(error.localizedDescription)", category: .auth)
+        } catch {
+            // Token actually invalid - sign out
+            logWarning("Token refresh failed, signing out: \(error.localizedDescription)", category: .auth)
+            authService.signOut()
+        }
     }
     
     // MARK: - Handle Return to Foreground
@@ -130,13 +167,100 @@ class AppState: ObservableObject {
         print("💤 [App] Entered background at \(lastBackgroundTime!)")
     }
     
-    /// Check if data is stale (was in background > threshold)
+    /// Check if data is stale (was in background or offline > threshold)
     private func isDataStale() -> Bool {
-        guard let backgroundTime = lastBackgroundTime else { return false }
-        let elapsed = Date().timeIntervalSince(backgroundTime)
-        let isStale = elapsed > staleDataThreshold
-        print("🔄 [App] Time in background: \(Int(elapsed))s, stale threshold: \(Int(staleDataThreshold))s, isStale: \(isStale)")
-        return isStale
+        // Check background time
+        if let backgroundTime = lastBackgroundTime {
+            let elapsed = Date().timeIntervalSince(backgroundTime)
+            if elapsed > staleDataThreshold {
+                print("🔄 [App] Stale: was in background for \(Int(elapsed))s")
+                return true
+            }
+        }
+        return false
+    }
+    
+    // MARK: - Network State Tracking
+    
+    /// Called when network request fails due to connectivity
+    private func handleNetworkDisconnected() {
+        if !isCurrentlyOffline {
+            isCurrentlyOffline = true
+            lastOfflineTime = Date()
+            print("📡 [App] Network disconnected at \(lastOfflineTime!)")
+            
+            // Start retry timer to periodically try reconnecting
+            startNetworkRetryTimer()
+        }
+    }
+    
+    /// Called when network request succeeds after being offline
+    private func handleNetworkReconnected() {
+        guard isCurrentlyOffline else { return }
+        
+        // Check if we were offline long enough to show toast
+        if let offlineTime = lastOfflineTime {
+            let elapsed = Date().timeIntervalSince(offlineTime)
+            print("📡 [App] Network reconnected after \(Int(elapsed))s offline")
+            
+            if elapsed > staleDataThreshold {
+                showDataRefreshToast()
+            }
+        }
+        
+        // Reset offline state
+        isCurrentlyOffline = false
+        lastOfflineTime = nil
+        stopNetworkRetryTimer()
+    }
+    
+    private var networkRetryTimer: Timer?
+    
+    /// Start a timer to periodically retry network connection
+    private func startNetworkRetryTimer() {
+        stopNetworkRetryTimer()
+        print("📡 [App] Starting network retry timer (every 30s)")
+        
+        networkRetryTimer = Timer.scheduledTimer(withTimeInterval: 30, repeats: true) { [weak self] _ in
+            Task { @MainActor [weak self] in
+                await self?.retryNetworkConnection()
+            }
+        }
+    }
+    
+    private func stopNetworkRetryTimer() {
+        networkRetryTimer?.invalidate()
+        networkRetryTimer = nil
+    }
+    
+    /// Try to reconnect and sync data
+    private func retryNetworkConnection() async {
+        guard isCurrentlyOffline, authService.isAuthenticated else { return }
+        print("📡 [App] Retrying network connection...")
+        
+        do {
+            try await authService.refreshAccessToken()
+            await authService.fetchUserInfo()
+            
+            // Cache the user ID for offline restore
+            if let userId = authService.currentUser?.id {
+                UserDefaults.standard.set(userId, forKey: "cachedUserId")
+            }
+            
+            logSuccess("📡 Network retry successful!", category: .auth)
+            await loadAllData()
+            
+            // We're back online!
+            handleNetworkReconnected()
+        } catch let error as URLError where error.code == .notConnectedToInternet || error.code == .networkConnectionLost || error.code == .timedOut {
+            // Still offline, timer will retry
+            print("📡 [App] Still offline: \(error.localizedDescription)")
+        } catch {
+            // Auth error - stop retrying and sign out
+            logWarning("📡 Network retry auth failed: \(error.localizedDescription)", category: .auth)
+            stopNetworkRetryTimer()
+            authService.signOut()
+        }
     }
     
     /// Show a toast indicating data has been refreshed

@@ -180,6 +180,8 @@ class AuthenticationService: NSObject, ObservableObject {
             // Save user to Google Sheets
             if let user = currentUser {
                 logInfo("Saving user to Google Sheets: \(user.displayName)", category: .auth)
+                // Cache user ID for offline restore
+                UserDefaults.standard.set(user.id, forKey: "cachedUserId")
                 do {
                     try await GoogleSheetsService.shared.saveUser(user)
                     logSuccess("User saved to Sheets", category: .auth)
@@ -242,6 +244,7 @@ class AuthenticationService: NSObject, ObservableObject {
         // Clear stored credentials
         UserDefaults.standard.removeObject(forKey: "accessToken")
         UserDefaults.standard.removeObject(forKey: "refreshToken")
+        UserDefaults.standard.removeObject(forKey: "cachedUserId")
         logSuccess("Sign-out complete", category: .auth)
     }
     

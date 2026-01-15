@@ -11,6 +11,7 @@ class AppState: ObservableObject {
     let sheetsService = GoogleSheetsService.shared
     let priceService = StockPriceService.shared
     let portfolioManager = PortfolioManager.shared
+    let databaseService = DatabaseService.shared
     
     // MARK: - State
     @Published var isInitialized = false
@@ -35,6 +36,9 @@ class AppState: ObservableObject {
         // Accessing the singleton triggers lazy init - do this early to avoid UI lag later
         let _ = StockDataService.shared
         logInfo("📦 Stock data service initialized: \(StockDataService.shared.stockCount) stocks", category: .app)
+        
+        // Load cached data for instant startup (before network calls)
+        loadCachedData()
         
         // Load saved credentials
         logDebug("Loading saved credentials", category: .app)
@@ -102,6 +106,44 @@ class AppState: ObservableObject {
         print("🔄 [App] ✅ Foreground refresh complete")
     }
     
+    // MARK: - Load Cached Data
+    /// Loads data from local SQLite cache for instant startup
+    private func loadCachedData() {
+        logInfo("📦 Loading cached data for instant startup", category: .app)
+        
+        // Load cached users and portfolios into the sheets service
+        let cachedUsers = databaseService.loadUsers()
+        let cachedPortfolios = databaseService.loadPortfolios()
+        let cachedSnapshots = databaseService.loadSnapshots()
+        let cachedPrices = databaseService.loadPriceCache()
+        
+        if !cachedUsers.isEmpty {
+            sheetsService.loadFromCache(users: cachedUsers, portfolios: cachedPortfolios, snapshots: cachedSnapshots)
+            priceService.loadFromCache(prices: cachedPrices)
+            
+            // Update derived state with cached data
+            updateDerivedState()
+            
+            let cacheAge = databaseService.getCacheAge() ?? 0
+            logSuccess("📦 Loaded cached data: \(cachedUsers.count) users, \(cachedPortfolios.count) portfolios (age: \(Int(cacheAge))s)", category: .app)
+        } else {
+            logInfo("📦 No cached data found - will fetch from network", category: .app)
+        }
+    }
+    
+    // MARK: - Save Data to Cache
+    /// Saves current data to local SQLite cache
+    private func saveDataToCache() {
+        logInfo("📦 Saving data to cache", category: .app)
+        
+        databaseService.saveAllData(
+            users: sheetsService.users,
+            portfolios: sheetsService.portfolios,
+            snapshots: sheetsService.snapshots,
+            priceCache: priceService.getPriceCache()
+        )
+    }
+    
     // MARK: - Load All Data
     func loadAllData() async {
         logInfo("Loading all data from backend", category: .app)
@@ -120,6 +162,9 @@ class AppState: ObservableObject {
             
             // Record snapshots for all users (throttled to once per hour)
             await recordSnapshotsForAllUsers()
+            
+            // Save fresh data to local cache for next startup
+            saveDataToCache()
             
             logSuccess("All data loaded successfully", category: .app)
         } catch GoogleSheetsError.notAuthenticated {

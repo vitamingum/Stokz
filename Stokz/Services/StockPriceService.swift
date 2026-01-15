@@ -15,6 +15,30 @@ class StockPriceService: ObservableObject {
     private var priceCache: [String: PriceCacheEntry] = [:]
     private let cacheTimeout: TimeInterval = 60 // 1 minute
     
+    // MARK: - Cache Access
+    
+    /// Returns the current price cache for persistence
+    func getPriceCache() -> [String: PriceCacheEntry] {
+        return priceCache
+    }
+    
+    /// Loads prices from local SQLite cache for instant startup
+    func loadFromCache(prices: [String: PriceCacheEntry]) {
+        logInfo("📦 Loading \(prices.count) prices from cache", category: .stocks)
+        self.priceCache = prices
+        
+        // Also populate the prices and stocks dictionaries
+        for (symbol, entry) in prices {
+            self.prices[symbol] = entry.price
+            self.stocks[symbol] = Stock(
+                symbol: symbol,
+                currentPrice: entry.price,
+                previousClose: entry.previousClose,
+                lastUpdated: entry.timestamp
+            )
+        }
+    }
+    
     // MARK: - Fetch Quote (Yahoo Finance - no API key needed)
     func fetchQuote(symbol: String) async throws -> Stock {
         // Check cache first

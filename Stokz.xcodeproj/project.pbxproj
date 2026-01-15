@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A1000043 /* DatabaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000043 /* DatabaseService.swift */; };
 		A1000042 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000042 /* Theme.swift */; };
 		192F52A1E3BF20C45B444BF1 /* StockScreenerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78037C261E320548EF3AA623 /* StockScreenerService.swift */; };
 		2574F619C1CE229C0FDCBE53 /* BugReportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 645CB82A3A64EAD65469C31D /* BugReportView.swift */; };
@@ -99,6 +100,7 @@
 		A2000040 /* AIPlayerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIPlayerService.swift; sourceTree = "<group>"; };
 		A2000041 /* AIPlayersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIPlayersView.swift; sourceTree = "<group>"; };
 		A2000042 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
+		A2000043 /* DatabaseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseService.swift; sourceTree = "<group>"; };
 		A9000001 /* Development.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Development.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -173,6 +175,7 @@
 				78037C261E320548EF3AA623 /* StockScreenerService.swift */,
 				9C8E62F0FC3E272BC075DCEA /* AIService.swift */,
 				A2000040 /* AIPlayerService.swift */,
+				A2000043 /* DatabaseService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -329,6 +332,7 @@
 				A1000040 /* AIPlayerService.swift in Sources */,
 				A1000041 /* AIPlayersView.swift in Sources */,
 				A1000042 /* Theme.swift in Sources */,
+				A1000043 /* DatabaseService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

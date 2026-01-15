@@ -13,6 +13,7 @@ Stokz/
 │   ├── GoogleSheetsService # Users + portfolios from Sheets
 │   ├── StockPriceService   # Live prices from Finnhub
 │   ├── StockDataService    # Company info from JSON bundle (1005 stocks)
+│   ├── DatabaseService     # SQLite local cache for offline/fast startup
 │   ├── PortfolioManager    # Buy/sell logic
 │   ├── AuthenticationService
 │   ├── AIService           # Multi-provider LLM (Gemini/OpenAI/Anthropic/Grok)
@@ -71,6 +72,41 @@ Team ID is managed via xcconfig to avoid merge conflicts:
 - `setAPIKey(for:key:)` - store API key securely
 
 **Usage**: All AI features route through AIService (taglines, screener, chat)
+
+## DatabaseService (Local SQLite Cache)
+
+**Service**: `DatabaseService.swift` - SQLite-based local caching for offline support and faster startup
+
+**Purpose**:
+- Cache users, portfolios, snapshots, and prices locally
+- Enable instant app startup with cached data (network refresh happens in background)
+- No external dependencies - uses raw SQLite3
+
+**Schema Version (Nonce)**:
+```swift
+private static let schemaVersion = 1  // Bump to drop & recreate DB
+```
+When `schemaVersion` changes, the entire database is dropped and recreated. This avoids complex migration logic - just bump the version when schema/data format changes.
+
+**Tables**:
+- `users` - cached user profiles (including AI players)
+- `portfolios` - cached portfolio holdings (JSON-encoded)
+- `price_cache` - cached stock prices
+- `snapshots` - net worth history
+- `metadata` - cache timestamps
+- `schema_version` - version tracking for nonce
+
+**Key Methods**:
+- `saveAllData(users:portfolios:snapshots:priceCache:)` - persist after network fetch
+- `loadUsers()`, `loadPortfolios()`, `loadPriceCache()`, `loadSnapshots()` - restore on startup
+- `clearCache()` - manual cache clear
+- `isCacheValid(maxAge:)` - check if cache is stale
+
+**Integration Points**:
+- `AppState.initialize()` calls `loadCachedData()` before network calls
+- `AppState.loadAllData()` calls `saveDataToCache()` after successful fetch
+- `GoogleSheetsService.loadFromCache()` populates service from cached data
+- `StockPriceService.loadFromCache()` restores price cache
 
 ## TALL BOY AI Stock Screener
 

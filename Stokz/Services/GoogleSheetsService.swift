@@ -40,6 +40,15 @@ class GoogleSheetsService: ObservableObject {
         self.accessToken = token
     }
     
+    // MARK: - Load from Local Cache
+    /// Loads cached data from SQLite for instant startup
+    func loadFromCache(users: [User], portfolios: [String: Portfolio], snapshots: [String: [NetWorthSnapshot]]) {
+        logInfo("📦 Loading \(users.count) users, \(portfolios.count) portfolios from cache", category: .sheets)
+        self.users = users
+        self.portfolios = portfolios
+        self.snapshots = snapshots
+    }
+    
     // MARK: - Fetch All Data
     func fetchAllData() async throws {
         logInfo("Fetching all data from Google Sheets", category: .sheets)

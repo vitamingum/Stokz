@@ -38,8 +38,9 @@ struct StokzApp: App {
             print("⏸️ [App] Going inactive")
             
         case .background:
-            // App is in background
+            // App is in background - track time for stale data detection
             print("💤 [App] Entered background")
+            appState.handleEnterBackground()
             
         @unknown default:
             break

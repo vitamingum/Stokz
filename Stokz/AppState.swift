@@ -22,6 +22,14 @@ class AppState: ObservableObject {
     @Published var leaderboard: [LeaderboardEntry] = []
     @Published var allStocksWithOwners: [StockWithOwners] = []
     
+    // MARK: - Toast State
+    @Published var showDataRefreshedToast = false
+    @Published var dataRefreshMessage = ""
+    
+    // Track when app went to background for stale data detection
+    private var lastBackgroundTime: Date?
+    private let staleDataThreshold: TimeInterval = 120 // 2 minutes
+    
     // Timer for price updates
     private var priceUpdateTimer: Timer?
     // Timer for full data refresh (users, portfolios)
@@ -82,6 +90,9 @@ class AppState: ObservableObject {
             return
         }
         
+        // Check if data is stale (away for > 2 minutes)
+        let wasStale = isDataStale()
+        
         // 1. Validate/refresh the auth token (may have expired while in background)
         do {
             print("🔄 [App] Refreshing access token...")
@@ -103,7 +114,50 @@ class AppState: ObservableObject {
         print("🔄 [App] Restarting price update timers")
         startPriceUpdates()
         
+        // 4. Show toast if data was stale
+        if wasStale {
+            showDataRefreshToast()
+        }
+        
         print("🔄 [App] ✅ Foreground refresh complete")
+    }
+    
+    // MARK: - Background Time Tracking
+    
+    /// Called when app enters background
+    func handleEnterBackground() {
+        lastBackgroundTime = Date()
+        print("💤 [App] Entered background at \(lastBackgroundTime!)")
+    }
+    
+    /// Check if data is stale (was in background > threshold)
+    private func isDataStale() -> Bool {
+        guard let backgroundTime = lastBackgroundTime else { return false }
+        let elapsed = Date().timeIntervalSince(backgroundTime)
+        let isStale = elapsed > staleDataThreshold
+        print("🔄 [App] Time in background: \(Int(elapsed))s, stale threshold: \(Int(staleDataThreshold))s, isStale: \(isStale)")
+        return isStale
+    }
+    
+    /// Show a toast indicating data has been refreshed
+    private func showDataRefreshToast() {
+        let formatter = DateFormatter()
+        formatter.timeStyle = .short
+        dataRefreshMessage = "Reconnected at \(formatter.string(from: Date()))"
+        
+        withAnimation(.easeInOut(duration: 0.3)) {
+            showDataRefreshedToast = true
+        }
+        
+        // Auto-dismiss after 3 seconds
+        Task {
+            try? await Task.sleep(nanoseconds: 3_000_000_000)
+            await MainActor.run {
+                withAnimation(.easeInOut(duration: 0.3)) {
+                    showDataRefreshedToast = false
+                }
+            }
+        }
     }
     
     // MARK: - Load Cached Data

@@ -53,7 +53,14 @@ struct ContentView: View {
                     }
             }
         }
+        .overlay(alignment: .top) {
+            if appState.showDataRefreshedToast {
+                DataRefreshedToast(message: appState.dataRefreshMessage)
+                    .transition(.move(edge: .top).combined(with: .opacity))
+            }
+        }
         .animation(.easeInOut, value: showInvalidKeyToast)
+        .animation(.easeInOut, value: appState.showDataRefreshedToast)
     }
     
     private func validateAPIKeyOnStart() {
@@ -317,6 +324,31 @@ struct InvalidAPIKeyToast: View {
                 .stroke(Color.yellow.opacity(0.3), lineWidth: 1)
         )
         .padding(.horizontal, 16)
+        .padding(.top, 50) // Below dynamic island/notch
+    }
+}
+
+// MARK: - Data Refreshed Toast
+struct DataRefreshedToast: View {
+    let message: String
+    
+    var body: some View {
+        HStack(spacing: 10) {
+            Image(systemName: "checkmark.circle.fill")
+                .foregroundColor(.green)
+            
+            Text(message)
+                .font(.system(size: 13, weight: .medium))
+                .foregroundColor(.white)
+        }
+        .padding(.horizontal, 16)
+        .padding(.vertical, 10)
+        .background(Color(white: 0.15))
+        .cornerRadius(20)
+        .overlay(
+            RoundedRectangle(cornerRadius: 20)
+                .stroke(Color.green.opacity(0.3), lineWidth: 1)
+        )
         .padding(.top, 50) // Below dynamic island/notch
     }
 }

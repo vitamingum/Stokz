@@ -97,6 +97,43 @@ enum BugSeverity: String, Codable, CaseIterable {
     }
 }
 
+// MARK: - Bug Report File Storage (background actor — all I/O off the main thread)
+private actor BugReportFileStorage {
+    
+    private var reportsDirectory: URL {
+        FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+            .appendingPathComponent("PendingBugReports", isDirectory: true)
+    }
+    
+    func save(_ report: BugReport) throws {
+        let dir = reportsDirectory
+        try FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
+        let fileName = "bugreport_\(report.userId)_\(report.id).json"
+        let url = dir.appendingPathComponent(fileName)
+        let data = try JSONEncoder().encode(report)
+        try data.write(to: url, options: .atomic)
+    }
+    
+    func loadPending(for userId: String) throws -> [(url: URL, report: BugReport)] {
+        let dir = reportsDirectory
+        guard FileManager.default.fileExists(atPath: dir.path) else { return [] }
+        let files = try FileManager.default.contentsOfDirectory(at: dir, includingPropertiesForKeys: nil)
+        let prefix = "bugreport_\(userId)_"
+        return files
+            .filter { $0.lastPathComponent.hasPrefix(prefix) }
+            .compactMap { url in
+                guard let data = try? Data(contentsOf: url),
+                      let report = try? JSONDecoder().decode(BugReport.self, from: data)
+                else { return nil }
+                return (url, report)
+            }
+    }
+    
+    func delete(at url: URL) throws {
+        try FileManager.default.removeItem(at: url)
+    }
+}
+
 /// BugReportService handles screenshot capture and shake detection
 @MainActor
 class BugReportService: ObservableObject {
@@ -104,6 +141,8 @@ class BugReportService: ObservableObject {
     
     @Published var isShowingBugReport = false
     @Published var capturedScreenshot: UIImage?
+    
+    private let fileStorage = BugReportFileStorage()
     
     private init() {}
     
@@ -125,6 +164,42 @@ class BugReportService: ObservableObject {
         logInfo("📸 Bug report triggered - capturing screen", category: .app)
         capturedScreenshot = captureScreen()
         isShowingBugReport = true
+    }
+    
+    /// Saves a bug report to local file storage (runs off main thread via actor)
+    func saveReportLocally(_ report: BugReport) async {
+        do {
+            try await fileStorage.save(report)
+            logInfo("💾 Bug report saved locally: \(report.id)", category: .app)
+        } catch {
+            logError("💾 Failed to save bug report locally: \(error)", category: .app)
+        }
+    }
+    
+    /// Uploads all pending reports for a user to Google Sheets, deleting each on success.
+    /// Safe to call speculatively — does nothing if no pending reports exist.
+    func uploadPendingReports(for userId: String, sheetsService: GoogleSheetsService) async {
+        let pending: [(url: URL, report: BugReport)]
+        do {
+            pending = try await fileStorage.loadPending(for: userId)
+        } catch {
+            logError("💾 Failed to read pending bug reports: \(error)", category: .app)
+            return
+        }
+        
+        guard !pending.isEmpty else { return }
+        logInfo("📤 Uploading \(pending.count) pending bug report(s) for user \(userId)", category: .app)
+        
+        for (url, report) in pending {
+            do {
+                try await sheetsService.submitBugReport(report)
+                try await fileStorage.delete(at: url)
+                logSuccess("📤 Uploaded & removed bug report: \(report.id)", category: .app)
+            } catch {
+                logError("📤 Failed to upload bug report \(report.id): \(error)", category: .app)
+                // Leave file on disk — will retry on next sign-in or foreground
+            }
+        }
     }
     
     /// Reset the bug report state

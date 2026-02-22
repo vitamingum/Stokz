@@ -320,17 +320,18 @@ struct BugReportView: View {
         )
         
         Task {
-            do {
-                try await appState.sheetsService.submitBugReport(report)
-                logSuccess("Bug report submitted successfully", category: .app)
-                isSubmitting = false
-                showSuccessAlert = true
-            } catch {
-                logError("Failed to submit bug report: \(error)", category: .app)
-                isSubmitting = false
-                errorMessage = "Failed to submit bug report. Please try again."
-                showErrorAlert = true
-            }
+            // 1. Always persist to disk first (works fully offline)
+            await bugReportService.saveReportLocally(report)
+            
+            // 2. Try to upload immediately; if it fails the file stays on disk
+            //    and will be retried on the next sign-in or foreground event.
+            await bugReportService.uploadPendingReports(
+                for: user.id,
+                sheetsService: appState.sheetsService
+            )
+            
+            isSubmitting = false
+            showSuccessAlert = true
         }
     }
 }

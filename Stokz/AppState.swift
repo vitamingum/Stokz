@@ -143,15 +143,20 @@ class AppState: ObservableObject {
             return
         }
         
-        // 2. Reload all data (portfolios, prices, etc.)
+        // 2. Upload any bug reports queued while offline
+        if let userId = authService.currentUser?.id {
+            await BugReportService.shared.uploadPendingReports(for: userId, sheetsService: sheetsService)
+        }
+        
+        // 3. Reload all data (portfolios, prices, etc.)
         print("🔄 [App] Reloading all data...")
         await loadAllData()
         
-        // 3. Restart timers (iOS may have invalidated them)
+        // 4. Restart timers (iOS may have invalidated them)
         print("🔄 [App] Restarting price update timers")
         startPriceUpdates()
         
-        // 4. Show toast if data was stale
+        // 5. Show toast if data was stale
         if wasStale {
             showDataRefreshToast()
         }
@@ -835,6 +840,11 @@ class AppState: ObservableObject {
             
             // Save user to backend if new
             if let user = authService.currentUser {
+                // Upload any bug reports that were saved while offline
+                await BugReportService.shared.uploadPendingReports(
+                    for: user.id,
+                    sheetsService: sheetsService
+                )
                 logInfo("User: \(user.displayName) (\(user.email))", category: .auth)
                 do {
                     try await sheetsService.saveUser(user)

@@ -353,6 +353,24 @@ struct DataRefreshedToast: View {
     }
 }
 
+// MARK: - Spinning Skull Loading Indicator
+/// Small spinning app icon used as a global loading indicator in nav bars
+struct SpinningSkull: View {
+    @State private var isAnimating = false
+
+    var body: some View {
+        Image("AppIconImage")
+            .resizable()
+            .scaledToFill()
+            .scaleEffect(1.7)
+            .frame(width: 26, height: 26)
+            .clipShape(Circle())
+            .rotationEffect(.degrees(isAnimating ? 360 : 0))
+            .animation(.linear(duration: 1.2).repeatForever(autoreverses: false), value: isAnimating)
+            .onAppear { isAnimating = true }
+    }
+}
+
 // MARK: - Preview
 #Preview {
     ContentView()

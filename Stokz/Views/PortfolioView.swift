@@ -40,6 +40,11 @@ struct PortfolioView: View {
             }
             .navigationTitle("")
             .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    if appState.isLoading {
+                        SpinningSkull()
+                    }
+                }
                 ToolbarItem(placement: .principal) {
                     Text("PORTFOLIO")
                         .font(.system(size: 18, weight: .black))

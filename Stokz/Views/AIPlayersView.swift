@@ -57,6 +57,11 @@ struct AIPlayersView: View {
             .navigationTitle("AI PLAYERS")
             .navigationBarTitleDisplayMode(.large)
             .toolbar {
+                ToolbarItem(placement: .topBarLeading) {
+                    if appState.isLoading {
+                        SpinningSkull()
+                    }
+                }
                 ToolbarItem(placement: .topBarTrailing) {
                     Button {
                         showingCreateSheet = true
